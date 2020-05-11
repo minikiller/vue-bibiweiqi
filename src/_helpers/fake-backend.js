@@ -124,6 +124,6 @@ export function configureFakeBackend() {
                 realFetch(url, opts).then(response => resolve(response));
 
             }, 500);
-        });*/
-    }
+        });
+    }*/
 } 
