@@ -2,8 +2,8 @@
 let users = JSON.parse(localStorage.getItem('users')) || [];
     
 export function configureFakeBackend() {
-    let realFetch = window.fetch;
-    window.fetch = function (url, opts) {
+    /* let realFetch = window.fetch; */
+    /* window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
             // wrap in timeout to simulate server api call
             setTimeout(() => {
@@ -124,6 +124,6 @@ export function configureFakeBackend() {
                 realFetch(url, opts).then(response => resolve(response));
 
             }, 500);
-        });
+        });*/
     }
-}
+} 
