@@ -39,3 +39,6 @@ typings
 
 # Dist directory
 dist
+
+*.lock
+# package-lock.json
