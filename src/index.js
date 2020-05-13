@@ -14,8 +14,9 @@ Vue.use(BootstrapVue)
 Vue.use(VeeValidate);
 
 // setup fake backend
-import { configureFakeBackend } from './_helpers';
-configureFakeBackend();
+// import { configureFakeBackend } from './_helpers';
+// configureFakeBackend();
+export const EventBus = new Vue();
 
 new Vue({
     el: '#app',

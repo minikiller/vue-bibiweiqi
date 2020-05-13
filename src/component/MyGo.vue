@@ -10,15 +10,9 @@
 </template>
 
 <script>
-import {
-  initGame,
-  beginGame,
-  socket,
-  socketServer,
-  EventBus
-} from "../_helpers";
+import { initGame, beginGame, socket, socketServer } from "../_helpers";
 import { mapState, mapActions } from "vuex";
-
+import { EventBus } from "../../src/index";
 export default {
   computed: {
     ...mapState({
@@ -41,6 +35,7 @@ export default {
       beginGame();
     },
     login() {
+      console.log(`${this.account.user.name} is me`);
       socket.emit("login", this.account.user.name);
     }
   },
@@ -50,7 +45,7 @@ export default {
       blackOne: this.blackOne,
       blackTwo: this.blackTwo,
       whiteOne: this.whiteOne,
-      whiteOne: this.whiteOne
+      whiteTwo: this.whiteTwo
     });
 
     EventBus.$on("fetchdata", group => {

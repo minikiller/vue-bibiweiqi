@@ -1,8 +1,12 @@
 let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var black_time, white_time;
-import { socketServer } from "./socket";
+var serverGame;
+import { socket } from "./socket";
 
+//////////////////////////////
+// game init
+//////////////////////////////
 export function initGame(ele, gameinfo) {
 
   black_time = gameinfo.total_time;
@@ -37,6 +41,7 @@ var edit_board_mouse_out = function() {
     delete this._lastY;
   }
 };
+
 //board mouse move event
 var edit_board_mouse_move = function(x, y) {
   if (myplayer.frozen || (this._lastX == x && this._lastY == y)) return;
@@ -103,7 +108,6 @@ var play = function(x, y) {
 
   // show next move
   myplayer.next(myplayer.kifuReader.node.children.length - 1);
-  // todo check what is board
   var data = {
     move: move,
     gameId: serverGame.id,
@@ -111,9 +115,9 @@ var play = function(x, y) {
     BL: black_time,
     WL: white_time,
   };
-  //   socket.emit("move", data);
+    socket.emit("move", data);
 
-  //   disable_board();
+    disable_board();
   //   read_time();
 };
 export function beginGame() {

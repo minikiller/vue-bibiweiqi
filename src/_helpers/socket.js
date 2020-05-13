@@ -2,11 +2,11 @@
  * 处理websocket相关的业务方法
  */
 var usersOnline = [];
-var myGames,allGames;
+var myGames, allGames;
 export let socketServer = "dfdfdf";
 export let socket = io.connect("https://localhost:3000");
 
-import Event from "./event.js";
+import { EventBus } from "../index.js";
 // var connection = new RTCMultiConnection();
 
 //////////////////////////////
@@ -16,7 +16,7 @@ import Event from "./event.js";
 socket.on("login", function(msg) {
   usersOnline = msg.users;
   // updateUserList();
-  Event.$emit("fetchdata");
+  EventBus.$emit("fetchdata", msg);
   myGames = msg.games;
   // updateGamesList();
 

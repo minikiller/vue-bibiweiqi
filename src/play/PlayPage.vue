@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MyGo total_time="1000" blackOne="sunlf" whiteOne="mini" blackTwo="sdsd" whiteTwo="sunlf123" />
+    <MyGo total_time="1000" blackOne="sunlf111" whiteOne="mini111" blackTwo="sdsd111" whiteTwo="sunlf12311" />
     <b-list-group>
       <b-list-group-item href="http://apple.com">iPhone</b-list-group-item>
       <b-list-group-item>OnePlus 3T</b-list-group-item>

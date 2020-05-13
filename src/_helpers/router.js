@@ -5,16 +5,20 @@ import HomePage from "../home/HomePage";
 import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
+import KifuPage from "../kifu/KifuPage";
+import GamePage from "../game/GamePage";
 Vue.use(Router);
 
 export const router = new Router({
   mode: "history",
   routes: [
     // { path: "/", component: HomePage },
-    { path: "/", component: PlayPage },
+    { path: "/", component: KifuPage },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/play", component: PlayPage },
+    { path: "/game", component: GamePage },
+    { path: "/kifu", component: KifuPage },
 
     // otherwise redirect to home
     { path: "*", redirect: "/" },
