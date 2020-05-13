@@ -10,7 +10,8 @@ Vue.use(Router);
 export const router = new Router({
   mode: "history",
   routes: [
-    { path: "/", component: HomePage },
+    // { path: "/", component: HomePage },
+    { path: "/", component: PlayPage },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/play", component: PlayPage },
