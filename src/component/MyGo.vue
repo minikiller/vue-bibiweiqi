@@ -10,22 +10,28 @@
 </template>
 
 <script>
-import { initGame, beginGame, socket, socketServer } from "../_helpers";
+import {
+  initGame,
+  beginGame,
+  socket,
+  socketServer,
+  EventBus
+} from "../_helpers";
 import { mapState, mapActions } from "vuex";
 
 export default {
   computed: {
     ...mapState({
-      account: (state) => state.account,
-      users: (state) => state.users.all,
-    }),
+      account: state => state.account,
+      users: state => state.users.all
+    })
   },
   props: {
     total_time: String,
     blackOne: String,
     whiteOne: String,
     blackTwo: String,
-    whiteTwo: String,
+    whiteTwo: String
   },
   data() {
     return {};
@@ -36,7 +42,7 @@ export default {
     },
     login() {
       socket.emit("login", this.account.user.name);
-    },
+    }
   },
   mounted() {
     initGame(this.$refs.player, {
@@ -44,9 +50,13 @@ export default {
       blackOne: this.blackOne,
       blackTwo: this.blackTwo,
       whiteOne: this.whiteOne,
-      whiteOne: this.whiteOne,
+      whiteOne: this.whiteOne
+    });
+
+    EventBus.$on("fetchdata", group => {
+      console.log("i get it ");
     });
     // socket.emit("login", account.user.name);
-  },
+  }
 };
 </script>

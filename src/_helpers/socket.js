@@ -1,8 +1,12 @@
 /**
  * 处理websocket相关的业务方法
  */
+var usersOnline = [];
+var myGames,allGames;
 export let socketServer = "dfdfdf";
 export let socket = io.connect("https://localhost:3000");
+
+import Event from "./event.js";
 // var connection = new RTCMultiConnection();
 
 //////////////////////////////
@@ -11,13 +15,13 @@ export let socket = io.connect("https://localhost:3000");
 
 socket.on("login", function(msg) {
   usersOnline = msg.users;
-  updateUserList();
-
+  // updateUserList();
+  Event.$emit("fetchdata");
   myGames = msg.games;
-  updateGamesList();
+  // updateGamesList();
 
   allGames = msg.allgames;
-  updateAllGamesList();
+  // updateAllGamesList();
 });
 
 socket.on("joinlobby", function(msg) {
