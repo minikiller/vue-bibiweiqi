@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import HomePage from "../home/HomePage";
+import Home from "../home/Home";
 import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
@@ -13,7 +14,7 @@ export const router = new Router({
   mode: "history",
   routes: [
     // { path: "/", component: HomePage },
-    { path: "/", component: KifuPage },
+    { path: "/", component: Home },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/play", component: PlayPage },
