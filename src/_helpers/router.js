@@ -15,9 +15,10 @@ export const router = new Router({
   routes: [
     // { path: "/", component: HomePage },
     { path: "/", component: Home },
+    { path: "/home", component: HomePage },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
-    { path: "/play", component: PlayPage },
+    { path: "/play/:game_id", component: PlayPage , props: true },
     { path: "/game", component: GamePage },
     { path: "/kifu", component: KifuPage },
 

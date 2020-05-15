@@ -1,46 +1,48 @@
 <template>
   <b-container>
-    <div v-if="meals.length">
+    <div v-if="games.length">
       <b-row>
-        <div v-bind:key="data.index" v-for="data in meals">
+        <div v-bind:key="data.index" v-for="data in games">
           <b-col l="4">
             <b-card
-              v-bind:title="data.strCategory"
-              v-bind:img-src="data.strCategoryThumb"
+              v-bind:title="data.name"
               img-alt="Image"
               img-top
               tag="article"
               style="max-width: 20rem;"
-              class="mb-2">
-              <b-card-text>{{ `${data.strCategoryDescription.slice(0,100)}...` }}</b-card-text>
-              <b-button href="#" variant="primary">View food</b-button>
+              class="mb-2"
+            >
+              <b-card-text>{{ `对局名称:${data.comment.slice(0,100)}` }}</b-card-text>
+              <b-card-text>{{ `黑选手1:${data.blackone_id} => 白选手1:${data.whiteone_id}` }}</b-card-text>
+              <b-card-text>{{ `黑选手2:${data.blacktwo_id} => 白选手2:${data.whitetwo_id}` }}</b-card-text>
+              <b-card-text>{{ `预定时间:${data.create_date}` }}</b-card-text>
+              <b-card-text>{{ `创建时间:${data.dur_date}` }}</b-card-text>
+              <router-link :to="{path:'/play/'+data.id}">
+                <b-button variant="primary">进入房间</b-button>
+              </router-link>
             </b-card>
           </b-col>
         </div>
       </b-row>
     </div>
     <div v-else>
-      <h5>No meals available yet 😢</h5>
+      <h5>没有有效的预定对局😢</h5>
     </div>
   </b-container>
 </template>
 <script>
-import axios from "axios";
+import { gameService } from "../_services";
 export default {
   data() {
     return {
-      meals: []
+      games: []
     };
   },
   mounted() {
-    axios
-      .get("https://www.themealdb.com/api/json/v1/1/categories.php")
-      .then(response => {
-        this.meals = response.data.categories;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    gameService.getAll().then(data => {
+      this.games = data.games;
+      return data;
+    });
   }
 };
 </script>

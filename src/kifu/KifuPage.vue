@@ -15,7 +15,7 @@
 </template>
 <script>
 import config from "config";
-import { authHeader } from "../_helpers";
+import { authHeader,handleResponse } from "../_helpers";
 import { userService } from "../_services";
 import { mapState } from "vuex";
 export default {
@@ -56,7 +56,7 @@ export default {
         headers: authHeader(),
       };
       let _data = fetch(`${config.apiUrl}/kifus`, requestOptions)
-        .then(userService.handleResponse)
+        .then(handleResponse)
         .then(data => {
           this.items = data.kifus;
           return data;
