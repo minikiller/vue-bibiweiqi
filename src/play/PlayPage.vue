@@ -1,13 +1,15 @@
 <template>
   <div>
     <h2>hello {{game_id}}</h2>
-    <my-go
-      total_time="1000"
-      blackOne="sunlf111"
-      whiteOne="mini111"
-      blackTwo="sdsd111"
-      whiteTwo="sunlf12311"
-    />
+    <div>
+      <my-go
+        v-if="game"
+        :blackOne="game.blackone_id"
+        :whiteOne="game.whiteone_id"
+        :blackTwo="game.blacktwo_id"
+        :whiteTwo="game.whitetwo_id"
+      />
+    </div>
     <b-list-group>
       <b-list-group-item href="http://apple.com">iPhone</b-list-group-item>
       <b-list-group-item>OnePlus 3T</b-list-group-item>
@@ -17,11 +19,23 @@
 </template>
 <script>
 import MyGo from "../component/MyGo";
+import { gameService } from "../_services";
+
 export default {
   props: ["game_id"],
+  data() {
+    return {
+      game: null
+    };
+  },
+  mounted() {
+    gameService.getById(this.game_id).then(data => {
+      this.game = data;
+      return data;
+    });
+  },
   components: {
     MyGo
-  },
-  mounted() {}
+  }
 };
 </script>

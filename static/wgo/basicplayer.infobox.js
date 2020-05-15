@@ -5,6 +5,12 @@
   var _html = '<font size="3" face="verdana" color="green"> 行棋 </font>';
 
   var prepare_dom = function(opponent) {
+    while (whiteList.length > 0) {
+      whiteList.pop();
+    }
+    while (blackList.length > 0) {
+      blackList.pop();
+    }
     for (var i = 0; i < opponent / 2; i++) {
       var w = prepare_dom_box.call(this, "white");
       var b = prepare_dom_box.call(this, "black");
@@ -42,7 +48,7 @@
     info_wrapper.appendChild(t.info.time.wrapper);
     info_wrapper.appendChild(t.info.caps.wrapper);
     info_wrapper.appendChild(t.info.rank.wrapper);
-    
+
     return t;
   };
 

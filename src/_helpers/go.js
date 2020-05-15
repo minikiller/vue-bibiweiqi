@@ -8,7 +8,7 @@ import { socket } from "./socket";
 // game init
 //////////////////////////////
 export function initGame(ele, gameinfo) {
-
+  if (myplayer != null) myplayer = null;
   black_time = gameinfo.total_time;
   white_time = gameinfo.total_time;
   myplayer = new WGo.BasicPlayer(ele, {
@@ -115,9 +115,9 @@ var play = function(x, y) {
     BL: black_time,
     WL: white_time,
   };
-    socket.emit("move", data);
+  socket.emit("move", data);
 
-    disable_board();
+  disable_board();
   //   read_time();
 };
 export function beginGame() {

@@ -21,7 +21,6 @@ export default {
     })
   },
   props: {
-    total_time: String,
     blackOne: String,
     whiteOne: String,
     blackTwo: String,
@@ -41,7 +40,7 @@ export default {
   },
   mounted() {
     initGame(this.$refs.player, {
-      total_time: this.total_time,
+      total_time: 1000,
       blackOne: this.blackOne,
       blackTwo: this.blackTwo,
       whiteOne: this.whiteOne,
@@ -51,6 +50,8 @@ export default {
     EventBus.$on("fetchdata", group => {
       console.log("i get it ");
     });
+    
+
     // socket.emit("login", account.user.name);
   }
 };
