@@ -13,7 +13,7 @@ export const router = new Router({
   mode: "history",
   routes: [
     // { path: "/", component: HomePage },
-    { path: "/", component: KifuPage },
+    { path: "/", component: GamePage },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/play", component: PlayPage },

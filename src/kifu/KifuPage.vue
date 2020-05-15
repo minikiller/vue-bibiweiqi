@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>{{account.user.name}}</h2>
     <b-table striped hover :items="items" :fields="fields">
       <template v-slot:cell(actions)="row">
         <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
@@ -10,7 +11,14 @@
 <script>
 import config from "config";
 import { authHeader } from "../_helpers";
+import { userService } from "../_services";
+import { mapState } from "vuex";
 export default {
+  computed: {
+    ...mapState({
+      account: state => state.account
+    })
+  },
   data() {
     return {
       fields: [
@@ -42,26 +50,12 @@ export default {
         method: "GET",
         headers: authHeader()
       };
-      let _data = fetch(`${config.apiUrl}/kifus`, requestOptions).then(
-        this.handleResponse
-      );
-    },
-    handleResponse(response) {
-      return response.text().then(text => {
-        const data = text && JSON.parse(text);
-        if (!response.ok) {
-          if (response.status === 401) {
-            // auto logout if 401 response returned from api
-            localStorage.removeItem("user");
-            location.reload(true);
-          }
-
-          const error = (data && data.message) || response.statusText;
-          return Promise.reject(error);
-        }
-        this.items = data.kifus;
-        return data;
-      });
+      let _data = fetch(`${config.apiUrl}/kifus`, requestOptions)
+        .then(userService.handleResponse)
+        .then(data => {
+          this.items = data.kifus;
+          return data;
+        });
     }
   }
 };

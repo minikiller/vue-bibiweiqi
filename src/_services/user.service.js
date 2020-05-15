@@ -8,7 +8,8 @@ export const userService = {
     getAll,
     getById,
     update,
-    delete: _delete
+    delete: _delete,
+    handleResponse
 };
 
 function login(username, password) {
