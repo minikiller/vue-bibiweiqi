@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Login</h2>
+        <h2>哔哔围棋</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
                 <label for="username">Username</label>
