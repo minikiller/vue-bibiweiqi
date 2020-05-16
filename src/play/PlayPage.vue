@@ -4,7 +4,7 @@
       <b-row>
         <b-col cols="8">
           <h2>
-            <b-badge v-if="game">{{game.name}}</b-badge>
+            <b-badge v-if="game">{{game.name}}--->{{account.user.name}}</b-badge>
           </h2>
           <div>
             <my-go
@@ -26,10 +26,8 @@
               <chat :gameId="game_id" />
             </b-tab>
             <b-tab title="观众">
-              <b-list-group>
-                <b-list-group-item href="http://apple.com">iPhone</b-list-group-item>
-                <b-list-group-item>OnePlus 3T</b-list-group-item>
-                <b-list-group-item>Samsung Galaxy 8</b-list-group-item>
+              <b-list-group v-for="(user, index) in games.onlineUsers" :key="index">
+                <b-list-group-item>{{user}}</b-list-group-item>
               </b-list-group>
             </b-tab>
           </b-tabs>
@@ -43,8 +41,18 @@ import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
 import Video from "../component/Video";
 import { gameService } from "../_services";
-
+import { EventBus } from "../../src/index";
+import { mapState, mapMutations } from "vuex";
 export default {
+  computed: {
+    ...mapState({
+      account: state => state.account,
+      games: state => state.games
+    })
+  },
+  methods: {
+    ...mapMutations(["addUser", "deleteUser"])
+  },
   props: ["game_id"],
   data() {
     return {
@@ -63,6 +71,14 @@ export default {
       this.gameUser.push(this.game.whiteone_id);
       this.gameUser.push(this.game.whitetwo_id);
       return data;
+    });
+    EventBus.$on("joinlobbye", data => {
+      console.log("user id is come in room" + data);
+      this.addUser(data);
+    });
+    EventBus.$on("leavelobby", data => {
+      console.log("user id is leave room" + data);
+      this.deleteUser(data);
     });
   },
   components: {

@@ -25,19 +25,41 @@ export default {
     })
   },
   mounted() {
-    socket.emit("login", this.account.user.name);
+    this._socket = socket;
+    //发送登陆消息给服务器
+    socket.emit("login", {
+      userId: this.account.user.name,
+      gameId: this.gameId
+    });
+    socket.emit(this.gameId);//进入gameId的房间
+
+    EventBus.$on("get_message", data => {
+      if (data.gameId === this.gameId) {
+        console.log("i get it " + data);
+        this.text =
+          this.text +
+          "<div fontcolor='red'><b-badge>" +
+          data.username +
+          ": " +
+          data.message +
+          "</b-badge>: " +
+          this.msg +
+          "\n</div>";
+      }
+    });
   },
   data() {
     return {
       msg: "",
-      text: ""
+      text: "",
+      _socket: null
     };
   },
   methods: {
     send() {
       console.log("get " + this.msg);
 
-      socket.emit("new_message", {
+      this._socket.emit("new_message", {
         message: this.msg,
         gameId: this.gameId
       });

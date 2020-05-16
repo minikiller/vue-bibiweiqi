@@ -1,10 +1,13 @@
 /**
  * 处理websocket相关的业务方法
  */
+import config from "config";
+
 var usersOnline = [];
 var myGames, allGames;
 export let socketServer = "dfdfdf";
-export let socket = io.connect("https://localhost:3000");
+
+export let socket = io.connect(`${config.socketUrl}`);
 
 import { EventBus } from "../index.js";
 // var connection = new RTCMultiConnection();
@@ -24,12 +27,15 @@ socket.on("login", function(msg) {
   // updateAllGamesList();
 });
 
-socket.on("joinlobby", function(msg) {
-  addUser(msg);
+//用户进入对局室
+socket.on("joinlobby", function (msg) {
+  EventBus.$emit("joinlobbye", msg);
+  // addUser(msg);
 });
-
-socket.on("leavelobby", function(msg) {
-  removeUser(msg);
+//用户离开对局室
+socket.on("leavelobby", function (msg) {
+  EventBus.$emit("leavelobby", msg);
+  // removeUser(msg);
 });
 
 socket.on("gameadd", function(msg) {});
@@ -102,12 +108,6 @@ socket.on("logout", function(msg) {
 });
 
 //Listen on new_message
-socket.on("get_message", function(data) {
-  if (serverGame && data.gameId === serverGame.id) {
-    feedback.html("");
-    message.val("");
-    chatroom.append(
-      "<p class='message'>" + data.username + ": " + data.message + "</p>"
-    );
-  }
+socket.on("get_message", function (msg) {
+  EventBus.$emit("get_message", msg);
 });

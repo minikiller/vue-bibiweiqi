@@ -20,7 +20,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
@@ -31,11 +31,14 @@ module.exports = {
   ],
   devServer: {
     historyApiFallback: true,
+    host: "0.0.0.0",
+    port: 8080,
   },
   externals: {
     // global app config object
     config: JSON.stringify({
-      apiUrl: "http://localhost:5000",
+      apiUrl: "http://192.168.1.34:5000",
+      socketUrl: "https://192.168.1.34:3000"
     }),
   },
 };
