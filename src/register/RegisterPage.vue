@@ -23,22 +23,21 @@
                                 v-model="user.name" 
                                 v-validate="'required'" 
                                 name="name" 
-                                placeholder="用户名"
+                                placeholder="请输入用户名"
                                 class="form-control" 
                                 :class="{ 'is-invalid': submitted && errors.has('name') }"
                             />
                             <div v-if="submitted && errors.has('name')" class="invalid-feedback">{{ errors.first('username') }}</div>
                         </div>
                         <div class="form-group">
-                            <input 
+                            <b-form-input
                                 type="password" 
                                 v-model="user.password" 
-                                placeholder="密码"
+                                placeholder="请输入密码"
                                 v-validate="{ required: true, min: 6 }" 
                                 name="password" 
-                                class="form-control" 
-                                :class="{ 'is-invalid': submitted && errors.has('password') }"
-                            />
+                                :class="{ 'is-invalid': submitted && errors.has('password') }">
+                            </b-form-input>     
                             <div v-if="submitted && errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
                         </div>
                         <div class="form-group">
@@ -54,21 +53,20 @@
                             <div v-if="submitted && errors.has('mobile')" class="invalid-feedback">{{ errors.first('mobile') }}</div>
                         </div>
                         <div class="form-group">
-                            <input
-                                type="email" 
+                            <b-form-input 
                                 v-model="user.email" 
+                                name="email"
                                 v-validate="'required'"
-                                name="email" 
-                                placeholder="电子邮件"
-                                class="form-control" 
                                 :class="{ 'is-invalid': submitted && errors.has('email') }" 
-                            />    
+                                placeholder="电子邮件地址">
+                            </b-form-input>
                             <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
                         </div>
                         <div class="form-group">
                             <b-form-select v-model="selected" :options="options">
                             </b-form-select>
                         </div>
+
                         <div class="form-group">
                             <b-button type="submit" block variant="success" :disabled="status.registering">提交</b-button>
                         </div>
