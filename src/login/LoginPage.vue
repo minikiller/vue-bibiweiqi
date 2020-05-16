@@ -6,7 +6,7 @@
                 <b-card>
                 <div>
                     <div class="logo">
-                        <img src="/static/img/logo.png" width="320">
+                        <img src="/static/img/logo.png" width="270">
                     </div>
                     <div>
                     <form @submit.prevent="handleSubmit">
@@ -78,5 +78,7 @@ export default {
 <style scoped>
     .logo {
         margin-bottom: 1rem;
+        vertical-align: middle;
+        text-align: center;
     }
 </style>>

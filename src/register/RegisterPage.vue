@@ -5,7 +5,7 @@
             <b-col sm="6" offset="3">
                 <b-card>
                 
-                    <h2>Register</h2>
+                    <h2>用户注册</h2>
                     <form @submit.prevent="handleSubmit">
                         <!-- <div class="form-group">
                             <label for="firstName">First Name</label>
@@ -23,7 +23,7 @@
                                 v-model="user.name" 
                                 v-validate="'required'" 
                                 name="name" 
-                                placeholder="username"
+                                placeholder="用户名"
                                 class="form-control" 
                                 :class="{ 'is-invalid': submitted && errors.has('name') }"
                             />
@@ -33,7 +33,7 @@
                             <input 
                                 type="password" 
                                 v-model="user.password" 
-                                placeholder="password"
+                                placeholder="密码"
                                 v-validate="{ required: true, min: 6 }" 
                                 name="password" 
                                 class="form-control" 
@@ -47,7 +47,7 @@
                                 v-model="user.mobile"
                                 v-validate="'required'"
                                 name="mobile"
-                                placeholder="mobile"
+                                placeholder="手机号码"
                                 class="form-control"
                                 :class="{ 'is-invalid': submitted && errors.has('mobile') }"
                             />
@@ -59,7 +59,7 @@
                                 v-model="user.email" 
                                 v-validate="'required'" 
                                 name="email" 
-                                placeholder="email"
+                                placeholder="电子邮件"
                                 class="form-control" 
                                 :class="{ 'is-invalid': submitted && errors.has('email') }" 
                             />    
@@ -70,7 +70,9 @@
                                 type="text" 
                                 v-model="user.rank" 
                                 v-validate="'required'" 
-                                name="rank" class="form-control" 
+                                name="rank" 
+                                placeholder="段位级别"
+                                class="form-control" 
                                 :class="{ 'is-invalid': submitted && errors.has('rank') }" 
                             />    
                             <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
