@@ -1,83 +1,91 @@
 <template>
-    <div>
-        <h2>Register</h2>
-        <form @submit.prevent="handleSubmit">
-            <!-- <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" v-model="user.firstName" v-validate="'required'" name="firstName" class="form-control" :class="{ 'is-invalid': submitted && errors.has('firstName') }" />
-                <div v-if="submitted && errors.has('firstName')" class="invalid-feedback">{{ errors.first('firstName') }}</div>
-            </div>
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" v-model="user.lastName" v-validate="'required'" name="lastName" class="form-control" :class="{ 'is-invalid': submitted && errors.has('lastName') }" />
-                <div v-if="submitted && errors.has('lastName')" class="invalid-feedback">{{ errors.first('lastName') }}</div>
-            </div> -->
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input 
-                    type="text" 
-                    v-model="user.name" 
-                    v-validate="'required'" 
-                    name="name" 
-                    class="form-control" 
-                    :class="{ 'is-invalid': submitted && errors.has('name') }"
-                />
-                <div v-if="submitted && errors.has('name')" class="invalid-feedback">{{ errors.first('username') }}</div>
-            </div>
-            <div class="form-group">
-                <label htmlFor="password">Password</label>
-                <input 
-                    type="password" 
-                    v-model="user.password" 
-                    v-validate="{ required: true, min: 6 }" 
-                    name="password" 
-                    class="form-control" 
-                    :class="{ 'is-invalid': submitted && errors.has('password') }"
-                />
-                <div v-if="submitted && errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
-            </div>
-            <div class="form-group">
-                <label for="mobile">mobile</label>
-                <input 
-                    type="text"
-                    v-model="user.mobile"
-                    v-validate="'required'"
-                    name="mobile"
-                    class="form-control"
-                    :class="{ 'is-invalid': submitted && errors.has('mobile') }"
-                />
-                <div v-if="submitted && errors.has('mobile')" class="invalid-feedback">{{ errors.first('mobile') }}</div>
-            </div>
-            <div class="form-group">
-                <label for="email">email</label>
-                <input
-                    type="email" 
-                    v-model="user.email" 
-                    v-validate="'required'" 
-                    name="email" 
-                    class="form-control" 
-                    :class="{ 'is-invalid': submitted && errors.has('email') }" 
-                />    
-                <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
-            </div>
-            <div class="form-group">
-                <label for="rank">rank</label>
-                <input
-                    type="text" 
-                    v-model="user.rank" 
-                    v-validate="'required'" 
-                    name="rank" class="form-control" 
-                    :class="{ 'is-invalid': submitted && errors.has('rank') }" 
-                />    
-                <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" :disabled="status.registering">Register</button>
-                <img v-show="status.registering" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                <router-link to="/login" class="btn btn-link">Cancel</router-link>
-            </div>
-        </form>
-    </div>
+
+    <b-container class="bv-example-row">
+        <b-row>
+            <b-col sm="6" offset="3">
+                <b-card>
+                
+                    <h2>Register</h2>
+                    <form @submit.prevent="handleSubmit">
+                        <!-- <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" v-model="user.firstName" v-validate="'required'" name="firstName" class="form-control" :class="{ 'is-invalid': submitted && errors.has('firstName') }" />
+                            <div v-if="submitted && errors.has('firstName')" class="invalid-feedback">{{ errors.first('firstName') }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" v-model="user.lastName" v-validate="'required'" name="lastName" class="form-control" :class="{ 'is-invalid': submitted && errors.has('lastName') }" />
+                            <div v-if="submitted && errors.has('lastName')" class="invalid-feedback">{{ errors.first('lastName') }}</div>
+                        </div> -->
+                        <div class="form-group">
+                            <input 
+                                type="text" 
+                                v-model="user.name" 
+                                v-validate="'required'" 
+                                name="name" 
+                                placeholder="username"
+                                class="form-control" 
+                                :class="{ 'is-invalid': submitted && errors.has('name') }"
+                            />
+                            <div v-if="submitted && errors.has('name')" class="invalid-feedback">{{ errors.first('username') }}</div>
+                        </div>
+                        <div class="form-group">
+                            <input 
+                                type="password" 
+                                v-model="user.password" 
+                                placeholder="password"
+                                v-validate="{ required: true, min: 6 }" 
+                                name="password" 
+                                class="form-control" 
+                                :class="{ 'is-invalid': submitted && errors.has('password') }"
+                            />
+                            <div v-if="submitted && errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
+                        </div>
+                        <div class="form-group">
+                            <input 
+                                type="text"
+                                v-model="user.mobile"
+                                v-validate="'required'"
+                                name="mobile"
+                                placeholder="mobile"
+                                class="form-control"
+                                :class="{ 'is-invalid': submitted && errors.has('mobile') }"
+                            />
+                            <div v-if="submitted && errors.has('mobile')" class="invalid-feedback">{{ errors.first('mobile') }}</div>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="email" 
+                                v-model="user.email" 
+                                v-validate="'required'" 
+                                name="email" 
+                                placeholder="email"
+                                class="form-control" 
+                                :class="{ 'is-invalid': submitted && errors.has('email') }" 
+                            />    
+                            <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="text" 
+                                v-model="user.rank" 
+                                v-validate="'required'" 
+                                name="rank" class="form-control" 
+                                :class="{ 'is-invalid': submitted && errors.has('rank') }" 
+                            />    
+                            <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" :disabled="status.registering">Register</button>
+                            <img v-show="status.registering" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            <router-link to="/login" class="btn btn-link">Cancel</router-link>
+                        </div>
+                    </form>
+                
+                </b-card>
+           </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
@@ -113,3 +121,9 @@ export default {
     }
 };
 </script>
+
+<style>
+.form-group {
+    margin-bottom: 1rem;
+}
+</style>
