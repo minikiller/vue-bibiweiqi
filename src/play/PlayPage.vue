@@ -51,7 +51,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations("games", ["addUser", "deleteUser"])
+    
   },
   props: ["game_id"],
   data() {
@@ -72,14 +72,7 @@ export default {
       this.gameUser.push(this.game.whitetwo_id);
       return data;
     });
-    EventBus.$on("joinlobbye", data => {
-      console.log("user id is come in room" + data);
-      this.addUser(data);
-    });
-    EventBus.$on("leavelobby", data => {
-      console.log("user id is leave room" + data);
-      this.deleteUser(data);
-    });
+    
   },
   components: {
     MyGo,
