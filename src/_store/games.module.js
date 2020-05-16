@@ -8,7 +8,7 @@ const actions = {};
 
 const mutations = {
   addUser(state, userId) {
-    state.onlineUsers.push(userId);
+    if (state.onlineUsers.indexOf(userId) == -1) state.onlineUsers.push(userId);
   },
   deleteUser(state, userId) {
     state.onlineUsers.pop(userId);
@@ -19,5 +19,5 @@ export const games = {
   namespaced: true,
   state,
   actions,
-  mutations
+  mutations,
 };

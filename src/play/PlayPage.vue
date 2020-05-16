@@ -6,16 +6,19 @@
           <h2>
             <b-badge v-if="game">{{game.name}}--->{{account.user.name}}</b-badge>
           </h2>
-          <div>
-            <my-go
-              v-if="game"
-              :total_time="game.total_time"
-              :blackOne="game.blackone_id"
-              :whiteOne="game.whiteone_id"
-              :blackTwo="game.blacktwo_id"
-              :whiteTwo="game.whitetwo_id"
-            />
+          <div class="form-group">
+            <button class="btn btn-primary" @click="begin">开始</button>
+            <!-- <button class="btn btn-primary" @click="login">login</button> -->
+            <button class="btn btn-primary" @click="exit">退出</button>
           </div>
+          <my-go
+            v-if="game"
+            :total_time="game.total_time"
+            :blackOne="game.blackone_id"
+            :whiteOne="game.whiteone_id"
+            :blackTwo="game.blacktwo_id"
+            :whiteTwo="game.whitetwo_id"
+          />
         </b-col>
         <b-col cols="4">
           <b-tabs content-class="mt-3" justified>
@@ -43,6 +46,7 @@ import Video from "../component/Video";
 import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
+import { socket } from "../_helpers";
 export default {
   computed: {
     ...mapState({
@@ -51,7 +55,15 @@ export default {
     })
   },
   methods: {
-    
+    begin() {},
+    exit() {
+      console.log(`${this.account.user.name} is me`);
+      socket.emit("logout", {
+        userId: this.account.user.name,
+        gameId: this.game_id
+      });
+      this.$router.push({path: '/'});
+    }
   },
   props: ["game_id"],
   data() {
@@ -72,7 +84,6 @@ export default {
       this.gameUser.push(this.game.whitetwo_id);
       return data;
     });
-    
   },
   components: {
     MyGo,

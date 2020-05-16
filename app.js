@@ -25,7 +25,7 @@ var lobbyUsers = {};
 var users = {};
 var activeGames = {};
 var allGames = {};
-
+var userinGame = {};
 app.get("/", function(req, res) {
   // res.sendFile(path.join(__dirname, 'dist', 'index.html'))
   res.sendFile(__dirname + "/public/index.html");
@@ -63,26 +63,42 @@ io.on("connection", function(socket) {
 
     if (!users[userId]) {
       console.log(getFormattedDate() + "creating new user " + userId);
-      users[userId] = { userId: socket.userId, games: { gameId: gameId } };
+      users[userId] = { userId: socket.userId, games: gameId };
     } else {
       console.log("user found!");
-      Object.keys(users[userId].games).forEach(function(gameId) {
-        console.log(getFormattedDate() + "gameid - " + gameId);
-      });
+      // Object.keys(users[userId].games).forEach(function(gameId) {
+      //   console.log(getFormattedDate() + "gameid - " + gameId);
+      // });
+      if (users[userId].games == gameId) {
+        console.log("user in same game room");
+      } else {
+        console.log("user in new game room");
+        users[userId].games = gameId;
+      }
     }
-
-    // socket.emit("login", {
-    //   users: Object.keys(lobbyUsers),
-    //   games: Object.keys(users[userId].games),
-    //   allgames: Object.keys(allGames),
-    // });
+    // socket.emit("login", userinGame[gameId]);
     lobbyUsers[userId] = socket;
-    socket.join(gameId, () => {
-      
-    });
+    socket.join(gameId, () => {});
 
-    io.sockets.in(gameId).emit("joinlobby", userId);
+    // io.sockets.in(gameId).emit("joinlobby", userId);
+    // 给房间内的所有人发送消息，不包括sender本身
+    socket.broadcast.to(gameId).emit("joinlobby", userId);
+    //获得当前房间的所有人员信息列表
+    let game_users = [];
+    for (key in users) {
+      if (users[key].games == gameId) {
+        game_users.push(users[key].userId);
+      }
+    }
+    //给新登陆的用户发送当前房间的所有人员信息列表
+    socket.emit("initGameUser", game_users);
   }
+
+  socket.on("logout", function(msg) {
+    socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
+    socket.leave(msg.gameId);
+    delete users[msg.userId];
+  });
 
   socket.on("invite", function(opponentId) {
     console.log(
@@ -196,8 +212,8 @@ io.on("connection", function(socket) {
         " user id is: " +
         socket.userId
     );
-    // lobbyUsers[socket.userId].emit('get_message', { message: data.message, username: socket.userId });
-    socket.broadcast.emit("get_message", {
+    //给房间内的其他用户发送消息，不包括sender本身
+    socket.broadcast.to(data.gameId).emit("get_message", {
       message: data.message,
       username: socket.userId,
       gameId: data.gameId,

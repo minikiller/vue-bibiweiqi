@@ -47,7 +47,7 @@ io.sockets.emit('message', "this is a test");
 io.sockets.in('game').emit('message', 'cool game');
 
 // sending to individual socketid
-io.sockets.socket(socketid).emit('message', 'for your eyes only');
+io.sockets.connected(socketid).emit('message', 'for your eyes only');
 ```
 
 ### vuex
