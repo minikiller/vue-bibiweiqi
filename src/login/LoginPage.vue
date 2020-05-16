@@ -6,7 +6,7 @@
                 <b-card>
                 <div>
                     <div class="logo">
-                        <h2>哔哔围棋</h2>
+                        <img src="/static/img/logo.png" width="320">
                     </div>
                     <div>
                     <form @submit.prevent="handleSubmit">
