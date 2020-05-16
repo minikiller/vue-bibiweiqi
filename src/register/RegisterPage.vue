@@ -14,13 +14,55 @@
             </div> -->
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" v-model="user.name" v-validate="'required'" name="name" class="form-control" :class="{ 'is-invalid': submitted && errors.has('name') }" />
+                <input 
+                    type="text" 
+                    v-model="user.name" 
+                    v-validate="'required'" 
+                    name="name" 
+                    class="form-control" 
+                    :class="{ 'is-invalid': submitted && errors.has('name') }"
+                />
                 <div v-if="submitted && errors.has('name')" class="invalid-feedback">{{ errors.first('username') }}</div>
             </div>
             <div class="form-group">
                 <label htmlFor="password">Password</label>
                 <input type="password" v-model="user.password" v-validate="{ required: true, min: 6 }" name="password" class="form-control" :class="{ 'is-invalid': submitted && errors.has('password') }" />
                 <div v-if="submitted && errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
+            </div>
+            <div class="form-group">
+                <label for="mobile">mobile</label>
+                <input 
+                    type="text"
+                    v-model="user.mobile"
+                    v-validate="'required'"
+                    name="mobile"
+                    class="form-control"
+                    :class="{ 'is-invalid': submitted && errors.has('mobile') }"
+                />
+                <div v-if="submitted && errors.has('mobile')" class="invalid-feedback">{{ errors.first('mobile') }}</div>
+            </div>
+            <div class="form-group">
+                <label for="email">email</label>
+                <input
+                    type="text" 
+                    v-model="user.email" 
+                    v-validate="'required'" 
+                    name="email" 
+                    class="form-control" 
+                    :class="{ 'is-invalid': submitted && errors.has('email') }" 
+                />    
+                <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
+            </div>
+            <div class="form-group">
+                <label for="rank">rank</label>
+                <input
+                    type="text" 
+                    v-model="user.rank" 
+                    v-validate="'required'" 
+                    name="rank" class="form-control" 
+                    :class="{ 'is-invalid': submitted && errors.has('rank') }" 
+                />    
+                <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" :disabled="status.registering">Register</button>
@@ -41,7 +83,9 @@ export default {
                 // firstName: '',
                 // lastName: '',
                 name: '',
-                password: ''
+                password: '',
+                email: '',
+                mobile: ''
             },
             submitted: false
         }
