@@ -35,7 +35,7 @@ export default {
     },
     login() {
       console.log(`${this.account.user.name} is me`);
-      socket.emit("login", this.account.user.name);
+      
     }
   },
   mounted() {
