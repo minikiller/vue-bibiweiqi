@@ -12,7 +12,7 @@
 </template>
 <script>
 import { initGame, beginGame, socket, socketServer } from "../_helpers";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { EventBus } from "../../src/index";
 export default {
   props: {
@@ -26,26 +26,42 @@ export default {
   },
   mounted() {
     this._socket = socket;
-    socket.emit(this.gameId);//进入gameId的房间
+    socket.emit(this.gameId); //进入gameId的房间
     //发送登陆消息给服务器
     socket.emit("login", {
       userId: this.account.user.name,
       gameId: this.gameId
     });
-    
+    EventBus.$on("joinlobbye", data => {
+      console.log("user id is come in room" + data);
+      this.addUser(data);
+      this.text =
+        this.text +
+        "<br><div class='badge badge-danger'>" +
+        "系统:</div>" +
+        data +
+        "进入聊天室</br>";
+    });
+    EventBus.$on("leavelobby", data => {
+      console.log("user id is leave room" + data);
+      this.deleteUser(data);
+      this.text +
+        "<div class='badge badge-danger'>" +
+        "系统:</div>" +
+        data +
+        "离开聊天室\n";
+    });
 
     EventBus.$on("get_message", data => {
       if (data.gameId === this.gameId) {
         console.log("i get it " + data);
         this.text =
           this.text +
-          "<div fontcolor='red'><b-badge>" +
+          "<div class='badge badge-info'>" +
           data.username +
-          ": " +
+          ":</div> " +
           data.message +
-          "</b-badge>: " +
-          this.msg +
-          "\n</div>";
+          "\n";
       }
     });
   },
@@ -57,6 +73,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations("games", ["addUser", "deleteUser"]),
     send() {
       console.log("get " + this.msg);
 
@@ -64,14 +81,13 @@ export default {
         message: this.msg,
         gameId: this.gameId
       });
-
       this.text =
         this.text +
-        "<div fontcolor='red'><b-badge>" +
+        "<div class='badge badge-info'>" +
         this.account.user.name +
-        "</b-badge>: " +
+        ":</div> " +
         this.msg +
-        "\n</div>";
+        "\n";
       this.msg = "";
     }
   }
