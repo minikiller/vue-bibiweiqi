@@ -17,7 +17,7 @@ var io = require("socket.io")(https);
 
 var port = process.env.PORT || 3000;
 
-https.listen(port, function () {
+https.listen(port, function() {
   console.log("listening on *:" + port);
 });
 
@@ -26,11 +26,10 @@ var users = {};
 var activeGames = {};
 var allGames = {};
 
-app.get("/", function (req, res) {
+app.get("/", function(req, res) {
   // res.sendFile(path.join(__dirname, 'dist', 'index.html'))
   res.sendFile(__dirname + "/public/index.html");
 });
-
 
 function getFormattedDate() {
   var date = new Date();
@@ -50,37 +49,42 @@ function getFormattedDate() {
   return str;
 }
 
-io.on("connection", function (socket) {
+io.on("connection", function(socket) {
   console.log(getFormattedDate() + "new connection " + socket);
 
-  socket.on("login", function (userId) {
-    doLogin(socket, userId);
+  socket.on("login", function(msg) {
+    doLogin(socket, msg);
   });
 
-  function doLogin(socket, userId) {
-    socket.userId = userId;
+  function doLogin(socket, msg) {
+    let userId = msg.userId;
+    let gameId = msg.gameId;
+    socket.userId = msg.userId;
 
     if (!users[userId]) {
       console.log(getFormattedDate() + "creating new user " + userId);
-      users[userId] = { userId: socket.userId, games: {} };
+      users[userId] = { userId: socket.userId, games: { gameId: gameId } };
     } else {
       console.log("user found!");
-      Object.keys(users[userId].games).forEach(function (gameId) {
+      Object.keys(users[userId].games).forEach(function(gameId) {
         console.log(getFormattedDate() + "gameid - " + gameId);
       });
     }
 
-    socket.emit("login", {
-      users: Object.keys(lobbyUsers),
-      games: Object.keys(users[userId].games),
-      allgames: Object.keys(allGames),
-    });
+    // socket.emit("login", {
+    //   users: Object.keys(lobbyUsers),
+    //   games: Object.keys(users[userId].games),
+    //   allgames: Object.keys(allGames),
+    // });
     lobbyUsers[userId] = socket;
+    socket.join(gameId, () => {
+      
+    });
 
-    socket.broadcast.emit("joinlobby", socket.userId);
+    io.sockets.in(gameId).emit("joinlobby", userId);
   }
 
-  socket.on("invite", function (opponentId) {
+  socket.on("invite", function(opponentId) {
     console.log(
       getFormattedDate() +
         "got an invite from: " +
@@ -122,7 +126,7 @@ io.on("connection", function (socket) {
     socket.broadcast.emit("gameadd", { gameId: game.id, gameState: game });
   });
 
-  socket.on("viewgame", function (msg) {
+  socket.on("viewgame", function(msg) {
     console.log(getFormattedDate() + "ready to view game: " + msg.gameId);
 
     socket.gameId = msg.gameId;
@@ -136,7 +140,7 @@ io.on("connection", function (socket) {
     lobbyUsers[msg.userId].emit("viewgame", { game: game });
   });
 
-  socket.on("resumegame", function (gameId) {
+  socket.on("resumegame", function(gameId) {
     console.log(getFormattedDate() + "ready to resume game: " + gameId);
 
     socket.gameId = gameId;
@@ -164,7 +168,7 @@ io.on("connection", function (socket) {
     }
   });
 
-  socket.on("move", function (msg) {
+  socket.on("move", function(msg) {
     socket.broadcast.emit("move", msg);
     // activeGames[msg.gameId].board = msg.board;
     activeGames[msg.gameId].kifu = msg.kifu;
@@ -173,7 +177,7 @@ io.on("connection", function (socket) {
     console.log(getFormattedDate() + "kifu data is " + msg.kifu);
   });
 
-  socket.on("resign", function (msg) {
+  socket.on("resign", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
 
     delete users[activeGames[msg.gameId].users.white].games[msg.gameId];
@@ -184,7 +188,7 @@ io.on("connection", function (socket) {
   });
 
   //listen on new_message
-  socket.on("new_message", function (data) {
+  socket.on("new_message", function(data) {
     console.log(
       getFormattedDate() +
         "chat message received!" +
@@ -200,7 +204,7 @@ io.on("connection", function (socket) {
     });
   });
 
-  socket.on("disconnect", function (msg) {
+  socket.on("disconnect", function(msg) {
     console.log(msg);
 
     if (socket && socket.userId && socket.gameId) {
