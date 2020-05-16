@@ -1,13 +1,7 @@
 <template>
   <div>
     <section id="chatroom" ref="chatroom">
-      <b-form-textarea
-        id="textarea"
-        v-model="text"
-        placeholder="Show chat message..."
-        rows="3"
-        max-rows="6"
-      ></b-form-textarea>
+      <section v-html="text"></section>
     </section>
 
     <section id="input_zone">
@@ -48,7 +42,13 @@ export default {
         gameId: this.gameId
       });
 
-      this.text = this.text + this.account.user.name + ": " + this.msg + "\n";
+      this.text =
+        this.text +
+        "<div fontcolor='red'><b-badge>" +
+        this.account.user.name +
+        "</b-badge>: " +
+        this.msg +
+        "\n</div>";
       this.msg = "";
     }
   }

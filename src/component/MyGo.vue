@@ -21,6 +21,7 @@ export default {
     })
   },
   props: {
+    total_time:String,
     blackOne: String,
     whiteOne: String,
     blackTwo: String,
@@ -40,7 +41,7 @@ export default {
   },
   mounted() {
     initGame(this.$refs.player, {
-      total_time: 1000,
+      total_time: this.total_time,
       blackOne: this.blackOne,
       blackTwo: this.blackTwo,
       whiteOne: this.whiteOne,
