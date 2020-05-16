@@ -3,10 +3,13 @@
     <b-container class="bv-example-row" width="100%">
       <b-row>
         <b-col cols="8">
-          <h2>hello {{game_id}}</h2>
+          <h2>
+            <b-badge v-if="game">{{game.name}}</b-badge>
+          </h2>
           <div>
             <my-go
               v-if="game"
+              :total_time="game.total_time"
               :blackOne="game.blackone_id"
               :whiteOne="game.whiteone_id"
               :blackTwo="game.blacktwo_id"
@@ -15,12 +18,21 @@
           </div>
         </b-col>
         <b-col cols="4">
-          <chat :gameId="game_id" />
-          <b-list-group>
-            <b-list-group-item href="http://apple.com">iPhone</b-list-group-item>
-            <b-list-group-item>OnePlus 3T</b-list-group-item>
-            <b-list-group-item>Samsung Galaxy 8</b-list-group-item>
-          </b-list-group>
+          <b-tabs content-class="mt-3" justified>
+            <b-tab title="视频" active>
+              <video />
+            </b-tab>
+            <b-tab title="聊天室" active>
+              <chat :gameId="game_id" />
+            </b-tab>
+            <b-tab title="观众">
+              <b-list-group>
+                <b-list-group-item href="http://apple.com">iPhone</b-list-group-item>
+                <b-list-group-item>OnePlus 3T</b-list-group-item>
+                <b-list-group-item>Samsung Galaxy 8</b-list-group-item>
+              </b-list-group>
+            </b-tab>
+          </b-tabs>
         </b-col>
       </b-row>
     </b-container>
@@ -29,6 +41,7 @@
 <script>
 import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
+import Video from "../component/Video";
 import { gameService } from "../_services";
 
 export default {
@@ -37,8 +50,8 @@ export default {
     return {
       game: null,
       gameUser: [], //本对局的对手信息
-      currentUsers: [], //对局室的当前人
-      canBegin: Boolean, //是否可以进行对局
+      currentUsers: [], //进入对局室的所有人
+      canBegin: Boolean, //是否可以开始新对局
       kifu: "" //棋谱
     };
   },
@@ -54,7 +67,8 @@ export default {
   },
   components: {
     MyGo,
-    Chat
+    Chat,
+    Video
   }
 };
 </script>
