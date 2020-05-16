@@ -51,7 +51,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations(["addUser", "deleteUser"])
+    ...mapMutations("games", ["addUser", "deleteUser"])
   },
   props: ["game_id"],
   data() {

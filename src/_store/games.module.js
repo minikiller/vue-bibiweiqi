@@ -19,5 +19,5 @@ export const games = {
   namespaced: true,
   state,
   actions,
-  mutations,
+  mutations
 };

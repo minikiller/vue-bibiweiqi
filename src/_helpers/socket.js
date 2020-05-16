@@ -32,9 +32,9 @@ socket.on("joinlobby", function (msg) {
   EventBus.$emit("joinlobbye", msg);
   // addUser(msg);
 });
-//用户离开对局室
+//用户立刻对局室
 socket.on("leavelobby", function (msg) {
-  EventBus.$emit("leavelobby", msg);
+  EventBus.$emit("get_message", msg);
   // removeUser(msg);
 });
 

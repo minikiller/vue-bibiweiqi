@@ -57,11 +57,13 @@ io.on("connection", function(socket) {
   });
 
   function doLogin(socket, msg) {
+    let userId = msg.userId;
+    let gameId = msg.gameId;
     socket.userId = msg.userId;
 
     if (!users[userId]) {
       console.log(getFormattedDate() + "creating new user " + userId);
-      users[userId] = { userId: socket.userId, games: { gameId: msg.gameId } };
+      users[userId] = { userId: socket.userId, games: { gameId: gameId } };
     } else {
       console.log("user found!");
       Object.keys(users[userId].games).forEach(function(gameId) {
@@ -69,14 +71,17 @@ io.on("connection", function(socket) {
       });
     }
 
-    socket.emit("login", {
-      users: Object.keys(lobbyUsers),
-      games: Object.keys(users[userId].games),
-      allgames: Object.keys(allGames),
-    });
+    // socket.emit("login", {
+    //   users: Object.keys(lobbyUsers),
+    //   games: Object.keys(users[userId].games),
+    //   allgames: Object.keys(allGames),
+    // });
     lobbyUsers[userId] = socket;
+    socket.join(gameId, () => {
+      
+    });
 
-    socket.in(msg.gameId).emit("joinlobby", socket.userId);
+    io.sockets.in(gameId).emit("joinlobby", userId);
   }
 
   socket.on("invite", function(opponentId) {

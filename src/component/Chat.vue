@@ -26,12 +26,13 @@ export default {
   },
   mounted() {
     this._socket = socket;
+    socket.emit(this.gameId);//进入gameId的房间
     //发送登陆消息给服务器
     socket.emit("login", {
       userId: this.account.user.name,
       gameId: this.gameId
     });
-    socket.emit(this.gameId);//进入gameId的房间
+    
 
     EventBus.$on("get_message", data => {
       if (data.gameId === this.gameId) {
