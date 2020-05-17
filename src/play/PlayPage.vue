@@ -30,7 +30,7 @@
             <b-tab title="视频" active>
               <video />
             </b-tab>
-            <b-tab title="聊天室" active>
+            <b-tab title="聊天" active>
               <chat v-if="game" :gameId="game_id" :gameInfo="game" />
             </b-tab>
             <b-tab title="观众">
@@ -52,6 +52,7 @@ import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
 import { socket, enable_board, initGameData } from "../_helpers";
+
 export default {
   computed: {
     ...mapState({
@@ -60,16 +61,24 @@ export default {
     })
   },
   methods: {
-    ...mapMutations("alert", ["success", "error"]),
+    ...mapMutations("alert", ["success", "error", "clear"]),
     begin() {
-      this.canBegin = true;
-      this.btnText = "准备中";
-      this.success("等待其他对局者进入对局！");
-      this.$refs.quit.disabled = true;
-      this._socket.emit("prepareGame", {
-        userId: this.account.user.name,
-        gameId: this.game_id
-      });
+      
+      if (this.btnText == "开始") {
+        console.log("game is begin,text is {}".format(this.btnText))
+        this.btnText = "准备中";
+        this.success("等待其他对局者进入对局！");
+        this.$refs.quit.disabled = true;
+        this._socket.emit("prepareGame", {
+          userId: this.account.user.name,
+          gameId: this.game_id
+        });
+      } else if (this.btnText == "认输") {
+        socket.emit("resign", {
+          userId: this.account.user.name,
+          gameId: this.game_id
+        });
+      }
     },
     exit() {
       console.log(`${this.account.user.name} is me`);
@@ -115,14 +124,26 @@ export default {
       }
       return data;
     });
+    //棋手对局进入准备状态
     EventBus.$on("prepare", msg => {
       this.success(msg);
     });
-
+    //棋局正式开始
     EventBus.$on("beginGame", game => {
       // this.success(msg);
+      this.clear();
+      this.btnText = "认输";
       initGameData(this.account.user.name, game);
       enable_board();
+    });
+
+    //棋局正式结束
+    EventBus.$on("resign", msg => {
+      // this.success(msg);
+      //TODO send kifu to server msg.kifu
+      this.error(msg.result);
+      console.log("game is over,result is {}".format(msg.result))
+      this.$refs.quit.disabled = false;
     });
   },
   components: {

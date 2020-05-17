@@ -8,7 +8,7 @@ export let socketServer = "dfdfdf";
 export let socket = io.connect(`${config.socketUrl}`);
 
 import { EventBus } from "../index.js";
-import { readyMove } from "./go";
+import { readyMove,gameResign } from "./go";
 // var connection = new RTCMultiConnection();
 
 //////////////////////////////
@@ -41,17 +41,9 @@ socket.on("beginGame", function(msg) {
   // removeUser(msg);
 });
 
-socket.on("gameadd", function(msg) {});
-
 socket.on("resign", function(msg) {
-  if (msg.gameId == serverGame.id) {
-    if (myplayer.kifuReader.node.move.c == 1) {
-      game_over("白中盘胜");
-    } else {
-      game_over("黑中盘胜");
-    }
-    socket.emit("login", username);
-  }
+  msg = gameResign();
+  EventBus.$emit("resign", msg);
 });
 
 socket.on("joingame", function(msg) {
@@ -80,7 +72,8 @@ socket.on("move", function(msg) {
 });
 
 socket.on("logout", function(msg) {
-  removeUser(msg.username);
+  // removeUser(msg.username);
+  console.log(msg.username + " logout");
 });
 
 //Listen on new_message

@@ -17,6 +17,8 @@ Vue.use(VeeValidate);
 // import { configureFakeBackend } from './_helpers';
 // configureFakeBackend();
 export const EventBus = new Vue();
+export const format = require('string-format')
+format.extend (String.prototype, {})
 
 new Vue({
     el: '#app',

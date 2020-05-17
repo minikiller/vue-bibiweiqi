@@ -137,11 +137,11 @@ var disable_board = function() {
   myboard.removeEventListener("mouseout", _ev_out);
 };
 
-var read_time = function () {
+var read_time = function() {
   // console.log("your turn value is " + turn);
   clearTimeout(timer_loop);
   if (myplayer.kifuReader.node.move.c == -1) {
-    timer_loop = setInterval(function () {
+    timer_loop = setInterval(function() {
       black_time -= 1;
       myplayer.kifuReader.node.BL = black_time;
 
@@ -151,7 +151,7 @@ var read_time = function () {
       }
     }, 1000);
   } else {
-    timer_loop = setInterval(function () {
+    timer_loop = setInterval(function() {
       white_time -= 1;
       myplayer.kifuReader.node.WL = white_time;
 
@@ -165,7 +165,7 @@ var read_time = function () {
   // myplayer.update();
 };
 
-var move_play = function (player, x, y) {
+var move_play = function(player, x, y) {
   // ignore invalid move
   if (player.frozen || !player.kifuReader.game.isValid(x, y)) return;
 
@@ -202,14 +202,45 @@ var move_play = function (player, x, y) {
   }
 };
 
-export function initGameData(_username, _game){
+export function game_over(result) {
+  clearTimeout(timer_loop);
+  node = new WGo.KNode({
+    RE: result,
+  });
+  // append new node to the current kifu
+  myplayer.kifuReader.node.appendChild(node);
+
+  myplayer.kifu.info["RE"] = result;
+  // myplayer.kifu.info['BL'] = black_time;
+  // myplayer.kifu.info['WL'] = white_time;
+  myplayer.loadSgf(myplayer.kifu.toSgf(), 1000);
+  myplayer.kifuReader.node.WL = white_time;
+  myplayer.kifuReader.node.BL = black_time;
+
+  myplayer.update();
+  alert(result);
+  disable_board();
+  return myplayer.kifu.toSgf();
+}
+
+export function initGameData(_username, _game) {
   username = _username;
   game = _game;
 }
 
+export function gameResign() {
+  let result = "";
+  if (myplayer.kifuReader.node.move.c == 1) {
+    result = "白中盘胜";
+  } else {
+    result = "黑中盘胜";
+  }
+  let kifu = game_over(result);
+  return { result: result, kifu: kifu, game: game.id };
+}
+
 //enable board so it can play
 export function enable_board() {
- 
   var last_steps = myplayer.kifuReader.path.m;
   var turn = last_steps % 4;
   if (turn == 0 && username == game.users.black1) {

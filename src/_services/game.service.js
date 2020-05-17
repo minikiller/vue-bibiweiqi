@@ -25,3 +25,14 @@ function getById(id) {
     handleResponse
   );
 }
+function saveKifu(data) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    data: JSON.stringify(data),
+  };
+
+  return fetch(`${config.apiUrl}/games/${data.gameid}`, requestOptions).then(
+    handleResponse
+  );
+}

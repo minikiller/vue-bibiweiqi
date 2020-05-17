@@ -172,48 +172,6 @@ io.on("connection", function(socket) {
     delete users[msg.userId];
   });
 
-  socket.on("invite", function(opponentId) {
-    console.log(
-      getFormattedDate() +
-        "got an invite from: " +
-        socket.userId +
-        " --> " +
-        opponentId
-    );
-
-    socket.broadcast.emit("leavelobby", socket.userId);
-    socket.broadcast.emit("leavelobby", opponentId);
-
-    var game = {
-      id: Math.floor(Math.random() * 100 + 1),
-      board: null,
-      users: { white: socket.userId, black: opponentId, white0: 0, black0: 0 },
-      kifu: null,
-    };
-
-    socket.gameId = game.id;
-    activeGames[game.id] = game;
-    allGames[game.id] = game;
-
-    users[game.users.white].games[game.id] = game.id;
-    users[game.users.black].games[game.id] = game.id;
-
-    console.log(getFormattedDate() + "starting game: " + game.id);
-    lobbyUsers[game.users.white].emit("joingame", {
-      game: game,
-      color: "white",
-    });
-    lobbyUsers[game.users.black].emit("joingame", {
-      game: game,
-      color: "black",
-    });
-
-    delete lobbyUsers[game.users.white];
-    delete lobbyUsers[game.users.black];
-
-    socket.broadcast.emit("gameadd", { gameId: game.id, gameState: game });
-  });
-
   socket.on("viewgame", function(msg) {
     console.log(getFormattedDate() + "ready to view game: " + msg.gameId);
 
@@ -258,12 +216,9 @@ io.on("connection", function(socket) {
 
   socket.on("resign", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
-
-    delete users[activeGames[msg.gameId].users.white].games[msg.gameId];
-    delete users[activeGames[msg.gameId].users.black].games[msg.gameId];
     delete activeGames[msg.gameId];
-
-    socket.broadcast.emit("resign", msg);
+    // socket.broadcast.emit("resign", msg);
+    io.sockets.in(msg.gameId).emit("resign", msg);
   });
 
   //listen on new_message

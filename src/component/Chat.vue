@@ -85,20 +85,20 @@ export default {
   methods: {
     ...mapMutations("games", ["addUser", "deleteUser"]),
     send() {
-      console.log("get " + this.msg);
-
-      this._socket.emit("new_message", {
-        message: this.msg,
-        gameId: this.gameId
-      });
-      this.text =
-        this.text +
-        "<div class='badge badge-info'>" +
-        this.account.user.name +
-        ":</div> " +
-        this.msg +
-        "\n";
-      this.msg = "";
+      if (this.msg) {
+        this._socket.emit("new_message", {
+          message: this.msg,
+          gameId: this.gameId
+        });
+        this.text =
+          this.text +
+          "<div class='badge badge-info'>" +
+          this.account.user.name +
+          ":</div> " +
+          this.msg +
+          "\n";
+        this.msg = "";
+      }
     }
   }
 };
