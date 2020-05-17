@@ -51,7 +51,7 @@ import Video from "../component/Video";
 import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
-import { socket } from "../_helpers";
+import { socket, enable_board, initGameData } from "../_helpers";
 export default {
   computed: {
     ...mapState({
@@ -119,8 +119,10 @@ export default {
       this.success(msg);
     });
 
-    EventBus.$on("beginGame", msg => {
-      this.success(msg);
+    EventBus.$on("beginGame", game => {
+      // this.success(msg);
+      initGameData(this.account.user.name, game);
+      enable_board();
     });
   },
   components: {

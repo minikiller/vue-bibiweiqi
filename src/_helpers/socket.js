@@ -3,13 +3,12 @@
  */
 import config from "config";
 
-var usersOnline = [];
-var myGames, allGames;
 export let socketServer = "dfdfdf";
 
 export let socket = io.connect(`${config.socketUrl}`);
 
 import { EventBus } from "../index.js";
+import { readyMove } from "./go";
 // var connection = new RTCMultiConnection();
 
 //////////////////////////////
@@ -52,9 +51,6 @@ socket.on("resign", function(msg) {
       game_over("黑中盘胜");
     }
     socket.emit("login", username);
-
-    // $('#page-lobby').show();
-    // $('#page-game').hide();
   }
 });
 
@@ -64,12 +60,6 @@ socket.on("joingame", function(msg) {
   game = msg.game;
   initGame(msg.game, playerColor);
   renderRoom(msg);
-  // $('#page-lobby').hide();
-  // $('#page-game').show();
-  // connection.userid = username;
-  // connection.openOrJoin(msg.game.id);
-  $("#page-lobby").hide();
-  $("#page-game").css("visibility", "visible");
 });
 
 socket.on("joingame", function(msg) {
@@ -77,34 +67,16 @@ socket.on("joingame", function(msg) {
   playerColor = msg.color;
   game = msg.game;
   initGame(msg.game, playerColor);
-  renderRoom(msg);
-  // $('#page-lobby').hide();
-  // $('#page-game').show();
-  $("#page-lobby").hide();
-  $("#page-game").css("visibility", "visible");
 });
 
 socket.on("viewgame", function(msg) {
   console.log("viewed as game id: " + msg.game.id);
   game = msg.game;
-
-  // playerColor = msg.color;
   initViewGame(msg.game);
-  renderRoom(msg);
-  $("#page-lobby").hide();
-  $("#page-game").css("visibility", "visible");
 });
 
 socket.on("move", function(msg) {
-  if (serverGame && msg.gameId === serverGame.id) {
-    // game.move(msg.move);
-    // board.position(game.fen());
-    black_time = msg.BL;
-    white_time = msg.WL;
-    move_play(myplayer, msg.move.x, msg.move.y);
-    // if (!isView)
-    enable_board();
-  }
+  readyMove(msg);
 });
 
 socket.on("logout", function(msg) {

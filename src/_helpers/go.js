@@ -3,7 +3,8 @@ var _ev_move, _ev_click, _ev_out;
 var black_time, white_time;
 var serverGame;
 import { socket } from "./socket";
-
+var username, game;
+var timer_loop = null; //定时器
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -110,7 +111,7 @@ var play = function(x, y) {
   myplayer.next(myplayer.kifuReader.node.children.length - 1);
   var data = {
     move: move,
-    gameId: serverGame.id,
+    gameId: game.gameId,
     kifu: myplayer.kifu.toSgf(),
     BL: black_time,
     WL: white_time,
@@ -118,9 +119,10 @@ var play = function(x, y) {
   socket.emit("move", data);
 
   disable_board();
-  //   read_time();
+  read_time();
 };
-export function beginGame() {
+
+function add_event() {
   _ev_move = _ev_move || edit_board_mouse_move.bind(myboard);
   _ev_out = _ev_out || edit_board_mouse_out.bind(myboard);
   _ev_click = _ev_click || play.bind(myboard);
@@ -128,8 +130,110 @@ export function beginGame() {
   myboard.addEventListener("click", _ev_click);
   myboard.addEventListener("mouseout", _ev_out);
 }
-export default {
-  edit_board_mouse_out,
-  play,
-  edit_board_mouse_move,
+
+var disable_board = function() {
+  myboard.removeEventListener("click", _ev_click);
+  myboard.removeEventListener("mousemove", _ev_move);
+  myboard.removeEventListener("mouseout", _ev_out);
 };
+
+var read_time = function () {
+  // console.log("your turn value is " + turn);
+  clearTimeout(timer_loop);
+  if (myplayer.kifuReader.node.move.c == -1) {
+    timer_loop = setInterval(function () {
+      black_time -= 1;
+      myplayer.kifuReader.node.BL = black_time;
+
+      myplayer.update();
+      if (myplayer.kifuReader.node.BL == 0) {
+        game_over("白超时胜");
+      }
+    }, 1000);
+  } else {
+    timer_loop = setInterval(function () {
+      white_time -= 1;
+      myplayer.kifuReader.node.WL = white_time;
+
+      myplayer.update();
+      if (myplayer.kifuReader.node.WL == 0) {
+        game_over("黑超时胜");
+      }
+    }, 1000);
+  }
+
+  // myplayer.update();
+};
+
+var move_play = function (player, x, y) {
+  // ignore invalid move
+  if (player.frozen || !player.kifuReader.game.isValid(x, y)) return;
+
+  var node;
+  // create new node
+  if (x == null) {
+    node = new WGo.KNode({
+      move: {
+        pass: true,
+        c: player.kifuReader.game.turn,
+      },
+      BL: black_time,
+      WL: white_time,
+      _edited: true,
+    });
+  } else {
+    node = new WGo.KNode({
+      move: {
+        x: x,
+        y: y,
+        c: player.kifuReader.game.turn,
+      },
+      BL: black_time,
+      WL: white_time,
+      _edited: true,
+    });
+
+    // append new node to the current kifu
+    player.kifuReader.node.appendChild(node);
+
+    // show next move
+    player.next(player.kifuReader.node.children.length - 1);
+    read_time();
+  }
+};
+
+export function initGameData(_username, _game){
+  username = _username;
+  game = _game;
+}
+
+//enable board so it can play
+export function enable_board() {
+ 
+  var last_steps = myplayer.kifuReader.path.m;
+  var turn = last_steps % 4;
+  if (turn == 0 && username == game.users.black1) {
+    //black 0
+    add_event();
+  }
+  if (turn == 1 && username == game.users.white1) {
+    //white 0
+    add_event();
+  }
+  if (turn == 2 && username == game.users.black2) {
+    //black 1
+    add_event();
+  }
+  if (turn == 3 && username == game.users.white2) {
+    //white 1
+    add_event();
+  }
+}
+
+export function readyMove(msg) {
+  black_time = msg.BL;
+  white_time = msg.WL;
+  move_play(myplayer, msg.move.x, msg.move.y);
+  // if (!isView)
+  enable_board();
+}

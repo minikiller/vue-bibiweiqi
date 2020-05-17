@@ -112,12 +112,18 @@ io.on("connection", function(socket) {
     io.sockets.in(msg.gameId).emit("prepare", getUserStatus(msg.gameId));
 
     if (checkGameStatus(msg.gameId)) {
-      io.sockets.in(msg.gameId).emit("beginGame", "棋局开始了！！！");
-      /* lobbyUsers[gameInfos[gameId].blackone_id].emit("beginGame", "begin game");
-      lobbyUsers[gameInfos[gameId].blacktwo_id].emit("beginGame", "begin game");
-      lobbyUsers[gameInfos[gameId].whiteone_id].emit("beginGame", "begin game");
-      lobbyUsers[gameInfos[gameId].whitetwo_id].emit("beginGame", "begin game");
- */
+      var game = {
+        users: {
+          black1: gameInfos[msg.gameId].blackone_id,
+          black2: gameInfos[msg.gameId].blacktwo_id,
+          white1: gameInfos[msg.gameId].whiteone_id,
+          white2: gameInfos[msg.gameId].whitetwo_id,
+        },
+        kifu: "",
+        gameId: msg.gameId,
+      };
+      activeGames[msg.gameId] = game; //保存新的对局
+      io.sockets.in(msg.gameId).emit("beginGame", game);
     }
   });
   //查看棋局开始的准备状态
@@ -149,6 +155,16 @@ io.on("connection", function(socket) {
     }
     return true;
   }
+  //落子事件
+  socket.on("move", function (msg) {
+    
+    socket.broadcast.to(msg.gameId).emit("move", msg);
+    // activeGames[msg.gameId].board = msg.board;
+    activeGames[msg.gameId].kifu = msg.kifu;
+    // allGames[msg.gameId].kifu = msg.kifu;
+    console.log(getFormattedDate() + "move data is " + msg.move);
+    console.log(getFormattedDate() + "kifu data is " + msg.kifu);
+  });
 
   socket.on("logout", function(msg) {
     socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
@@ -238,15 +254,6 @@ io.on("connection", function(socket) {
         });
       delete lobbyUsers[game.users.black];
     }
-  });
-
-  socket.on("move", function(msg) {
-    socket.broadcast.emit("move", msg);
-    // activeGames[msg.gameId].board = msg.board;
-    activeGames[msg.gameId].kifu = msg.kifu;
-    // allGames[msg.gameId].kifu = msg.kifu;
-    console.log(getFormattedDate() + "move data is " + msg.move);
-    console.log(getFormattedDate() + "kifu data is " + msg.kifu);
   });
 
   socket.on("resign", function(msg) {
