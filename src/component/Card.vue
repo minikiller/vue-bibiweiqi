@@ -22,6 +22,7 @@
               <router-link :to="{path:'/play/'+data.id}">
                 <b-button variant="primary">进入房间</b-button>
               </router-link>
+              <b-button v-if="account.user.user_id==data.user_id" variant="primary" @click="delGame">删除</b-button>
             </b-card>
           </b-col>
         </div>
@@ -34,6 +35,7 @@
 </template>
 <script>
 import { gameService } from "../_services";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -45,6 +47,17 @@ export default {
       this.games = data.games;
       return data;
     });
+  },
+  computed: {
+    ...mapState({
+      account: state => state.account,
+    })
+  },
+  methods:{
+    // TODO add delete game method
+    delGame(){
+      alert('do');
+    }
   }
 };
 </script>

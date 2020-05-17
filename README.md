@@ -63,3 +63,13 @@ io.sockets.connected(socketid).emit('message', 'for your eyes only');
     ...mapMutations("games", ["addUser", "deleteUser"])
   },
 ```
+
+### route 
+```
+<router-link :to="{path:'/play/'+data.id}">
+  <b-button variant="primary">进入房间</b-button>
+</router-link>
+```
+```
+{ path: "/play/:game_id", component: PlayPage , props: true },
+```
