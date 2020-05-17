@@ -16,7 +16,8 @@ import { mapState, mapMutations } from "vuex";
 import { EventBus } from "../../src/index";
 export default {
   props: {
-    gameId: String
+    gameId: String,
+    gameInfo: null
   },
   computed: {
     ...mapState({
@@ -30,7 +31,8 @@ export default {
     //发送登陆消息给服务器
     socket.emit("login", {
       userId: this.account.user.name,
-      gameId: this.gameId
+      gameId: this.gameId,
+      gameInfo: this.gameInfo
     });
     //通知新的用户进入房间
     EventBus.$on("joinlobbye", user => {

@@ -25,7 +25,8 @@ var lobbyUsers = {};
 var users = {};
 var activeGames = {};
 var allGames = {};
-var userinGame = {};
+var gameInfos = {};
+var gameStatus = {}; //game对局者是否准备的信息
 app.get("/", function(req, res) {
   // res.sendFile(path.join(__dirname, 'dist', 'index.html'))
   res.sendFile(__dirname + "/public/index.html");
@@ -60,10 +61,20 @@ io.on("connection", function(socket) {
     let userId = msg.userId;
     let gameId = msg.gameId;
     socket.userId = msg.userId;
+    userStatus = {};
+
+    gameInfos[gameId] = msg.gameInfo;
+    if (!gameStatus[gameId]) {
+      userStatus[msg.gameInfo.blackone_id] = false;
+      userStatus[msg.gameInfo.blacktwo_id] = false;
+      userStatus[msg.gameInfo.whiteone_id] = false;
+      userStatus[msg.gameInfo.whitetwo_id] = false;
+      gameStatus[gameId] = userStatus;
+    }
 
     if (!users[userId]) {
       console.log(getFormattedDate() + "creating new user " + userId);
-      users[userId] = { userId: socket.userId, games: gameId };
+      users[userId] = { userId: socket.userId, games: gameId, prepared: false };
     } else {
       console.log("user found!");
       // Object.keys(users[userId].games).forEach(function(gameId) {
@@ -92,6 +103,51 @@ io.on("connection", function(socket) {
     }
     //给新登陆的用户发送当前房间的所有人员信息列表
     socket.emit("initGameUser", game_users);
+  }
+
+  //准备开始对局
+  socket.on("prepareGame", function(msg) {
+    // users[msg.userId].prepared = true;
+    gameStatus[msg.gameId][msg.userId] = true;
+    io.sockets.in(msg.gameId).emit("prepare", getUserStatus(msg.gameId));
+
+    if (checkGameStatus(msg.gameId)) {
+      io.sockets.in(msg.gameId).emit("beginGame", "棋局开始了！！！");
+      /* lobbyUsers[gameInfos[gameId].blackone_id].emit("beginGame", "begin game");
+      lobbyUsers[gameInfos[gameId].blacktwo_id].emit("beginGame", "begin game");
+      lobbyUsers[gameInfos[gameId].whiteone_id].emit("beginGame", "begin game");
+      lobbyUsers[gameInfos[gameId].whitetwo_id].emit("beginGame", "begin game");
+ */
+    }
+  });
+  //查看棋局开始的准备状态
+  function getUserStatus(gameId) {
+    let str = [];
+    let ok;
+    var userStatus = gameStatus[gameId];
+    for (var key in userStatus) {
+      if (!userStatus[key]) {
+        ok = `${key} 还没有开始对局；`;
+      } else {
+        ok = `${key} 已经开始对局；`;
+      }
+      str.push(ok);
+    }
+    let value = "";
+    str.forEach((v) => {
+      value = value + v;
+    });
+    return str;
+  }
+  //判断是否可以进入对局状态
+  function checkGameStatus(gameId) {
+    var userStatus = gameStatus[gameId];
+    for (var key in userStatus) {
+      if (!userStatus[key]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   socket.on("logout", function(msg) {

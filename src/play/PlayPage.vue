@@ -7,13 +7,18 @@
             <b-badge v-if="game">{{game.name}}--->{{account.user.name}}</b-badge>
           </h2>
           <div class="form-group">
-            <button class="btn btn-primary" @click="begin">开始</button>
+            <button
+              v-if="isOpponent"
+              aria-pressed="true"
+              class="btn btn-primary"
+              @click="begin"
+            >{{btnText}}</button>
             <!-- <button class="btn btn-primary" @click="login">login</button> -->
-            <button class="btn btn-primary" @click="exit">退出</button>
+            <button class="btn btn-primary" @click="exit" ref="quit">退出</button>
           </div>
           <my-go
             v-if="game"
-            :total_time="game.total_time"
+            :total_time="game.total_time.toString()"
             :blackOne="game.blackone_id"
             :whiteOne="game.whiteone_id"
             :blackTwo="game.blacktwo_id"
@@ -26,7 +31,7 @@
               <video />
             </b-tab>
             <b-tab title="聊天室" active>
-              <chat :gameId="game_id" />
+              <chat v-if="game" :gameId="game_id" :gameInfo="game" />
             </b-tab>
             <b-tab title="观众">
               <b-list-group v-for="(user, index) in games.onlineUsers" :key="index">
@@ -55,34 +60,67 @@ export default {
     })
   },
   methods: {
-    begin() {},
+    ...mapMutations("alert", ["success", "error"]),
+    begin() {
+      this.canBegin = true;
+      this.btnText = "准备中";
+      this.success("等待其他对局者进入对局！");
+      this.$refs.quit.disabled = true;
+      this._socket.emit("prepareGame", {
+        userId: this.account.user.name,
+        gameId: this.game_id
+      });
+    },
     exit() {
       console.log(`${this.account.user.name} is me`);
       socket.emit("logout", {
         userId: this.account.user.name,
         gameId: this.game_id
       });
-      this.$router.push({path: '/'});
+      this.$router.push({ path: "/" });
     }
   },
   props: ["game_id"],
   data() {
     return {
+      btnText: "开始",
+      _socket: null,
+      isOpponent: false,
       game: null,
       gameUser: [], //本对局的对手信息
+      userStatus: {}, //对局用户的准备状态
       currentUsers: [], //进入对局室的所有人
-      canBegin: Boolean, //是否可以开始新对局
+      canBegin: false, //是否可以开始新对局
       kifu: "" //棋谱
     };
   },
   mounted() {
+    this._socket = socket;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
       this.gameUser.push(this.game.blacktwo_id);
       this.gameUser.push(this.game.whiteone_id);
       this.gameUser.push(this.game.whitetwo_id);
+      /* this.userStatus[this.game.blackone_id] = false;
+      this.userStatus[this.game.blacktwo_id] = false;
+      this.userStatus[this.game.whiteone_id] = false;
+      this.userStatus[this.game.whitetwo_id] = false; */
+      //如果是对局者，给出提示信息
+      this.isOpponent =
+        this.gameUser.indexOf(this.account.user.name) != -1 ? true : false;
+      if (this.isOpponent) {
+        console.log("it is openent in game");
+        this.success("对局者请点击开始按钮，进入对局！");
+      }
       return data;
+    });
+    EventBus.$on("prepare", msg => {
+      this.success(msg);
+    });
+
+    EventBus.$on("beginGame", msg => {
+      this.success(msg);
     });
   },
   components: {

@@ -55,6 +55,7 @@ export default {
   },
   methods:{
     // TODO add delete game method
+    //正在进行的对局室不允许删除
     delGame(){
       alert('do');
     }

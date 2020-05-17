@@ -21,13 +21,24 @@ socket.on("initGameUser", function(msg) {
 });
 
 //用户进入对局室
-socket.on("joinlobby", function (msg) {
+socket.on("joinlobby", function(msg) {
   EventBus.$emit("joinlobbye", msg);
   // addUser(msg);
 });
 //用户立刻对局室
-socket.on("leavelobby", function (msg) {
+socket.on("leavelobby", function(msg) {
   EventBus.$emit("leavelobby", msg);
+  // removeUser(msg);
+});
+//用户准备开始对局
+socket.on("prepare", function(msg) {
+  EventBus.$emit("prepare", msg);
+  // removeUser(msg);
+});
+
+//全部用户准备开始对局
+socket.on("beginGame", function(msg) {
+  EventBus.$emit("beginGame", msg);
   // removeUser(msg);
 });
 
@@ -101,6 +112,6 @@ socket.on("logout", function(msg) {
 });
 
 //Listen on new_message
-socket.on("get_message", function (msg) {
+socket.on("get_message", function(msg) {
   EventBus.$emit("get_message", msg);
 });
