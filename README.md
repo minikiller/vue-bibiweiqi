@@ -47,7 +47,7 @@ io.sockets.emit('message', "this is a test");
 io.sockets.in('game').emit('message', 'cool game');
 
 // sending to individual socketid
-io.sockets.socket(socketid).emit('message', 'for your eyes only');
+io.sockets.connected(socketid).emit('message', 'for your eyes only');
 ```
 
 ### vuex
@@ -62,4 +62,14 @@ io.sockets.socket(socketid).emit('message', 'for your eyes only');
   methods: {
     ...mapMutations("games", ["addUser", "deleteUser"])
   },
+```
+
+### route 
+```
+<router-link :to="{path:'/play/'+data.id}">
+  <b-button variant="primary">进入房间</b-button>
+</router-link>
+```
+```
+{ path: "/play/:game_id", component: PlayPage , props: true },
 ```

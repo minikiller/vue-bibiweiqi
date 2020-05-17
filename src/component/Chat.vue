@@ -32,24 +32,32 @@ export default {
       userId: this.account.user.name,
       gameId: this.gameId
     });
-    EventBus.$on("joinlobbye", data => {
-      console.log("user id is come in room" + data);
-      this.addUser(data);
+    //通知新的用户进入房间
+    EventBus.$on("joinlobbye", user => {
+      this.addUser(user);
+      this.text =
+        this.text +
+        "<br><div class='badge badge-danger'>" +
+        "系统:</div>" +
+        user +
+        "进入聊天室</br>";
+    });
+    //初始化聊天室用户列表
+    EventBus.$on("initGameUser", userlist => {
+      userlist.forEach(user => {
+        this.addUser(user);
+      });
+    });
+
+    EventBus.$on("leavelobby", data => {
+      console.log("user id is leave room" + data);
+      this.deleteUser(data);
       this.text =
         this.text +
         "<br><div class='badge badge-danger'>" +
         "系统:</div>" +
         data +
-        "进入聊天室</br>";
-    });
-    EventBus.$on("leavelobby", data => {
-      console.log("user id is leave room" + data);
-      this.deleteUser(data);
-      this.text +
-        "<div class='badge badge-danger'>" +
-        "系统:</div>" +
-        data +
-        "离开聊天室\n";
+        "离开聊天室</br>";
     });
 
     EventBus.$on("get_message", data => {

@@ -1,16 +1,11 @@
 <template>
   <div>
-    <div class="form-group">
-      <button class="btn btn-primary" @click="begin">Play</button>
-      <button class="btn btn-primary" @click="login">login</button>
-      <button class="btn btn-primary" @click="begin">Play</button>
-      <div style="width: 100%; margin: 0" ref="player"></div>
-    </div>
+    <div style="width: 100%; margin: 0" ref="player"></div>
   </div>
 </template>
 
 <script>
-import { initGame, beginGame, socket, socketServer } from "../_helpers";
+import { initGame, socket } from "../_helpers";
 import { mapState, mapActions } from "vuex";
 import { EventBus } from "../../src/index";
 export default {
@@ -21,7 +16,7 @@ export default {
     })
   },
   props: {
-    total_time:String,
+    total_time: String,
     blackOne: String,
     whiteOne: String,
     blackTwo: String,
@@ -30,15 +25,7 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    begin() {
-      beginGame();
-    },
-    login() {
-      console.log(`${this.account.user.name} is me`);
-      
-    }
-  },
+  methods: {},
   mounted() {
     initGame(this.$refs.player, {
       total_time: this.total_time,
@@ -47,11 +34,6 @@ export default {
       whiteOne: this.whiteOne,
       whiteTwo: this.whiteTwo
     });
-
-    EventBus.$on("fetchdata", group => {
-      console.log("i get it ");
-    });
-    
 
     // socket.emit("login", account.user.name);
   }

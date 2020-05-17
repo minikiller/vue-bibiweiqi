@@ -16,15 +16,8 @@ import { EventBus } from "../index.js";
 // Socket.io handlers
 //////////////////////////////
 
-socket.on("login", function(msg) {
-  usersOnline = msg.users;
-  // updateUserList();
-  EventBus.$emit("fetchdata", msg);
-  myGames = msg.games;
-  // updateGamesList();
-
-  allGames = msg.allgames;
-  // updateAllGamesList();
+socket.on("initGameUser", function(msg) {
+  EventBus.$emit("initGameUser", msg);
 });
 
 //用户进入对局室
@@ -34,7 +27,7 @@ socket.on("joinlobby", function (msg) {
 });
 //用户立刻对局室
 socket.on("leavelobby", function (msg) {
-  EventBus.$emit("get_message", msg);
+  EventBus.$emit("leavelobby", msg);
   // removeUser(msg);
 });
 

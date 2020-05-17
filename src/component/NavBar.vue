@@ -28,7 +28,7 @@
               </template>
               <b-dropdown-item href="/game">new game</b-dropdown-item>
               <b-dropdown-item href="/profile">Profile</b-dropdown-item>
-              <b-dropdown-item href="/logout">Sign Out</b-dropdown-item>
+              <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { userService } from "../_services";
 export default {
   computed: {
     ...mapState({
@@ -52,6 +53,10 @@ export default {
   methods: {
     getMeal() {
       //   ...
+    },
+    logout() {
+      userService.logout();
+      location.reload(true);
     }
   }
 };
