@@ -5,7 +5,7 @@
             <b-col sm="6" offset="3">
                 <b-card>
                 
-                    <h2>Register</h2>
+                    <h2>用户注册</h2>
                     <form @submit.prevent="handleSubmit">
                         <!-- <div class="form-group">
                             <label for="firstName">First Name</label>
@@ -23,22 +23,21 @@
                                 v-model="user.name" 
                                 v-validate="'required'" 
                                 name="name" 
-                                placeholder="username"
+                                placeholder="请输入用户名"
                                 class="form-control" 
                                 :class="{ 'is-invalid': submitted && errors.has('name') }"
                             />
                             <div v-if="submitted && errors.has('name')" class="invalid-feedback">{{ errors.first('username') }}</div>
                         </div>
                         <div class="form-group">
-                            <input 
+                            <b-form-input
                                 type="password" 
                                 v-model="user.password" 
-                                placeholder="password"
+                                placeholder="请输入密码"
                                 v-validate="{ required: true, min: 6 }" 
                                 name="password" 
-                                class="form-control" 
-                                :class="{ 'is-invalid': submitted && errors.has('password') }"
-                            />
+                                :class="{ 'is-invalid': submitted && errors.has('password') }">
+                            </b-form-input>     
                             <div v-if="submitted && errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
                         </div>
                         <div class="form-group">
@@ -47,41 +46,37 @@
                                 v-model="user.mobile"
                                 v-validate="'required'"
                                 name="mobile"
-                                placeholder="mobile"
+                                placeholder="手机号码"
                                 class="form-control"
                                 :class="{ 'is-invalid': submitted && errors.has('mobile') }"
                             />
                             <div v-if="submitted && errors.has('mobile')" class="invalid-feedback">{{ errors.first('mobile') }}</div>
                         </div>
                         <div class="form-group">
-                            <input
-                                type="email" 
+                            <b-form-input 
                                 v-model="user.email" 
-                                v-validate="'required'" 
-                                name="email" 
-                                placeholder="email"
-                                class="form-control" 
+                                name="email"
+                                v-validate="'required'"
                                 :class="{ 'is-invalid': submitted && errors.has('email') }" 
-                            />    
+                                placeholder="电子邮件地址">
+                            </b-form-input>
                             <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
                         </div>
                         <div class="form-group">
-                            <input
-                                type="text" 
-                                v-model="user.rank" 
-                                v-validate="'required'" 
-                                name="rank" class="form-control" 
-                                :class="{ 'is-invalid': submitted && errors.has('rank') }" 
-                            />    
-                            <div v-if="submitted && errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
+                            <b-form-select v-model="selected" :options="options">
+                            </b-form-select>
                         </div>
+
                         <div class="form-group">
-                            <button class="btn btn-primary" :disabled="status.registering">Register</button>
+                            <b-button type="submit" block variant="success" :disabled="status.registering">提交</b-button>
+                        </div>
+                        <div>
+                            <!--
                             <img v-show="status.registering" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            -->
                             <router-link to="/login" class="btn btn-link">Cancel</router-link>
-                        </div>
+                        </div>    
                     </form>
-                
                 </b-card>
            </b-col>
         </b-row>
@@ -95,13 +90,22 @@ export default {
     data () {
         return {
             user: {
-                // firstName: '',
-                // lastName: '',
                 name: '',
                 password: '',
                 email: '',
                 mobile: ''
-            },
+            },            
+            selected: null,
+            options: [
+                { value: null, text: '选择您的棋力水平' },
+                { value: '1', text: '业余1段' },
+                { value: '2', text: '业余2段' },
+                { value: '3', text: '业余3段' },
+                { value: '4', text: '业余4段' },
+                { value: '5', text: '业余5段' },
+                { value: '6', text: '业余6段' },
+                { value: '7', text: '业余7段' }
+            ],
             submitted: false
         }
     },
@@ -122,7 +126,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .form-group {
     margin-bottom: 1rem;
 }
