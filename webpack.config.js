@@ -1,6 +1,6 @@
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const NODE_API_ENV = process.env.NODE_API_ENV || "http://localhost:5000";
+const NODE_API_ENV = process.env.NODE_API_ENV || "https://localhost:5000";
 const NODE_SOCKET_ENV = process.env.NODE_SOCKET_ENV || "https://localhost:3000";
 
 module.exports = {
