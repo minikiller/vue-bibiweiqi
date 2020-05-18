@@ -1,5 +1,8 @@
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const NODE_API_ENV = process.env.NODE_API_ENV || "http://localhost:5000";
+const NODE_SOCKET_ENV = process.env.NODE_SOCKET_ENV || "https://localhost:3000";
+
 module.exports = {
   mode: "development",
   resolve: {
@@ -14,10 +17,10 @@ module.exports = {
         use: "vue-loader",
       },
       {
-        enforce: 'pre',
+        enforce: "pre",
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'eslint-loader',
+        loader: "eslint-loader",
       },
       {
         test: /\.js?$/,
@@ -43,8 +46,8 @@ module.exports = {
   externals: {
     // global app config object
     config: JSON.stringify({
-      apiUrl: "http://localhost:5000",
-      socketUrl: "https://localhost:3000"
+      apiUrl: NODE_API_ENV,
+      socketUrl: NODE_SOCKET_ENV,
     }),
   },
 };
