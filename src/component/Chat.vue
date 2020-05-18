@@ -1,8 +1,11 @@
 <template>
   <div>
-    <section id="chatroom" ref="chatroom">
+    <!-- <section id="chatroom" ref="chatroom">
       <section v-html="text"></section>
-    </section>
+    </section>-->
+    <b-card class="mt-5" header="聊天记录">
+      <pre class="m-3" v-html="text"></pre>
+    </b-card>
 
     <section id="input_zone">
       <b-form-input placeholder="Enter your msg" v-model="msg"></b-form-input>
