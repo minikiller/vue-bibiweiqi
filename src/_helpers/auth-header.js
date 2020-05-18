@@ -17,7 +17,10 @@ export function handleResponse(response) {
           if (response.status === 401) {
               // auto logout if 401 response returned from api
               userService.logout();
-              location.reload(true);
+              if (location.pathname !== "/login") {
+                location.reload(true);
+              }
+              
           }
 
           const error = (data && data.message) || response.statusText;
