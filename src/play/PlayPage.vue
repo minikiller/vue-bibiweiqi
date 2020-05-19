@@ -28,7 +28,7 @@
         <b-col cols="4">
           <b-tabs content-class="mt-3" justified>
             <b-tab title="视频" active>
-              <video />
+              <video :gameId="game_id"></video>
             </b-tab>
             <b-tab title="聊天" active>
               <chat v-if="game" :gameId="game_id" :gameInfo="game" />

@@ -5,6 +5,8 @@
 </template>
 <script>
 import { connection } from "../_helpers";
+import { mapState, mapMutations } from "vuex";
+
 export default {
   props: {
     gameId: String,
