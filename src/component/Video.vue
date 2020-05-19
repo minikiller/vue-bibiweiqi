@@ -1,12 +1,30 @@
 <template>
   <div>
-    <h2>this is video</h2>
+    <div ref="videos-container"></div>
   </div>
 </template>
 <script>
+import { connection } from "../_helpers";
 export default {
+  props: {
+    gameId: String,
+    gameInfo: null
+  },
+  computed: {
+    ...mapState({
+      account: state => state.account
+    })
+  },
   data() {
     return {};
+  },
+  mounted() {
+    connection.videosContainer =this.$refs.videos-container;
+
+    connection.userid =this.account.user.name;
+    connection.openOrJoin(gameId, (isRoomJoined, roomid, error) => {
+      console.log(isRoomJoined, roomid, error);
+    });
   }
 };
 </script>

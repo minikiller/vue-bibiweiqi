@@ -3,5 +3,5 @@ export * from "./router";
 export * from "./auth-header";
 export * from "./go";
 export * from "./socket";
-export * from "./video";
+export * from "./webrtc";
 // export * from "./event";
