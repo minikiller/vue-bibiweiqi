@@ -4,16 +4,7 @@
       <v-select label="name" :filterable="false" :options="options" @search="onSearch">
         <template slot="no-options">type to search GitHub repositories..</template>
         <template slot="option" slot-scope="option">
-          <div class="d-center">
-            <img :src="option.owner.avatar_url" />
-            {{ option.full_name }}
-          </div>
-        </template>
-        <template slot="selected-option" slot-scope="option">
-          <div class="selected d-center">
-            <img :src="option.owner.avatar_url" />
-            {{ option.full_name }}
-          </div>
+          <div class="d-center">{{ option.name }}</div>
         </template>
       </v-select>
       Selected: {{ selected }}
@@ -97,9 +88,11 @@ export default {
     },
     search: _.debounce((loading, search, vm) => {
       fetch(
-        `https://api.github.com/search/repositories?q=${escape(search)}`
+        `https://localhost:5000/users/data?userName=${escape(search)}`
       ).then(res => {
-        res.json().then(json => (vm.options = json.items));
+        res.json().then(json => {
+          vm.options = json;
+        });
         loading(false);
       });
     }, 350),
