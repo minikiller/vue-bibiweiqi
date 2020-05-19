@@ -28,9 +28,10 @@
         <b-col cols="4">
           <b-tabs content-class="mt-3" justified>
             <b-tab title="视频" active>
-              <video :gameId="game_id"></video>
+              <div>sterere</div>
+              <my-video :gameId="game_id"></my-video>
             </b-tab>
-            <b-tab title="聊天" active>
+            <b-tab title="聊天">
               <chat v-if="game" :gameId="game_id" :gameInfo="game" />
             </b-tab>
             <b-tab title="观众">
@@ -47,7 +48,7 @@
 <script>
 import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
-import Video from "../component/Video";
+import MyVideo from "../component/MyVideo";
 import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
@@ -63,9 +64,8 @@ export default {
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
     begin() {
-      
       if (this.btnText == "开始") {
-        console.log("game is begin,text is {}".format(this.btnText))
+        console.log("game is begin,text is {}".format(this.btnText));
         this.btnText = "准备中";
         this.success("等待其他对局者进入对局！");
         this.$refs.quit.disabled = true;
@@ -142,14 +142,14 @@ export default {
       // this.success(msg);
       //TODO send kifu to server msg.kifu
       this.error(msg.result);
-      console.log("game is over,result is {}".format(msg.result))
+      console.log("game is over,result is {}".format(msg.result));
       this.$refs.quit.disabled = false;
     });
   },
   components: {
     MyGo,
     Chat,
-    Video
+    MyVideo
   }
 };
 </script>
