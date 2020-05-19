@@ -4,7 +4,9 @@
       <b-row>
         <b-col cols="8">
           <h2>
-            <b-badge v-if="game">{{game.name}}--->{{account.user.name}}</b-badge>
+            <b-badge v-if="game"
+              >{{ game.name }}--->{{ account.user.name }}</b-badge
+            >
           </h2>
           <div class="form-group">
             <button
@@ -12,9 +14,13 @@
               aria-pressed="true"
               class="btn btn-primary"
               @click="begin"
-            >{{btnText}}</button>
+            >
+              {{ btnText }}
+            </button>
             <!-- <button class="btn btn-primary" @click="login">login</button> -->
-            <button class="btn btn-primary" @click="exit" ref="quit">退出</button>
+            <button class="btn btn-primary" @click="exit" ref="quit">
+              退出
+            </button>
           </div>
           <my-go
             v-if="game"
@@ -29,14 +35,58 @@
           <b-tabs content-class="mt-3" justified>
             <b-tab title="视频" active>
               <div>sterere</div>
-              <my-video :gameId="game_id"></my-video>
+              <div class="">
+                <vue-webrtc
+                  ref="webrtc"
+                  width="100%"
+                  :roomId="roomId"
+                  v-on:joined-room="logEvent"
+                  v-on:left-room="logEvent"
+                  v-on:open-room="logEvent"
+                  v-on:share-started="logEvent"
+                  v-on:share-stopped="logEvent"
+                  @error="onError"
+                />
+              </div>
+              <div class="row">
+                <div class="col-md-12 my-3">
+                  <button type="button" class="btn btn-primary" @click="onJoin">
+                    Join
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="onLeave"
+                  >
+                    Leave
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="onCapture"
+                  >
+                    Capture Photo
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="onShareScreen"
+                  >
+                    Share Screen
+                  </button>
+                </div>
+              </div>
+              <!-- <my-video :gameId="game_id"></my-video> -->
             </b-tab>
             <b-tab title="聊天">
               <chat v-if="game" :gameId="game_id" :gameInfo="game" />
             </b-tab>
             <b-tab title="观众">
-              <b-list-group v-for="(user, index) in games.onlineUsers" :key="index">
-                <b-list-group-item>{{user}}</b-list-group-item>
+              <b-list-group
+                v-for="(user, index) in games.onlineUsers"
+                :key="index"
+              >
+                <b-list-group-item>{{ user }}</b-list-group-item>
               </b-list-group>
             </b-tab>
           </b-tabs>
@@ -49,17 +99,23 @@
 import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
 import MyVideo from "../component/MyVideo";
+import WebRTC from "../component/webrtc";
 import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
 import { socket, enable_board, initGameData } from "../_helpers";
 
+// import { WebRTC } from "plugin";
+import { find, head } from "lodash";
+import Vue from 'vue'
+Vue.component(WebRTC.name, WebRTC);
+
 export default {
   computed: {
     ...mapState({
-      account: state => state.account,
-      games: state => state.games
-    })
+      account: (state) => state.account,
+      games: (state) => state.games,
+    }),
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
@@ -71,12 +127,12 @@ export default {
         this.$refs.quit.disabled = true;
         this._socket.emit("prepareGame", {
           userId: this.account.user.name,
-          gameId: this.game_id
+          gameId: this.game_id,
         });
       } else if (this.btnText == "认输") {
         socket.emit("resign", {
           userId: this.account.user.name,
-          gameId: this.game_id
+          gameId: this.game_id,
         });
       }
     },
@@ -84,10 +140,28 @@ export default {
       console.log(`${this.account.user.name} is me`);
       socket.emit("logout", {
         userId: this.account.user.name,
-        gameId: this.game_id
+        gameId: this.game_id,
       });
       this.$router.push({ path: "/" });
-    }
+    },
+    onCapture() {
+      this.img = this.$refs.webrtc.capture();
+    },
+    onJoin() {
+      this.$refs.webrtc.join();
+    },
+    onLeave() {
+      this.$refs.webrtc.leave();
+    },
+    onShareScreen() {
+      this.img = this.$refs.webrtc.shareScreen();
+    },
+    onError(error, stream) {
+      console.log("On Error Event", error, stream);
+    },
+    logEvent(event) {
+      console.log("Event : ", event);
+    },
   },
   props: ["game_id"],
   data() {
@@ -100,12 +174,14 @@ export default {
       userStatus: {}, //对局用户的准备状态
       currentUsers: [], //进入对局室的所有人
       canBegin: false, //是否可以开始新对局
-      kifu: "" //棋谱
+      kifu: "", //棋谱
+      img: null,
+      roomId: "public-room",
     };
   },
   mounted() {
     this._socket = socket;
-    gameService.getById(this.game_id).then(data => {
+    gameService.getById(this.game_id).then((data) => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
       this.gameUser.push(this.game.blacktwo_id);
@@ -125,11 +201,11 @@ export default {
       return data;
     });
     //棋手对局进入准备状态
-    EventBus.$on("prepare", msg => {
+    EventBus.$on("prepare", (msg) => {
       this.success(msg);
     });
     //棋局正式开始
-    EventBus.$on("beginGame", game => {
+    EventBus.$on("beginGame", (game) => {
       // this.success(msg);
       this.clear();
       this.btnText = "认输";
@@ -138,7 +214,7 @@ export default {
     });
 
     //棋局正式结束
-    EventBus.$on("resign", msg => {
+    EventBus.$on("resign", (msg) => {
       // this.success(msg);
       //TODO send kifu to server msg.kifu
       this.error(msg.result);
@@ -149,7 +225,7 @@ export default {
   components: {
     MyGo,
     Chat,
-    MyVideo
-  }
+    MyVideo,
+  },
 };
 </script>
