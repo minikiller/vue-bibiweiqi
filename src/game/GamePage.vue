@@ -1,6 +1,13 @@
 <template>
   <div>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+      <v-select label="name" :filterable="false" :options="options" @search="onSearch">
+        <template slot="no-options">type to search GitHub repositories..</template>
+        <template slot="option" slot-scope="option">
+          <div class="d-center">{{ option.name }}</div>
+        </template>
+      </v-select>
+      Selected: {{ selected }}
       <b-form-group
         id="input-group-1"
         label="Email address:"
@@ -51,9 +58,13 @@
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
   data() {
     return {
+      selected: null, // this needs to be filled with the selected value (id or object), but it stays empty
+      options: [],
       form: {
         email: "",
         name: "",
@@ -71,6 +82,21 @@ export default {
     };
   },
   methods: {
+    onSearch(search, loading) {
+      loading(true);
+      this.search(loading, search, this);
+    },
+    search: _.debounce((loading, search, vm) => {
+      fetch(
+        `https://localhost:5000/users/data?userName=${escape(search)}`
+      ).then(res => {
+        res.json().then(json => {
+          vm.options = json;
+        });
+        loading(false);
+      });
+    }, 350),
+
     onSubmit(evt) {
       evt.preventDefault();
       alert(JSON.stringify(this.form));
