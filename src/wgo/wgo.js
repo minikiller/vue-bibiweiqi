@@ -1865,7 +1865,7 @@
       this.redraw();
     },
   };
-
+  WGo.DIR = "/static/";
   Board.default = {
     size: 19,
     width: 0,
@@ -1994,7 +1994,7 @@
 
     //background: WGo.DIR+"wood1.jpg",    // Original version, tileing
     //background: WGo.DIR+"wood_512.jpg", // Mobile friendly, low resolution
-    background: WGo.DIR + "wood_1024.jpg",  // High resolution version, use with REALISTIC handler
+    background: WGo.DIR + "wood_1024.jpg", // High resolution version, use with REALISTIC handler
     // background: wood_1024, // High resolution version, use with REALISTIC handler
 
     //whiteStoneGraphic: [ WGo.DIR+"white_128.png" ], // Single image only, hires
