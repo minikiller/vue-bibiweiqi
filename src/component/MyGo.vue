@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { initGame, socket } from "../_helpers";
+import { initGame, resumeGame, socket } from "../_helpers";
 import { mapState, mapActions } from "vuex";
 import { EventBus } from "../../src/index";
 
@@ -35,8 +35,14 @@ export default {
       whiteOne: this.whiteOne,
       whiteTwo: this.whiteTwo
     });
-
+    //棋局恢复
+    EventBus.$on("resumeGame", msg => {
+      resumeGame(msg);
+    });
     // socket.emit("login", account.user.name);
   }
 };
 </script>
+<style scoped>
+@import "/static/wgo.player.css";
+</style>

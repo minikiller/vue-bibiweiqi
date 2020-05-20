@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import { initGame, beginGame, socket, socketServer } from "../_helpers";
+import { initGame, beginGame, socket } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
 import { EventBus } from "../../src/index";
 export default {
