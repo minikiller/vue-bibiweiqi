@@ -12,11 +12,18 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-select/dist/vue-select.css';
 
 import vSelect from 'vue-select'
-
 Vue.component('v-select', vSelect)
 Vue.use(BootstrapVue)
 Vue.use(VeeValidate);
 
+require('exports-loader?WGo!./wgo/wgo.js');
+require('exports-loader?WGo.KifuReader,WGo.Kifu!./wgo/kifu.js');
+require('exports-loader?WGo.SGF!./wgo/sgfparser.js');
+require('exports-loader?WGo.Player!./wgo/player.js');
+require('exports-loader?WGo.BasicPlayer!./wgo/basicplayer.js');
+require('exports-loader?WGo.BasicPlayer.component!./wgo/basicplayer.component.js');
+require('exports-loader?WGo.BasicPlayer.component.InfoBox!./wgo/basicplayer.infobox.js');
+require('exports-loader?WGo.i18n["zh"]!./wgo/i18n.zh.js');
 // setup fake backend
 // import { configureFakeBackend } from './_helpers';
 // configureFakeBackend();

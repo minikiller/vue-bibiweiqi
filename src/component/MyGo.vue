@@ -8,6 +8,7 @@
 import { initGame, socket } from "../_helpers";
 import { mapState, mapActions } from "vuex";
 import { EventBus } from "../../src/index";
+
 export default {
   computed: {
     ...mapState({

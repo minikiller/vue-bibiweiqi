@@ -2,8 +2,8 @@
  * 处理websocket相关的业务方法
  */
 import config from "config";
-
-export let socketServer = "dfdfdf";
+import io from 'socket.io-client';
+// export let socketServer = "dfdfdf";
 
 export let socket = io.connect(`${config.socketUrl}`);
 
