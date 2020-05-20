@@ -23,7 +23,8 @@ https.listen(port, function() {
 
 var lobbyUsers = {};
 var users = {};
-var activeGames = {};
+var activeGames = {}; //正在进行的对局字典
+var activeUsers = {}; //正在进行对局的用户字典
 var allGames = {};
 var gameInfos = {};
 var gameStatus = {}; //game对局者是否准备的信息
@@ -112,6 +113,7 @@ io.on("connection", function(socket) {
     io.sockets.in(msg.gameId).emit("prepare", getUserStatus(msg.gameId));
 
     if (checkGameStatus(msg.gameId)) {
+      //进入对局状态
       var game = {
         users: {
           black1: gameInfos[msg.gameId].blackone_id,
@@ -120,8 +122,15 @@ io.on("connection", function(socket) {
           white2: gameInfos[msg.gameId].whitetwo_id,
         },
         kifu: "",
+        BL: "",
+        WL: "",
+        move: null,
         gameId: msg.gameId,
       };
+      activeUsers[gameInfos[msg.gameId].blackone_id] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].blacktwo_id] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].whiteone_id] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].whitetwo_id] = msg.gameId;
       activeGames[msg.gameId] = game; //保存新的对局
       io.sockets.in(msg.gameId).emit("beginGame", game);
     }
@@ -156,14 +165,28 @@ io.on("connection", function(socket) {
     return true;
   }
   //落子事件
-  socket.on("move", function (msg) {
-    
+  socket.on("move", function(msg) {
     socket.broadcast.to(msg.gameId).emit("move", msg);
     // activeGames[msg.gameId].board = msg.board;
     activeGames[msg.gameId].kifu = msg.kifu;
+    activeGames[msg.gameId].BL = msg.BL;
+    activeGames[msg.gameId].WL = msg.WL;
+    activeGames[msg.gameId].move = msg.move;
     // allGames[msg.gameId].kifu = msg.kifu;
     console.log(getFormattedDate() + "move data is " + msg.move);
     console.log(getFormattedDate() + "kifu data is " + msg.kifu);
+  });
+
+  //检查用户是否有正在进行的对局
+  socket.on("resume", function(userId) {
+    if (activeUsers[userId]) {
+      gameId = activeUsers[userId];
+      game = activeGames[gameId];
+      lobbyUsers[msg.userId].emit("resume", {
+        gameId: gameId,
+        kifu: game.kifu,
+      });
+    }
   });
 
   socket.on("logout", function(msg) {
@@ -216,7 +239,12 @@ io.on("connection", function(socket) {
 
   socket.on("resign", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
+    delete activeUsers[activeGames[msg.gameId].blackone_id];
+    delete activeUsers[activeGames[msg.gameId].blacktwo_id];
+    delete activeUsers[activeGames[msg.gameId].whiteone_id];
+    delete activeUsers[activeGames[msg.gameId].whitetwo_id];
     delete activeGames[msg.gameId];
+
     // socket.broadcast.emit("resign", msg);
     io.sockets.in(msg.gameId).emit("resign", msg);
   });

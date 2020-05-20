@@ -223,9 +223,10 @@ export function game_over(result) {
   return myplayer.kifu.toSgf();
 }
 
-export function initGameData(_username, _game) {
+export function initGameData(_username, _game, _kifu) {
   username = _username;
   game = _game;
+  kifu = _kifu;
 }
 
 export function gameResign() {
@@ -264,6 +265,16 @@ export function enable_board() {
 export function readyMove(msg) {
   black_time = msg.BL;
   white_time = msg.WL;
+  move_play(myplayer, msg.move.x, msg.move.y);
+  // if (!isView)
+  enable_board();
+}
+
+export function resumeGame(msg) {
+  black_time = msg.BL;
+  white_time = msg.WL;
+  myplayer.loadSgf(msg.kifu);
+  myplayer.last();
   move_play(myplayer, msg.move.x, msg.move.y);
   // if (!isView)
   enable_board();

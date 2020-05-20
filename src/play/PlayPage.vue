@@ -13,7 +13,7 @@
               class="btn btn-primary"
               @click="begin"
             >{{ btnText }}</button>
-            <!-- <button class="btn btn-primary" @click="login">login</button> -->
+            <button class="btn btn-primary" v-if="canBegin" @click="getScore">数子</button>
             <button class="btn btn-primary" @click="exit" ref="quit">退出</button>
           </div>
           <my-go
@@ -90,6 +90,28 @@ export default {
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
+    // 显示分数
+    getScore() {
+      if (this.score_selected) {
+        myplayer.setFrozen(false);
+        this._score_mode.end();
+        delete this._score_mode;
+        myplayer.notification();
+        myplayer.help();
+        score_selected = false;
+      } else {
+        myplayer.setFrozen(true);
+        myplayer.help("<p>" + WGo.t("help_score") + "</p>");
+        this._score_mode = new WGo.ScoreMode(
+          myplayer.kifuReader.game.position,
+          myplayer.board,
+          myplayer.kifu.info.KM || 7.5,
+          myplayer.notification
+        );
+        this._score_mode.start();
+        this.score_selected = true;
+      }
+    },
     begin() {
       if (this.btnText == "开始") {
         console.log("game is begin,text is {}".format(this.btnText));
@@ -107,6 +129,15 @@ export default {
         });
       }
     },
+    beginPlay(kifu) {
+      // this.success(msg);
+      this.clear();
+      this.btnText = "认输";
+      this.canBegin = true;
+      initGameData(this.account.user.name, game, kifu);
+      enable_board();
+    },
+
     exit() {
       console.log(`${this.account.user.name} is me`);
       socket.emit("logout", {
@@ -137,6 +168,7 @@ export default {
   props: ["game_id"],
   data() {
     return {
+      score_selected: false,
       btnText: "开始",
       _socket: null,
       isOpponent: false,
@@ -177,12 +209,9 @@ export default {
     });
     //棋局正式开始
     EventBus.$on("beginGame", game => {
-      // this.success(msg);
-      this.clear();
-      this.btnText = "认输";
-      initGameData(this.account.user.name, game);
-      enable_board();
+      this.beginPlay("");
     });
+    
 
     //棋局正式结束
     EventBus.$on("resign", msg => {

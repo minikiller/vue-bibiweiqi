@@ -54,12 +54,12 @@ socket.on("joingame", function(msg) {
   renderRoom(msg);
 });
 
-socket.on("joingame", function(msg) {
-  console.log("joined as game id: " + msg.game.id);
-  playerColor = msg.color;
-  game = msg.game;
-  initGame(msg.game, playerColor);
-});
+// socket.on("joingame", function(msg) {
+//   console.log("joined as game id: " + msg.game.id);
+//   playerColor = msg.color;
+//   game = msg.game;
+//   initGame(msg.game, playerColor);
+// });
 
 socket.on("viewgame", function(msg) {
   console.log("viewed as game id: " + msg.game.id);
@@ -79,4 +79,9 @@ socket.on("logout", function(msg) {
 //Listen on new_message
 socket.on("get_message", function(msg) {
   EventBus.$emit("get_message", msg);
+});
+
+//Listen on new_message
+socket.on("resume", function(msg) {
+  EventBus.$emit("resume", msg);
 });
