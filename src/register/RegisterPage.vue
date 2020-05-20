@@ -62,7 +62,7 @@
               <b-form-input
                 v-model="user.email"
                 name="email"
-                v-validate="'required'"
+                v-validate="'required|email'"
                 :class="{ 'is-invalid': submitted && errors.has('email') }"
                 placeholder="电子邮件地址"
               >
