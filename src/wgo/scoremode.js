@@ -101,11 +101,10 @@
       }
 
       this.board.restoreState({ objects: WGo.clone(this.saved_state.objects) });
-      result = this.displayScore();
+      this.displayScore();
     }.bind(this);
 
     this.board.addEventListener("click", this._click);
-    return result;
   };
 
   ScoreMode.prototype.end = function() {
@@ -199,7 +198,6 @@
       msg += "<p style='font-weight: bold;'>" + WGo.t("wwin", sw - sb) + "</p>";
 
     this.output(msg);
-    return msg;
   };
 
   ScoreMode.prototype.calculate = function() {

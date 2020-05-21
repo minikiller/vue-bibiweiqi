@@ -190,6 +190,10 @@ export default {
       enable_board();
     });
 
+    EventBus.$on("showScore", msg => {
+      this.success(msg);
+    });
+
     //棋局正式结束
     EventBus.$on("resign", msg => {
       // this.success(msg);

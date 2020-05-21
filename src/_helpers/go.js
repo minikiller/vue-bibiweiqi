@@ -299,7 +299,11 @@ export function resumeGame(msg) {
   // if (!isView)
   enable_board();
 }
-
+//回调函数，用于形势判断，获得判断的结果
+function showScoreResult(msg) {
+  console.log(msg);
+  EventBus.$emit("showScore", msg);
+}
 export function showScore() {
   if (score_selected) {
     myplayer.setFrozen(false);
@@ -311,12 +315,13 @@ export function showScore() {
     return "";
   } else {
     myplayer.setFrozen(true);
-    myplayer.help("<p>" + WGo.t("help_score") + "</p>");
+    showScoreResult("<p>" + WGo.t("help_score") + "</p>");
     _score_mode = new WGo.ScoreMode(
       myplayer.kifuReader.game.position,
       myplayer.board,
       myplayer.kifu.info.KM || 7.5,
-      myplayer.notification
+      // myplayer.notification
+      showScoreResult
     );
     
     score_selected = true;
