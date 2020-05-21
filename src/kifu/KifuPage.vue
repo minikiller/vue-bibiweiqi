@@ -32,6 +32,10 @@ export default {
           label: "白方信息"
         },
         {
+          key: "result",
+          label: "结果"
+        },
+        {
           key: "create_date",
           label: "创建时间",
           class: "my-class"

@@ -43,6 +43,9 @@ export default {
         query: { type: "resume" }
       });
     });
+    EventBus.$on("move", game=>{
+      this.updateGame(game);
+    });
   }
 };
 </script>

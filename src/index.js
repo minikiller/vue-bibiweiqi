@@ -14,8 +14,11 @@ import 'vue-select/dist/vue-select.css';
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 Vue.use(BootstrapVue)
-Vue.use(VeeValidate);
-
+// Vue.use(VeeValidate);
+Vue.use(VeeValidate, {
+    inject: true,
+    fieldsBagName: 'veeFields'
+  });
 require('exports-loader?WGo!./wgo/wgo.js');
 require('exports-loader?WGo.KifuReader,WGo.Kifu!./wgo/kifu.js');
 require('exports-loader?WGo.SGF!./wgo/sgfparser.js');

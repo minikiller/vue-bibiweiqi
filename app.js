@@ -239,10 +239,11 @@ io.on("connection", function(socket) {
 
   socket.on("resign", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
-    delete activeUsers[activeGames[msg.gameId].blackone_id];
-    delete activeUsers[activeGames[msg.gameId].blacktwo_id];
-    delete activeUsers[activeGames[msg.gameId].whiteone_id];
-    delete activeUsers[activeGames[msg.gameId].whitetwo_id];
+    console.log(activeGames[msg.gameId]);
+    delete activeUsers[activeGames[msg.gameId].users.black1];
+    delete activeUsers[activeGames[msg.gameId].users.black2];
+    delete activeUsers[activeGames[msg.gameId].users.white1];
+    delete activeUsers[activeGames[msg.gameId].users.white2];
     delete activeGames[msg.gameId];
 
     // socket.broadcast.emit("resign", msg);

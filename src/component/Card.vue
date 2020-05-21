@@ -22,7 +22,6 @@
               <router-link :to="{path:'/play/'+data.id}">
                 <b-button variant="primary">进入房间</b-button>
               </router-link>
-              <a :href="$router.resolve({name: 'PlayPage'}).href">link</a>
               <b-button
                 v-if="account.user.user_id==data.user_id"
                 variant="primary"

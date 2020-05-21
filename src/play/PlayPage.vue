@@ -92,8 +92,8 @@ export default {
     ...mapMutations("alert", ["success", "error", "clear"]),
     // 显示分数
     getScore() {
-      showScore(this.score_selected);
-      this.score_selected = !this.score_selected;
+      this.success(showScore());
+      // this.score_selected = !this.score_selected;
     },
     begin() {
       if (this.btnText == "开始") {
@@ -198,12 +198,12 @@ export default {
       console.log("game is over,result is {}".format(msg.result));
       this.$refs.quit.disabled = false;
       let save_data = {
-        black_info: this.games.game.black1 + "&" + this.games.game.black2,
-        white_info: this.games.game.white1 + "&" + this.games.game.white2,
+        black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
+        white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
         kifu_data: this.games.game.kifu,
         result: msg.result
       };
-      gameService.save(save_data).then((data)=>{
+      gameService.saveKifu(save_data).then((data)=>{
         this.success(data);
       });
 

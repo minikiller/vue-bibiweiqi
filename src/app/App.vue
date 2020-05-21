@@ -3,7 +3,7 @@
     <b-container fluid="xl">
       <b-row>
         <b-col>
-          <div v-if="alert.message" :class="`alert ${alert.type}`">{{alert.message}}</div>
+          <div v-if="alert.message" :class="`alert ${alert.type}`" v-html="alert.message"> </div>
           <router-view></router-view>
         </b-col>
       </b-row>

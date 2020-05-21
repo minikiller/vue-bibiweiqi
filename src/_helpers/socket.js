@@ -67,8 +67,9 @@ socket.on("viewgame", function(msg) {
   initViewGame(msg.game);
 });
 
-socket.on("move", function(msg) {
+socket.on("move", function (msg) {
   readyMove(msg);
+  EventBus.$emit("move", msg);
 });
 
 socket.on("logout", function(msg) {

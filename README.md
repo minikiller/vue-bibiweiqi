@@ -81,3 +81,11 @@ format.extend (String.prototype, {})
 var a = "Hello {0} {1}!".format("world","hello");
 console.log(a)
 ```
+### confict with vee-validate and b-table
+refer to: https://github.com/bootstrap-vue/bootstrap-vue/issues/1270
+```
+Vue.use(VeeValidate, {
+  inject: true,
+  fieldsBagName: 'veeFields'
+});
+```

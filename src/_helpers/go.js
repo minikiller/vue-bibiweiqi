@@ -1,11 +1,12 @@
 let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var black_time, white_time;
-var serverGame;
 import { socket } from "./socket";
+import { EventBus } from "../index.js";
 var username, game;
 var timer_loop = null; //定时器
-var _score_mode,score_selected;
+var _score_mode;
+var score_selected = false;
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -45,7 +46,8 @@ export function initResumeGame(ele, gameinfo) {
     // move: 1000
   });
   myboard = myplayer.board;
-  move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
+  myplayer.last();
+  // move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
   // if (!isView)
   enable_board();
 }
@@ -134,6 +136,7 @@ var play = function(x, y) {
     WL: white_time,
   };
   socket.emit("move", data);
+  EventBus.$emit("move", data);
 
   disable_board();
   read_time();
@@ -221,7 +224,7 @@ var move_play = function(player, x, y) {
 
 export function game_over(result) {
   clearTimeout(timer_loop);
-  node = new WGo.KNode({
+  let node = new WGo.KNode({
     RE: result,
   });
   // append new node to the current kifu
@@ -297,14 +300,15 @@ export function resumeGame(msg) {
   enable_board();
 }
 
-export function showScore(isScored) {
-  if (isScored) {
+export function showScore() {
+  if (score_selected) {
     myplayer.setFrozen(false);
     _score_mode.end();
-    delete this._score_mode;
+    // delete _score_mode;
     myplayer.notification();
     myplayer.help();
     score_selected = false;
+    return "";
   } else {
     myplayer.setFrozen(true);
     myplayer.help("<p>" + WGo.t("help_score") + "</p>");
@@ -314,7 +318,8 @@ export function showScore(isScored) {
       myplayer.kifu.info.KM || 7.5,
       myplayer.notification
     );
-    _score_mode.start();
+    
     score_selected = true;
+    return _score_mode.start();
   }
 }
