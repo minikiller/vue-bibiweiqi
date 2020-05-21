@@ -178,13 +178,13 @@ io.on("connection", function(socket) {
   });
 
   //检查用户是否有正在进行的对局
-  socket.on("resume", function(userId) {
-    if (activeUsers[userId]) {
-      gameId = activeUsers[userId];
+  socket.on("resume", function(msg) {
+    if (activeUsers[msg.userId] !== undefined) {
+      gameId = activeUsers[msg.userId];
       game = activeGames[gameId];
-      lobbyUsers[msg.userId].emit("resume", {
+      socket.emit("resume", {
         gameId: gameId,
-        kifu: game.kifu,
+        game: game,
       });
     }
   });

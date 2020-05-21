@@ -74,7 +74,7 @@ import WebRTC from "../component/webrtc";
 import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
-import { socket, enable_board, initGameData } from "../_helpers";
+import { socket, enable_board, initGameData, showScore } from "../_helpers";
 
 // import { WebRTC } from "plugin";
 import { find, head } from "lodash";
@@ -92,25 +92,8 @@ export default {
     ...mapMutations("alert", ["success", "error", "clear"]),
     // 显示分数
     getScore() {
-      if (this.score_selected) {
-        myplayer.setFrozen(false);
-        this._score_mode.end();
-        delete this._score_mode;
-        myplayer.notification();
-        myplayer.help();
-        score_selected = false;
-      } else {
-        myplayer.setFrozen(true);
-        myplayer.help("<p>" + WGo.t("help_score") + "</p>");
-        this._score_mode = new WGo.ScoreMode(
-          myplayer.kifuReader.game.position,
-          myplayer.board,
-          myplayer.kifu.info.KM || 7.5,
-          myplayer.notification
-        );
-        this._score_mode.start();
-        this.score_selected = true;
-      }
+      showScore(this.score_selected);
+      this.score_selected = !this.score_selected;
     },
     begin() {
       if (this.btnText == "开始") {
@@ -129,15 +112,6 @@ export default {
         });
       }
     },
-    beginPlay(kifu) {
-      // this.success(msg);
-      this.clear();
-      this.btnText = "认输";
-      this.canBegin = true;
-      initGameData(this.account.user.name, game, kifu);
-      enable_board();
-    },
-
     exit() {
       console.log(`${this.account.user.name} is me`);
       socket.emit("logout", {
@@ -209,9 +183,12 @@ export default {
     });
     //棋局正式开始
     EventBus.$on("beginGame", game => {
-      this.beginPlay("");
+      this.success("对局正式开始");
+      this.btnText = "认输";
+      this.canBegin = true;
+      initGameData(this.account.user.name, game);
+      enable_board();
     });
-    
 
     //棋局正式结束
     EventBus.$on("resign", msg => {
@@ -220,6 +197,19 @@ export default {
       this.error(msg.result);
       console.log("game is over,result is {}".format(msg.result));
       this.$refs.quit.disabled = false;
+      let save_data = {
+        black_info: this.games.game.black1 + "&" + this.games.game.black2,
+        white_info: this.games.game.white1 + "&" + this.games.game.white2,
+        kifu_data: this.games.game.kifu,
+        result: msg.result
+      };
+      gameService.save(save_data).then((data)=>{
+        this.success(data);
+      });
+
+      /* kifu_data=data['kifu_data'], create_date=now_time,
+                    user_id=current_user.id, black_info=data['black_info'],
+                    white_info=data['white_info']*/
     });
   },
   components: {

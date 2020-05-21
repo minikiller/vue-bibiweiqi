@@ -1,38 +1,52 @@
 const state = {
-    type: null,
-    message: null
+  type: null,
+  message: null,
 };
-
+const time_out = 5000;
 const actions = {
-    success({ commit }, message) {
-        commit('success', message);
-    },
-    error({ commit }, message) {
-        commit('error', message);
-    },
-    clear({ commit }) {
-        commit('clear');
-    }
+  success({ commit }, message) {
+    commit("success", message);
+    setTimeout(() => {
+      commit("clear");
+    }, time_out);
+  },
+  error({ commit }, message) {
+    commit("error", message);
+    setTimeout(() => {
+      commit("clear");
+    }, time_out);
+  },
+  clear({ commit }) {
+    commit("clear");
+  },
 };
 
 const mutations = {
-    success(state, message) {
-        state.type = 'alert-success';
-        state.message = message;
-    },
-    error(state, message) {
-        state.type = 'alert-danger';
-        state.message = message;
-    },
-    clear(state) {
-        state.type = null;
-        state.message = null;
-    }
+  success(state, message) {
+    state.type = "alert-success";
+    state.message = message;
+    setTimeout(() => {
+      state.type = null;
+      state.message = null;
+    }, time_out);
+  },
+  error(state, message) {
+    state.type = "alert-danger";
+    state.message = message;
+    setTimeout(() => {
+      state.type = null;
+      state.message = null;
+    }, time_out);
+  },
+  clear(state) {
+    state.type = null;
+    state.message = null;
+  },
 };
 
 export const alert = {
-    namespaced: true,
-    state,
-    actions,
-    mutations
+  namespaced: true,
+  state,
+  actions,
+  mutations,
 };

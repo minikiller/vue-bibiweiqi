@@ -17,10 +17,13 @@ export default {
     Navbar,
     Card
   },
-  data(){
+  methods: {
+    ...mapMutations("games", ["updateGame"])
+  },
+  data() {
     return {
-      _socket:null
-    }
+      _socket: null
+    };
   },
   computed: {
     ...mapState({
@@ -34,10 +37,12 @@ export default {
       userId: this.account.user.name
     });
     EventBus.$on("resume", msg => {
-       this.$router.push({ path: `/play/${msg.gameId}` });
-       EventBus.$emit("resumeGame", msg);
+      this.updateGame(msg.game);
+      this.$router.push({
+        path: `/play/${msg.gameId}`,
+        query: { type: "resume" }
+      });
     });
-    
   }
 };
 </script>

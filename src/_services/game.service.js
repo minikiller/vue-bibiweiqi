@@ -4,6 +4,7 @@ import { authHeader, handleResponse } from "../_helpers";
 export const gameService = {
   getAll,
   getById,
+  saveKifu,
 };
 
 function getAll() {
@@ -25,6 +26,7 @@ function getById(id) {
     handleResponse
   );
 }
+
 function saveKifu(data) {
   const requestOptions = {
     method: "POST",
@@ -32,7 +34,7 @@ function saveKifu(data) {
     data: JSON.stringify(data),
   };
 
-  return fetch(`${config.apiUrl}/games/${data.gameid}`, requestOptions).then(
+  return fetch(`${config.apiUrl}/kifus`, requestOptions).then(
     handleResponse
   );
 }

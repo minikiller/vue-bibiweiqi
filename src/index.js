@@ -24,6 +24,7 @@ require('exports-loader?WGo.BasicPlayer!./wgo/basicplayer.js');
 require('exports-loader?WGo.BasicPlayer.component!./wgo/basicplayer.component.js');
 require('exports-loader?WGo.BasicPlayer.component.InfoBox!./wgo/basicplayer.infobox.js');
 require('exports-loader?WGo.i18n["zh"]!./wgo/i18n.zh.js');
+require('exports-loader?WGo.ScoreMode!./wgo/scoremode.js');
 // setup fake backend
 // import { configureFakeBackend } from './_helpers';
 // configureFakeBackend();

@@ -5,6 +5,7 @@ var serverGame;
 import { socket } from "./socket";
 var username, game;
 var timer_loop = null; //定时器
+var _score_mode,score_selected;
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -31,6 +32,22 @@ export function initGame(ele, gameinfo) {
     // move: 1000
   });
   myboard = myplayer.board;
+}
+
+export function initResumeGame(ele, gameinfo) {
+  if (myplayer != null) myplayer = null;
+  black_time = gameinfo.BL;
+  white_time = gameinfo.WL;
+  myplayer = new WGo.BasicPlayer(ele, {
+    sgf: gameinfo.kifu,
+    enableWheel: false,
+    enableKeys: false,
+    // move: 1000
+  });
+  myboard = myplayer.board;
+  move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
+  // if (!isView)
+  enable_board();
 }
 
 // board mouseout callback for edit move
@@ -223,10 +240,9 @@ export function game_over(result) {
   return myplayer.kifu.toSgf();
 }
 
-export function initGameData(_username, _game, _kifu) {
+export function initGameData(_username, _game) {
   username = _username;
   game = _game;
-  kifu = _kifu;
 }
 
 export function gameResign() {
@@ -271,11 +287,34 @@ export function readyMove(msg) {
 }
 
 export function resumeGame(msg) {
-  black_time = msg.BL;
-  white_time = msg.WL;
-  myplayer.loadSgf(msg.kifu);
+  game = msg.game;
+  black_time = game.BL;
+  white_time = game.WL;
+  myplayer.loadSgf(game.kifu);
   myplayer.last();
-  move_play(myplayer, msg.move.x, msg.move.y);
+  move_play(myplayer, game.move.x, game.move.y);
   // if (!isView)
   enable_board();
+}
+
+export function showScore(isScored) {
+  if (isScored) {
+    myplayer.setFrozen(false);
+    _score_mode.end();
+    delete this._score_mode;
+    myplayer.notification();
+    myplayer.help();
+    score_selected = false;
+  } else {
+    myplayer.setFrozen(true);
+    myplayer.help("<p>" + WGo.t("help_score") + "</p>");
+    _score_mode = new WGo.ScoreMode(
+      myplayer.kifuReader.game.position,
+      myplayer.board,
+      myplayer.kifu.info.KM || 7.5,
+      myplayer.notification
+    );
+    _score_mode.start();
+    score_selected = true;
+  }
 }

@@ -2,6 +2,7 @@ import { gamesService } from "../_services";
 
 const state = {
   onlineUsers: [],
+  game: null,
 };
 
 const actions = {};
@@ -12,6 +13,9 @@ const mutations = {
   },
   deleteUser(state, userId) {
     state.onlineUsers.pop(userId);
+  },
+  updateGame(state, game) {
+    state.game = game;
   },
 };
 

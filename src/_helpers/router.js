@@ -11,7 +11,7 @@ import GamePage from "../game/GamePage";
 Vue.use(Router);
 
 export const router = new Router({
-  mode: "history",
+  // mode: "history",
   routes: [
     // { path: "/", component: HomePage },
     { path: "/", component: Home },
