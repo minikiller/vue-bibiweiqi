@@ -1,7 +1,7 @@
 <template>
   <b-container class="bv-example-row">
     <b-row>
-      <b-col sm="6" offset="3">
+      <b-col sm="6">
         <b-card>
           <h2>用户注册</h2>
           <form @submit.prevent="handleSubmit">
