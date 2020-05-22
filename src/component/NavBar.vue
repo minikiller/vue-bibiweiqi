@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="lg" type="dark" variant="success">
       <b-container>
-        <b-navbar-brand href="#">我的对局室</b-navbar-brand>
+        <b-navbar-brand href="#">{{games.navTitle}}</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <!-- Right aligned nav items -->
@@ -26,9 +26,19 @@
               <template slot="button-content">
                 <em>{{account.user.name}}</em>
               </template>
-              <b-dropdown-item href="/game">new game</b-dropdown-item>
-              <b-dropdown-item href="/profile">Profile</b-dropdown-item>
-              <b-dropdown-item href="/kifu">Kifu</b-dropdown-item>
+              <b-dropdown-item>
+                <router-link :to="{ path: '/'}" replace>home</router-link>
+              </b-dropdown-item>              
+              <b-dropdown-item>
+                <router-link :to="{ path: '/game'}" replace>new game</router-link>
+              </b-dropdown-item>
+              <b-dropdown-item>
+                <router-link :to="{ path: '/profile'}" replace>Profile</router-link>
+              </b-dropdown-item>
+              <b-dropdown-item href="/kifu">
+                Kifu
+                <!-- <router-link :to="{ path: '/kifu'}" replace>Kifu</router-link> -->
+              </b-dropdown-item>
               <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -43,7 +53,8 @@ import { userService } from "../_services";
 export default {
   computed: {
     ...mapState({
-      account: state => state.account
+      account: state => state.account,
+      games: state => state.games
     })
   },
   data() {

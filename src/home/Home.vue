@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar />
+    <!-- <Navbar /> -->
     <Card />
   </div>
 </template>
@@ -18,10 +18,11 @@ export default {
     Card
   },
   methods: {
-    ...mapMutations("games", ["updateGame"])
+    ...mapMutations("games", ["updateGame", "updateNavTitle"])
   },
   data() {
     return {
+      name: "我的对局室",
       _socket: null
     };
   },
@@ -33,6 +34,7 @@ export default {
   },
   mounted() {
     this._socket = socket;
+    this.updateNavTitle(this.name);
     this._socket.emit("resume", {
       userId: this.account.user.name
     });
@@ -43,7 +45,7 @@ export default {
         query: { type: "resume" }
       });
     });
-    EventBus.$on("move", game=>{
+    EventBus.$on("move", game => {
       this.updateGame(game);
     });
   }

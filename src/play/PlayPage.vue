@@ -3,9 +3,7 @@
     <b-container class="bv-example-row" width="100%">
       <b-row>
         <b-col cols="8">
-          <h2>
-            <b-badge v-if="game">{{ game.name }}--->{{ account.user.name }}</b-badge>
-          </h2>
+          
           <div class="form-group">
             <button
               v-if="isOpponent"
@@ -90,6 +88,7 @@ export default {
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
+    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
     // 显示分数
     getScore() {
       this.success(showScore());
@@ -157,6 +156,7 @@ export default {
     };
   },
   mounted() {
+    
     this._socket = socket;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
@@ -175,6 +175,7 @@ export default {
         console.log("it is openent in game");
         this.success("对局者请点击开始按钮，进入对局！");
       }
+      this.updateNavTitle(this.game.name);
       return data;
     });
     //棋手对局进入准备状态

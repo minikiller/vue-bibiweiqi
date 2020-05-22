@@ -3,6 +3,7 @@ import { gamesService } from "../_services";
 const state = {
   onlineUsers: [],
   game: null,
+  navTitle: "",
 };
 
 const actions = {};
@@ -16,6 +17,9 @@ const mutations = {
   },
   updateGame(state, game) {
     state.game = game;
+  },
+  updateNavTitle(state, value) {
+    state.navTitle = value;
   },
 };
 

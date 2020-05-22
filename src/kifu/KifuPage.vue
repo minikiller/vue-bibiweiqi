@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>{{account.user.name}}</h2>
     <b-table striped hover :items="items" :fields="fields">
       <template v-slot:cell(actions)="row">
         <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
@@ -12,7 +11,7 @@
 import config from "config";
 import { authHeader, handleResponse } from "../_helpers";
 import { userService } from "../_services";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   computed: {
     ...mapState({
@@ -21,6 +20,7 @@ export default {
   },
   data() {
     return {
+      name: "我的棋谱",
       fields: [
         {
           key: "black_info",
@@ -47,8 +47,10 @@ export default {
   },
   mounted() {
     this.getall();
+    this.updateNavTitle(this.name);
   },
   methods: {
+    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
     info(item, index, event) {
       console.log(item, index, event);
       let id = item.id;

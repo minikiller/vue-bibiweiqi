@@ -59,10 +59,15 @@
 
 <script>
 import _ from "lodash";
+import { mapState, mapMutations } from "vuex";
 
 export default {
+  mounted() {
+    this.updateNavTitle(this.name);
+  },
   data() {
     return {
+      name: "新建对局",
       selected: null, // this needs to be filled with the selected value (id or object), but it stays empty
       options: [],
       form: {
@@ -82,6 +87,8 @@ export default {
     };
   },
   methods: {
+    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+
     onSearch(search, loading) {
       loading(true);
       this.search(loading, search, this);
