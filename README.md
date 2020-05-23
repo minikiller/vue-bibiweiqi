@@ -64,28 +64,57 @@ io.sockets.connected(socketid).emit('message', 'for your eyes only');
   },
 ```
 
-### route 
+### route
+
 ```
 <router-link :to="{path:'/play/'+data.id}">
   <b-button variant="primary">进入房间</b-button>
 </router-link>
 ```
+
 ```
 { path: "/play/:game_id", component: PlayPage , props: true },
 ```
 
 ### fomat string
+
 ```
 const format = require('string-format')
 format.extend (String.prototype, {})
 var a = "Hello {0} {1}!".format("world","hello");
 console.log(a)
 ```
+
 ### confict with vee-validate and b-table
+
 refer to: https://github.com/bootstrap-vue/bootstrap-vue/issues/1270
+
 ```
 Vue.use(VeeValidate, {
   inject: true,
   fieldsBagName: 'veeFields'
 });
+```
+
+### dialog
+
+```
+  this.$bvModal.msgBoxConfirm('Please confirm that you want to delete everything.', {
+          title: 'Please Confirm',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'YES',
+          cancelTitle: 'NO',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        })
+          .then(value => {
+            this.boxTwo = value
+          })
+          .catch(err => {
+            // An error occurred
+          })
+      }
 ```

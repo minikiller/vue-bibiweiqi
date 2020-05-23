@@ -241,7 +241,7 @@ export function game_over(result) {
   myplayer.update();
   alert(result);
   disable_board();
-  EventBus.$emit("timeout",null);
+  EventBus.$emit("timeout",result);
   return myplayer.kifu.toSgf();
 }
 

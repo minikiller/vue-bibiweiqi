@@ -149,6 +149,7 @@ io.on("connection", function(socket) {
         WL: "",
         move: null,
         gameId: msg.gameId,
+        status: "begin"
       };
       activeUsers[gameInfos[msg.gameId].blackone_id] = msg.gameId;
       activeUsers[gameInfos[msg.gameId].blacktwo_id] = msg.gameId;
@@ -213,6 +214,15 @@ io.on("connection", function(socket) {
         game: game,
       });
     }
+  });
+
+  //用户观战正在进行的对局
+  socket.on("view", function(msg) {
+    game = activeGames[msg.gameId];
+    socket.emit("view", {
+      gameId: msg.gameId,
+      game: game,
+    });
   });
 
   socket.on("logout", function(msg) {

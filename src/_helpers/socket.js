@@ -61,10 +61,9 @@ socket.on("joingame", function(msg) {
 //   initGame(msg.game, playerColor);
 // });
 
-socket.on("viewgame", function(msg) {
-  console.log("viewed as game id: " + msg.game.id);
-  game = msg.game;
-  initViewGame(msg.game);
+socket.on("view", function(msg) {
+  console.log("viewed as game id: " + msg.gameId);
+  EventBus.$emit("view", msg);
 });
 
 socket.on("move", function (msg) {

@@ -11,6 +11,7 @@
               @click="begin"
             >{{ btnText }}</button>
             <button class="btn btn-primary" v-if="canBegin" @click="getScore">数子</button>
+            <!-- <button class="btn btn-primary" @click="test">test</button> -->
             <button class="btn btn-primary" @click="exit" ref="quit">退出</button>
           </div>
           <my-go
@@ -20,6 +21,7 @@
             :whiteOne="game.whiteone_id"
             :blackTwo="game.blacktwo_id"
             :whiteTwo="game.whitetwo_id"
+            :gameStatus="game.status"
           />
         </b-col>
         <b-col cols="4">
@@ -93,6 +95,9 @@ export default {
       this.success(showScore());
       // this.score_selected = !this.score_selected;
     },
+    test() {
+      // this.$refs["modal"].show();
+    },
     begin() {
       if (this.btnText == "开始") {
         console.log("game is begin,text is {}".format(this.btnText));
@@ -104,10 +109,28 @@ export default {
           gameId: this.game_id
         });
       } else if (this.btnText == "认输") {
-        socket.emit("resign", {
-          userId: this.account.user.name,
-          gameId: this.game_id
-        });
+        this.$bvModal
+          .msgBoxConfirm("你想认输吗？", {
+            title: "请确认",
+            size: "sm",
+            buttonSize: "sm",
+            okVariant: "danger",
+            okTitle: "确定",
+            cancelTitle: "取消",
+            hideHeaderClose: false,
+            centered: true
+          })
+          .then(value => {
+            if (value) {
+              socket.emit("resign", {
+                userId: this.account.user.name,
+                gameId: this.game_id
+              });
+            }
+          })
+          .catch(err => {
+            // An error occurred
+          });
       }
     },
     exit() {
@@ -178,6 +201,7 @@ export default {
           this.success("对局成功恢复，请继续对局！");
           this.btnText = "认输";
           this.canBegin = true;
+          this.$refs.quit.disabled = true;
         }
       } else {
         //观战者
@@ -185,6 +209,11 @@ export default {
           this.success("对局还未开始，准备中！");
         } else if (this.game.status == "进行中") {
           this.success("对局正在进行中，请欣赏对局！");
+
+          socket.emit("view", {
+            userId: this.account.user.name,
+            gameId: this.game_id
+          });
         } else {
           //已结束
           this.success("对局已经结束！");
@@ -199,7 +228,11 @@ export default {
     });
     //超时判负
     EventBus.$on("timeout", msg => {
-      this.begin();
+      this._socket.emit("resign", {
+        userId: this.account.user.name,
+        gameId: this.game_id
+      }); //发送信息
+      this.error(msg);
     });
     //棋局正式开始
     EventBus.$on("beginGame", game => {
@@ -215,6 +248,11 @@ export default {
 
     EventBus.$on("showScore", msg => {
       this.success(msg);
+    });
+
+    EventBus.$on("view", msg => {
+      // this.success(msg);
+      this.updateGame(msg.game);
     });
 
     //棋局正式结束

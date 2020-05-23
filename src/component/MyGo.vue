@@ -22,7 +22,8 @@ export default {
     blackOne: String,
     whiteOne: String,
     blackTwo: String,
-    whiteTwo: String
+    whiteTwo: String,
+    gameStatus: String
   },
   data() {
     return {};
@@ -30,6 +31,10 @@ export default {
   methods: {},
   mounted() {
     if (this.$route.query.type == "resume") {
+      initGameData(this.account.user.name, this.games.game);
+      initResumeGame(this.$refs.player, this.games.game);
+    } else if (this.gameStatus == "进行中") {
+      //观战
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game);
     } else {
