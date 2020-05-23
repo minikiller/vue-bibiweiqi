@@ -8,6 +8,7 @@ import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
 import KifuPage from "../kifu/KifuPage";
 import GamePage from "../game/GamePage";
+import ProfilePage from "../profile/ProfilePage";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 Vue.use(Router);
@@ -23,6 +24,7 @@ export const router = new Router({
     { path: "/play/:game_id", component: PlayPage, props: true },
     { path: "/game", component: GamePage },
     { path: "/kifu", component: KifuPage },
+    { path: "/profile", component: ProfilePage },
 
     // otherwise redirect to home
     { path: "*", redirect: "/" },
@@ -37,7 +39,7 @@ router.beforeEach((to, from, next) => {
 
   if (authRequired && !loggedIn) {
     return next("/login");
-  }else{
+  } else {
     NProgress.start();
     next();
   }
