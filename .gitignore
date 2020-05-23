@@ -41,6 +41,6 @@ typings
 dist
 
 *.lock
-# package-lock.json
+package-lock.json
 
 .DS_Store
