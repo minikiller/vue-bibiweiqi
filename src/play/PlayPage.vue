@@ -250,10 +250,7 @@ export default {
       this.success(msg);
     });
 
-    EventBus.$on("view", msg => {
-      // this.success(msg);
-      this.updateGame(msg.game);
-    });
+    
 
     //棋局正式结束
     EventBus.$on("resign", msg => {

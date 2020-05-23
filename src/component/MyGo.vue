@@ -6,7 +6,7 @@
 
 <script>
 import { initGame, initResumeGame, initGameData, socket } from "../_helpers";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { EventBus } from "../../src/index";
 
 export default {
@@ -28,16 +28,15 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+  },
   mounted() {
     if (this.$route.query.type == "resume") {
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game);
-    } else if (this.gameStatus == "进行中") {
-      //观战
-      initGameData(this.account.user.name, this.games.game);
-      initResumeGame(this.$refs.player, this.games.game);
-    } else {
+    } else if (this.gameStatus == "未开始") {
+      
       initGame(this.$refs.player, {
         total_time: this.total_time,
         blackOne: this.blackOne,
@@ -46,12 +45,14 @@ export default {
         whiteTwo: this.whiteTwo
       });
     }
+    EventBus.$on("view", msg => {
+      // this.success(msg);
+      this.updateGame(msg.game);
+      //观战
+      initGameData(this.account.user.name, this.games.game);
+      initResumeGame(this.$refs.player, this.games.game);
+    });
 
-    //棋局恢复
-    // EventBus.$on("resumeGame", msg => {
-    //   resumeGame(msg);
-    // });
-    // socket.emit("login", account.user.name);
   }
 };
 </script>
