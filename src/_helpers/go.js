@@ -50,6 +50,7 @@ export function initResumeGame(ele, gameinfo) {
   // move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
   // if (!isView)
   enable_board();
+  read_time();
 }
 
 // board mouseout callback for edit move
@@ -240,6 +241,7 @@ export function game_over(result) {
   myplayer.update();
   alert(result);
   disable_board();
+  EventBus.$emit("timeout",null);
   return myplayer.kifu.toSgf();
 }
 
@@ -289,7 +291,7 @@ export function readyMove(msg) {
   enable_board();
 }
 
-export function resumeGame(msg) {
+/* export function resumeGame(msg) {
   game = msg.game;
   black_time = game.BL;
   white_time = game.WL;
@@ -298,7 +300,8 @@ export function resumeGame(msg) {
   move_play(myplayer, game.move.x, game.move.y);
   // if (!isView)
   enable_board();
-}
+  
+} */
 //回调函数，用于形势判断，获得判断的结果
 function showScoreResult(msg) {
   console.log(msg);

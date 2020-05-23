@@ -3,7 +3,6 @@
     <b-container class="bv-example-row" width="100%">
       <b-row>
         <b-col cols="8">
-          
           <div class="form-group">
             <button
               v-if="isOpponent"
@@ -145,7 +144,7 @@ export default {
       btnText: "开始",
       _socket: null,
       isOpponent: false,
-      game: null,
+      game: null, //本对局的对局信息
       gameUser: [], //本对局的对手信息
       userStatus: {}, //对局用户的准备状态
       currentUsers: [], //进入对局室的所有人
@@ -156,7 +155,6 @@ export default {
     };
   },
   mounted() {
-    
     this._socket = socket;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
@@ -173,7 +171,24 @@ export default {
         this.gameUser.indexOf(this.account.user.name) != -1 ? true : false;
       if (this.isOpponent) {
         console.log("it is openent in game");
-        this.success("对局者请点击开始按钮，进入对局！");
+
+        if (this.game.status == "未开始") {
+          this.success("对局者请点击开始按钮，进入对局！");
+        } else if (this.game.status == "进行中") {
+          this.success("对局成功恢复，请继续对局！");
+          this.btnText = "认输";
+          this.canBegin = true;
+        }
+      } else {
+        //观战者
+        if (this.game.status == "未开始") {
+          this.success("对局还未开始，准备中！");
+        } else if (this.game.status == "进行中") {
+          this.success("对局正在进行中，请欣赏对局！");
+        } else {
+          //已结束
+          this.success("对局已经结束！");
+        }
       }
       this.updateNavTitle(this.game.name);
       return data;
@@ -182,11 +197,18 @@ export default {
     EventBus.$on("prepare", msg => {
       this.success(msg);
     });
+    //超时判负
+    EventBus.$on("timeout", msg => {
+      this.begin();
+    });
     //棋局正式开始
     EventBus.$on("beginGame", game => {
       this.success("对局正式开始");
       this.btnText = "认输";
       this.canBegin = true;
+      gameService.beginGame(this.game_id).then(msg => {
+        console.log(msg);
+      });
       initGameData(this.account.user.name, game);
       enable_board();
     });
@@ -198,7 +220,6 @@ export default {
     //棋局正式结束
     EventBus.$on("resign", msg => {
       // this.success(msg);
-      //TODO send kifu to server msg.kifu
       this.error(msg.result);
       console.log("game is over,result is {}".format(msg.result));
       this.$refs.quit.disabled = false;
@@ -208,13 +229,13 @@ export default {
         kifu_data: this.games.game.kifu,
         result: msg.result
       };
-      gameService.saveKifu(save_data).then((data)=>{
+      gameService.saveKifu(save_data).then(data => {
         this.success(data);
       });
 
-      /* kifu_data=data['kifu_data'], create_date=now_time,
-                    user_id=current_user.id, black_info=data['black_info'],
-                    white_info=data['white_info']*/
+      gameService.completeGame(this.game_id).then(msg => {
+        console.log(msg);
+      });
     });
   },
   components: {

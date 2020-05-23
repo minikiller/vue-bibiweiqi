@@ -1,11 +1,13 @@
-test={};
-test["hello"]="1"
-if (test["hello"]){
-    console.log("yes");
+var kalix = {
+   
+};
 
-}
-else{
-    console.log("no");
-}
+_redis = require("./_redis");
 
+var user = { user: "hello" };
+_redis.setValue("hello", user);
+var value;
+_redis.getValue("hello",value);
+console.log(value);
 
+module.exports = kalix;

@@ -17,6 +17,12 @@
               <b-card-text>{{ `对局时长:${data.total_time}` }}</b-card-text>
               <b-card-text>{{ `预定时间:${data.create_date}` }}</b-card-text>
               <b-card-text>{{ `创建时间:${data.dur_date}` }}</b-card-text>
+              <b-card-text>状态:
+                <b-badge v-if="data.status=='未开始'" variant="danger">{{ `${data.status}` }}</b-badge>
+                <b-badge v-else-if="data.status=='进行中'" variant="success">{{ `${data.status}` }}</b-badge>
+                <b-badge v-else variant="info">{{ `${data.status}` }}</b-badge>
+              </b-card-text>
+              <!-- TODO add status check -->
               <b-card-text>{{ `备注:${data.comment.slice(0,100)}` }}</b-card-text>
 
               <router-link :to="{path:'/play/'+data.id}">

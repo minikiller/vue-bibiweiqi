@@ -5,6 +5,8 @@ export const gameService = {
   getAll,
   getById,
   saveKifu,
+  beginGame,
+  completeGame,
 };
 
 function getAll() {
@@ -23,6 +25,36 @@ function getById(id) {
   };
 
   return fetch(`${config.apiUrl}/games/${id}`, requestOptions).then(
+    handleResponse
+  );
+}
+/**
+ * update game status to "进行中"
+ * @param {*} id gameId
+ */
+function beginGame(id) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+
+  return fetch(`${config.apiUrl}/games/begin/${id}`, requestOptions).then(
+    handleResponse
+  );
+}
+
+/**
+ * update game status to "已完成"
+ * @param {*} id gameId
+ */
+
+function completeGame(id) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+
+  return fetch(`${config.apiUrl}/games/complete/${id}`, requestOptions).then(
     handleResponse
   );
 }

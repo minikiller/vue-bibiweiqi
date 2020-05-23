@@ -21,39 +21,58 @@ https.listen(port, function() {
   console.log("listening on *:" + port);
 });
 
+const redis_client = require("redis").createClient();
+
 var lobbyUsers = {};
 var users = {};
 var activeGames = {}; //正在进行的对局字典
 var activeUsers = {}; //正在进行对局的用户字典
-var allGames = {};
-var gameInfos = {};
+var gameInfos = {}; //存储对局室的信息
 var gameStatus = {}; //game对局者是否准备的信息
+
 app.get("/", function(req, res) {
-  // res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  // res.sendFile(__dirname + "/public/index.html");
 });
 
-function getFormattedDate() {
-  var date = new Date();
-  var str =
-    date.getFullYear() +
-    "-" +
-    (date.getMonth() + 1) +
-    "-" +
-    date.getDate() +
-    " " +
-    date.getHours() +
-    ":" +
-    date.getMinutes() +
-    ":" +
-    date.getSeconds();
-  str += " ";
-  return str;
-}
+// Redis Client Ready
+redis_client.once("ready", () => {
+  // Flush Redis DB
+  // client.flushdb();
+
+  // Initialize gameInfos
+  redis_client.get("gameInfos", function(err, reply) {
+    if (reply) {
+      gameInfos = JSON.parse(reply);
+    }
+  });
+
+  // Initialize gameStatus
+  redis_client.get("gameStatus", function(err, reply) {
+    if (reply) {
+      gameStatus = JSON.parse(reply);
+    }
+  });
+
+  // Initialize activeUsers
+  redis_client.get("activeUsers", function(err, reply) {
+    if (reply) {
+      activeUsers = JSON.parse(reply);
+    }
+  });
+
+  // Initialize activeGames
+  redis_client.get("activeGames", function(err, reply) {
+    if (reply) {
+      activeGames = JSON.parse(reply);
+    }
+  });
+});
 
 io.on("connection", function(socket) {
   console.log(getFormattedDate() + "new connection " + socket);
 
+  //用户进入对局室的处理过程
   socket.on("login", function(msg) {
     doLogin(socket, msg);
   });
@@ -63,14 +82,18 @@ io.on("connection", function(socket) {
     let gameId = msg.gameId;
     socket.userId = msg.userId;
     userStatus = {};
+    if (!gameInfos[gameId]) {
+      gameInfos[gameId] = msg.gameInfo;
+      redis_client.set("gameInfos", JSON.stringify(gameInfos));
+    }
 
-    gameInfos[gameId] = msg.gameInfo;
     if (!gameStatus[gameId]) {
       userStatus[msg.gameInfo.blackone_id] = false;
       userStatus[msg.gameInfo.blacktwo_id] = false;
       userStatus[msg.gameInfo.whiteone_id] = false;
       userStatus[msg.gameInfo.whitetwo_id] = false;
       gameStatus[gameId] = userStatus;
+      redis_client.set("gameStatus", JSON.stringify(gameStatus));
     }
 
     if (!users[userId]) {
@@ -90,10 +113,10 @@ io.on("connection", function(socket) {
     }
     // socket.emit("login", userinGame[gameId]);
     lobbyUsers[userId] = socket;
-    socket.join(gameId, () => {});
+    socket.join(gameId, () => {}); //进入对局室
 
     // io.sockets.in(gameId).emit("joinlobby", userId);
-    // 给房间内的所有人发送消息，不包括sender本身
+    // 给房间内的所有人发送新人进入对局室消息，不包括sender本身
     socket.broadcast.to(gameId).emit("joinlobby", userId);
     //获得当前房间的所有人员信息列表
     let game_users = [];
@@ -132,6 +155,8 @@ io.on("connection", function(socket) {
       activeUsers[gameInfos[msg.gameId].whiteone_id] = msg.gameId;
       activeUsers[gameInfos[msg.gameId].whitetwo_id] = msg.gameId;
       activeGames[msg.gameId] = game; //保存新的对局
+      redis_client.set("activeUsers", JSON.stringify(activeUsers));
+      redis_client.set("activeGames", JSON.stringify(activeGames));
       io.sockets.in(msg.gameId).emit("beginGame", game);
     }
   });
@@ -172,6 +197,7 @@ io.on("connection", function(socket) {
     activeGames[msg.gameId].BL = msg.BL;
     activeGames[msg.gameId].WL = msg.WL;
     activeGames[msg.gameId].move = msg.move;
+    redis_client.set("activeGames", JSON.stringify(activeGames));
     // allGames[msg.gameId].kifu = msg.kifu;
     console.log(getFormattedDate() + "move data is " + msg.move);
     console.log(getFormattedDate() + "kifu data is " + msg.kifu);
@@ -245,6 +271,12 @@ io.on("connection", function(socket) {
     delete activeUsers[activeGames[msg.gameId].users.white1];
     delete activeUsers[activeGames[msg.gameId].users.white2];
     delete activeGames[msg.gameId];
+    delete gameInfos[msg.gameId]; //存储对局室的信息
+    delete gameStatus[msg.gameId]; //game对局者是否准备的信息
+    redis_client.set("activeUsers", JSON.stringify(activeUsers));
+    redis_client.set("activeGames", JSON.stringify(activeGames));
+    redis_client.set("gameInfos", JSON.stringify(gameInfos));
+    redis_client.set("gameStatus", JSON.stringify(gameStatus));
 
     // socket.broadcast.emit("resign", msg);
     io.sockets.in(msg.gameId).emit("resign", msg);
@@ -287,6 +319,24 @@ io.on("connection", function(socket) {
     });
   });
 });
+
+function getFormattedDate() {
+  var date = new Date();
+  var str =
+    date.getFullYear() +
+    "-" +
+    (date.getMonth() + 1) +
+    "-" +
+    date.getDate() +
+    " " +
+    date.getHours() +
+    ":" +
+    date.getMinutes() +
+    ":" +
+    date.getSeconds();
+  str += " ";
+  return str;
+}
 
 // http.listen(port, function() {
 //     console.log('listening on *: ' + port);
