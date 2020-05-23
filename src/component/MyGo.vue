@@ -32,6 +32,7 @@ export default {
     ...mapMutations("games", ["updateGame", "updateNavTitle"]),
   },
   mounted() {
+    // document.getElementById("wgo-control").style.display = "none";
     if (this.$route.query.type == "resume") {
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game);
@@ -48,9 +49,11 @@ export default {
     EventBus.$on("view", msg => {
       // this.success(msg);
       this.updateGame(msg.game);
+      
       //观战
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game);
+      document.getElementById("wgo-control").style.display = "";
     });
 
   }
