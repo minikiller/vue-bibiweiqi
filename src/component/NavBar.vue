@@ -5,24 +5,17 @@
         <b-navbar-brand href="#">{{ games.navTitle }}</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
-          <!-- Right aligned nav items -->
+          <b-navbar-nav>
+            <b-nav-item href="/">对局日程 </b-nav-item>
+            <b-nav-item href="/kifu">我的棋谱 </b-nav-item>
+            <b-nav-item href="/kifu">我的棋友 </b-nav-item>
+          </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
-            <!-- <b-nav-form>
-                  <b-form-input 
-                    size="sm" 
-                    class="mr-sm-2" 
-                    placeholder="Search for a meal"
-                    v-model="meal"
-                    ></b-form-input>
-                  <b-button 
-                    size="sm" 
-                    class="my-2 my-sm-0" 
-                    type="submit" 
-                    @click.prevent="getMeal"
-                    >Search</b-button>
-            </b-nav-form>-->
-            <b-nav-item-dropdown right>
-              <!-- Using 'button-content' slot -->
+            <b-nav-text>{{ account.user.name }}[6D]</b-nav-text>
+            <b-nav-item href="/profile">修改个人信息 </b-nav-item>
+            <b-nav-item @click="logout">退出 </b-nav-item>
+          </b-navbar-nav>
+          <!--
               <template slot="button-content">
                 {{ account.user.name }}
               </template>
@@ -34,18 +27,13 @@
                   >创建新游戏</router-link
                 >
               </b-dropdown-item>
-              <b-dropdown-item>
-                <router-link :to="{ path: '/profile' }" replace
-                  >个人信息</router-link
-                >
-              </b-dropdown-item>
               <b-dropdown-item href="/kifu">
                 我的棋谱
-                <!-- <router-link :to="{ path: '/kifu'}" replace>Kifu</router-link> -->
               </b-dropdown-item>
               <b-dropdown-item @click="logout">退出</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
+          -->
         </b-collapse>
       </b-container>
     </b-navbar>

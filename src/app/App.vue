@@ -1,6 +1,6 @@
 <template>
   <b-jumbotron>
-    <b-container fluid="xl">
+    <b-container fluid>
       <b-row>
         <b-col>
           <Navbar />
@@ -46,11 +46,7 @@ export default {
 
 <style>
 .jumbotron {
-  padding: 0rem 0rem;
-  margin: 0rem 0rem;
-}
-.container {
-  padding: 0rem 0rem;
+  padding: 0rem 0rem 2rem 0rem;
   margin: 0rem 0rem;
 }
 .navbar {
