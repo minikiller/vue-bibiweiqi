@@ -86,7 +86,7 @@ import {
   enable_board,
   initGameData,
   showScore,
-  getResult,
+  getResult
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -150,10 +150,12 @@ export default {
           })
           .then(value => {
             if (value) {
-              this.setResult(getResult());
+              var result = getResult();
+              this.setResult(result);
               this._socket.emit("resignGame", {
                 userId: this.account.user.name,
-                gameId: this.game_id
+                gameId: this.game_id,
+                result: result
               });
             }
           })
@@ -262,7 +264,8 @@ export default {
       this.error(msg);
       this._socket.emit("resignGame", {
         userId: this.account.user.name,
-        gameId: this.game_id
+        gameId: this.game_id,
+        result: msg
       }); //发送信息
     });
     //棋局正式开始
@@ -285,7 +288,7 @@ export default {
       // this.success(msg);
       this.error(msg.result);
       console.log("game is over,result is {}".format(msg.result));
-      this.$refs.quit.disabled = false;
+      this.btnQuitDisable = false;
       let save_data = {
         black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
         white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
@@ -293,7 +296,7 @@ export default {
         result: msg.result
       };
       gameService.saveKifu(save_data).then(data => {
-        this.success(data);
+        this.success(data.message);
       });
 
       gameService.completeGame(this.game_id).then(msg => {

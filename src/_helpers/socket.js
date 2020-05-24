@@ -42,7 +42,7 @@ socket.on("beginGame", function(msg) {
 });
 
 socket.on("resign", function(msg) {
-  msg = gameResign();
+  gameResign(msg.result);
   EventBus.$emit("resign", msg);
 });
 

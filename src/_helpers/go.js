@@ -8,7 +8,6 @@ var timer_loop = null; //定时器
 var _score_mode;
 var score_selected = false;
 
-import {games} from "../_store/games.module"
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -266,8 +265,7 @@ export function getResult() {
 }
 
 //获取比赛结果和棋谱
-export function gameResign() {
-  let result = games.state.result;
+export function gameResign(result) {
   let kifu = game_over(result);
   return { result: result, kifu: kifu, game: game.id };
 }
