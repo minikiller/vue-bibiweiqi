@@ -52,4 +52,7 @@ export default {
 .navbar {
   padding: 0.25rem 1rem;
 }
+.col {
+  padding: 0rem 0rem;
+}
 </style>
