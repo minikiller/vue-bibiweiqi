@@ -1,21 +1,20 @@
 <template>
-  <div>
-    <b-navbar toggleable="lg" type="dark" variant="secondary">
-      <b-container>
-        <b-navbar-brand href="#">{{ games.navTitle }}</b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
-            <b-nav-item href="/">对局日程 </b-nav-item>
-            <b-nav-item href="/kifu">我的棋谱 </b-nav-item>
-            <b-nav-item href="/kifu">我的棋友 </b-nav-item>
-          </b-navbar-nav>
-          <b-navbar-nav class="ml-auto">
-            <b-nav-text>{{ account.user.name }}[6D]</b-nav-text>
-            <b-nav-item href="/profile">修改个人信息 </b-nav-item>
-            <b-nav-item @click="logout">退出 </b-nav-item>
-          </b-navbar-nav>
-          <!--
+  <b-navbar toggleable="lg" type="dark" variant="secondary">
+    <b-container>
+      <b-navbar-brand href="#">{{ games.navTitle }}</b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-item href="/">对局日程 </b-nav-item>
+          <b-nav-item href="/kifu">我的棋谱 </b-nav-item>
+          <b-nav-item href="/kifu">我的棋友 </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-text>{{ account.user.name }}[6D]</b-nav-text>
+          <b-nav-item href="/profile">修改个人信息 </b-nav-item>
+          <b-nav-item @click="logout">退出 </b-nav-item>
+        </b-navbar-nav>
+        <!--
               <template slot="button-content">
                 {{ account.user.name }}
               </template>
@@ -34,10 +33,9 @@
             </b-nav-item-dropdown>
           </b-navbar-nav>
           -->
-        </b-collapse>
-      </b-container>
-    </b-navbar>
-  </div>
+      </b-collapse>
+    </b-container>
+  </b-navbar>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -65,3 +63,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.li.navbar-text {
+  padding: 8px;
+}
+</style>
