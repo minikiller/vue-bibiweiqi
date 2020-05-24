@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="success">
+    <b-navbar toggleable="lg" type="dark" variant="secondary">
       <b-container>
-        <b-navbar-brand href="#">{{games.navTitle}}</b-navbar-brand>
+        <b-navbar-brand href="#">{{ games.navTitle }}</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <!-- Right aligned nav items -->
@@ -24,22 +24,26 @@
             <b-nav-item-dropdown right>
               <!-- Using 'button-content' slot -->
               <template slot="button-content">
-                <em>{{account.user.name}}</em>
+                {{ account.user.name }}
               </template>
               <b-dropdown-item>
-                <router-link :to="{ path: '/'}" replace>home</router-link>
-              </b-dropdown-item>              
-              <b-dropdown-item>
-                <router-link :to="{ path: '/game'}" replace>new game</router-link>
+                <router-link :to="{ path: '/' }" replace>首页</router-link>
               </b-dropdown-item>
               <b-dropdown-item>
-                <router-link :to="{ path: '/profile'}" replace>Profile</router-link>
+                <router-link :to="{ path: '/game' }" replace
+                  >创建新游戏</router-link
+                >
+              </b-dropdown-item>
+              <b-dropdown-item>
+                <router-link :to="{ path: '/profile' }" replace
+                  >个人信息</router-link
+                >
               </b-dropdown-item>
               <b-dropdown-item href="/kifu">
-                Kifu
+                我的棋谱
                 <!-- <router-link :to="{ path: '/kifu'}" replace>Kifu</router-link> -->
               </b-dropdown-item>
-              <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
+              <b-dropdown-item @click="logout">退出</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -53,13 +57,13 @@ import { userService } from "../_services";
 export default {
   computed: {
     ...mapState({
-      account: state => state.account,
-      games: state => state.games
-    })
+      account: (state) => state.account,
+      games: (state) => state.games,
+    }),
   },
   data() {
     return {
-      meal: ""
+      meal: "",
     };
   },
   methods: {
@@ -69,8 +73,7 @@ export default {
     logout() {
       userService.logout();
       location.reload(true);
-    }
-  }
+    },
+  },
 };
 </script>
-
