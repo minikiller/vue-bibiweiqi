@@ -7,6 +7,8 @@ var username, game;
 var timer_loop = null; //定时器
 var _score_mode;
 var score_selected = false;
+
+import {games} from "../_store/games.module"
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -168,7 +170,8 @@ var read_time = function() {
 
       myplayer.update();
       if (myplayer.kifuReader.node.BL == 0) {
-        game_over("白超时胜");
+        // game_over("白超时胜");
+        EventBus.$emit("timeout","白超时胜");
       }
     }, 1000);
   } else {
@@ -178,7 +181,8 @@ var read_time = function() {
 
       myplayer.update();
       if (myplayer.kifuReader.node.WL == 0) {
-        game_over("黑超时胜");
+        // game_over("黑超时胜");
+        EventBus.$emit("timeout","黑超时胜");
       }
     }, 1000);
   }
@@ -234,14 +238,15 @@ export function game_over(result) {
   myplayer.kifu.info["RE"] = result;
   // myplayer.kifu.info['BL'] = black_time;
   // myplayer.kifu.info['WL'] = white_time;
-  myplayer.loadSgf(myplayer.kifu.toSgf(), 1000);
+  myplayer.loadSgf(myplayer.kifu.toSgf());
+  myplayer.last();
   myplayer.kifuReader.node.WL = white_time;
   myplayer.kifuReader.node.BL = black_time;
 
   myplayer.update();
   alert(result);
   disable_board();
-  EventBus.$emit("timeout",result);
+  
   return myplayer.kifu.toSgf();
 }
 
@@ -250,13 +255,19 @@ export function initGameData(_username, _game) {
   game = _game;
 }
 
-export function gameResign() {
+export function getResult() {
   let result = "";
   if (myplayer.kifuReader.node.move.c == 1) {
     result = "白中盘胜";
   } else {
     result = "黑中盘胜";
   }
+  return result;
+}
+
+//获取比赛结果和棋谱
+export function gameResign() {
+  let result = games.state.result;
   let kifu = game_over(result);
   return { result: result, kifu: kifu, game: game.id };
 }

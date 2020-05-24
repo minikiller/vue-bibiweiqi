@@ -149,7 +149,7 @@ io.on("connection", function(socket) {
         WL: "",
         move: null,
         gameId: msg.gameId,
-        status: "begin"
+        status: "begin",
       };
       activeUsers[gameInfos[msg.gameId].blackone_id] = msg.gameId;
       activeUsers[gameInfos[msg.gameId].blacktwo_id] = msg.gameId;
@@ -273,13 +273,15 @@ io.on("connection", function(socket) {
     }
   });
 
-  socket.on("resign", function(msg) {
+  socket.on("resignGame", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
     console.log(activeGames[msg.gameId]);
-    delete activeUsers[activeGames[msg.gameId].users.black1];
-    delete activeUsers[activeGames[msg.gameId].users.black2];
-    delete activeUsers[activeGames[msg.gameId].users.white1];
-    delete activeUsers[activeGames[msg.gameId].users.white2];
+    if (activeGames[msg.gameId].users) {
+      delete activeUsers[activeGames[msg.gameId].users.black1];
+      delete activeUsers[activeGames[msg.gameId].users.black2];
+      delete activeUsers[activeGames[msg.gameId].users.white1];
+      delete activeUsers[activeGames[msg.gameId].users.white2];
+    }
     delete activeGames[msg.gameId];
     delete gameInfos[msg.gameId]; //存储对局室的信息
     delete gameStatus[msg.gameId]; //game对局者是否准备的信息

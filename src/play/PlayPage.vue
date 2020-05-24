@@ -9,10 +9,18 @@
               aria-pressed="true"
               class="btn btn-primary"
               @click="begin"
+              ref="btnResign"
+              :disabled="btnBeginDisable"
             >{{ btnText }}</button>
             <button class="btn btn-primary" v-if="canBegin" @click="getScore">数子</button>
             <!-- <button class="btn btn-primary" @click="test">test</button> -->
-            <button class="btn btn-primary" @click="exit" ref="quit">退出</button>
+            <button
+              class="btn btn-primary"
+              :disabled="btnQuitDisable"
+              @click="exit"
+              ref="quit"
+              id="quit"
+            >退出</button>
           </div>
           <my-go
             v-if="game"
@@ -73,7 +81,13 @@ import WebRTC from "../component/webrtc";
 import { gameService } from "../_services";
 import { EventBus } from "../../src/index";
 import { mapState, mapMutations } from "vuex";
-import { socket, enable_board, initGameData, showScore } from "../_helpers";
+import {
+  socket,
+  enable_board,
+  initGameData,
+  showScore,
+  getResult,
+} from "../_helpers";
 
 // import { WebRTC } from "plugin";
 import { find, head } from "lodash";
@@ -89,7 +103,20 @@ export default {
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
-    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+    ...mapMutations("games", ["updateGame", "updateNavTitle", "setResult"]),
+    setStatus() {
+      this.btnText = "认输";
+      this.canBegin = true;
+      if (
+        this.account.user.name == this.game.blackone_id ||
+        this.account.user.name == this.game.whiteone_id
+      ) {
+        this.btnBeginDisable = false;
+      } else {
+        this.btnBeginDisable = true;
+      }
+      this.btnQuitDisable = true;
+    },
     // 显示分数
     getScore() {
       this.success(showScore());
@@ -97,6 +124,7 @@ export default {
     },
     test() {
       // this.$refs["modal"].show();
+      // alert(testStore());
     },
     begin() {
       if (this.btnText == "开始") {
@@ -122,7 +150,8 @@ export default {
           })
           .then(value => {
             if (value) {
-              socket.emit("resign", {
+              this.setResult(getResult());
+              this._socket.emit("resignGame", {
                 userId: this.account.user.name,
                 gameId: this.game_id
               });
@@ -163,6 +192,8 @@ export default {
   props: ["game_id"],
   data() {
     return {
+      btnBeginDisable: false,
+      btnQuitDisable: false,
       score_selected: false,
       btnText: "开始",
       _socket: null,
@@ -179,6 +210,7 @@ export default {
   },
   mounted() {
     this._socket = socket;
+
     gameService.getById(this.game_id).then(data => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
@@ -199,9 +231,7 @@ export default {
           this.success("对局者请点击开始按钮，进入对局！");
         } else if (this.game.status == "进行中") {
           this.success("对局成功恢复，请继续对局！");
-          this.btnText = "认输";
-          this.canBegin = true;
-          this.$refs.quit.disabled = true;
+          this.setStatus();
         }
       } else {
         //观战者
@@ -228,17 +258,17 @@ export default {
     });
     //超时判负
     EventBus.$on("timeout", msg => {
-      this._socket.emit("resign", {
+      this.setResult(msg);
+      this.error(msg);
+      this._socket.emit("resignGame", {
         userId: this.account.user.name,
         gameId: this.game_id
       }); //发送信息
-      this.error(msg);
     });
     //棋局正式开始
     EventBus.$on("beginGame", game => {
       this.success("对局正式开始");
-      this.btnText = "认输";
-      this.canBegin = true;
+      this.setStatus();
       gameService.beginGame(this.game_id).then(msg => {
         console.log(msg);
       });
@@ -249,8 +279,6 @@ export default {
     EventBus.$on("showScore", msg => {
       this.success(msg);
     });
-
-    
 
     //棋局正式结束
     EventBus.$on("resign", msg => {

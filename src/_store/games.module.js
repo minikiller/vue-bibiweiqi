@@ -4,6 +4,7 @@ const state = {
   onlineUsers: [],
   game: null,
   navTitle: "",
+  result: "no result",
 };
 
 const actions = {};
@@ -20,6 +21,9 @@ const mutations = {
   },
   updateNavTitle(state, value) {
     state.navTitle = value;
+  },
+  setResult(state, value) {
+    state.result = value;
   },
 };
 
