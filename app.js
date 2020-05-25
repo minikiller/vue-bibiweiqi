@@ -29,6 +29,7 @@ var activeGames = {}; //正在进行的对局字典
 var activeUsers = {}; //正在进行对局的用户字典
 var gameInfos = {}; //存储对局室的信息
 var gameStatus = {}; //game对局者是否准备的信息
+var gamePassed = {}; //game对局者是否终局的信息
 
 app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
@@ -51,6 +52,13 @@ redis_client.once("ready", () => {
   redis_client.get("gameStatus", function(err, reply) {
     if (reply) {
       gameStatus = JSON.parse(reply);
+    }
+  });
+
+  // Initialize gamePassed
+  redis_client.get("gamePassed", function(err, reply) {
+    if (reply) {
+      gamePassed = JSON.parse(reply);
     }
   });
 
@@ -82,6 +90,7 @@ io.on("connection", function(socket) {
     let gameId = msg.gameId;
     socket.userId = msg.userId;
     userStatus = {};
+    userPassed = {};
     if (!gameInfos[gameId]) {
       gameInfos[gameId] = msg.gameInfo;
       redis_client.set("gameInfos", JSON.stringify(gameInfos));
@@ -94,6 +103,15 @@ io.on("connection", function(socket) {
       userStatus[msg.gameInfo.whitetwo_id] = false;
       gameStatus[gameId] = userStatus;
       redis_client.set("gameStatus", JSON.stringify(gameStatus));
+    }
+
+    if (!gamePassed[gameId]) {
+      userPassed[msg.gameInfo.blackone_id] = false;
+      userPassed[msg.gameInfo.blacktwo_id] = false;
+      userPassed[msg.gameInfo.whiteone_id] = false;
+      userPassed[msg.gameInfo.whitetwo_id] = false;
+      gamePassed[gameId] = userPassed;
+      redis_client.set("gamePassed", JSON.stringify(gamePassed));
     }
 
     if (!users[userId]) {
@@ -127,6 +145,68 @@ io.on("connection", function(socket) {
     }
     //给新登陆的用户发送当前房间的所有人员信息列表
     socket.emit("initGameUser", game_users);
+  }
+
+  //准备开始终局
+  socket.on("passedGame", function(msg) {
+    gamePassed[msg.gameId][msg.userId] = true;
+    io.sockets.in(msg.gameId).emit("passed", getUserPassed(msg.gameId));
+    if (checkGamePassed(msg.gameId)) {
+      activeGames[msg.gameId].status = "passed";
+      var black1=activeGames[msg.gameId].users.black1;
+      var white1=activeGames[msg.gameId].users.white1;
+      var msg =
+        `进入数子状态，由${black1}数子，由${white1}确认结果！如有异议，${white1}数子，${black1}确认！`;
+      io.sockets.in(msg.gameId).emit("endGame", msg);
+      
+    }
+    redis_client.set("activeGames", JSON.stringify(activeGames));
+    redis_client.set("gamePassed", JSON.stringify(gamePassed));
+  });
+  //数子结果
+  socket.on("resultGame", function(msg) {
+    io.sockets.in(msg.gameId).emit("resultGame", msg);
+  });
+
+  //数子双方未达成一致
+  socket.on("noagreeGame", function(msg) {
+    io.sockets.in(msg.gameId).emit("noagreeGame", msg);
+  });
+
+  //数子结束，双方达成一致
+  socket.on("finishGame", function(msg) {
+    io.sockets.in(msg.gameId).emit("finishGame", msg);
+  });
+
+  //判断是否可以进入终局状态
+  function checkGamePassed(gameId) {
+    var userPassed = gamePassed[gameId];
+    for (var key in userPassed) {
+      if (!userPassed[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  //查看棋局终局的准备状态
+  function getUserPassed(gameId) {
+    let str = [];
+    let ok;
+    var userPassed = gamePassed[gameId];
+    for (var key in userPassed) {
+      if (!userPassed[key]) {
+        ok = `${key} 还没有进入终局；`;
+      } else {
+        ok = `${key} 已经进入终局；`;
+      }
+      str.push(ok);
+    }
+    let value = "";
+    str.forEach((v) => {
+      value = value + v;
+    });
+    return str;
   }
 
   //准备开始对局
@@ -226,8 +306,8 @@ io.on("connection", function(socket) {
   });
 
   socket.on("logout", function(msg) {
-    socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
     socket.leave(msg.gameId);
+    socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
     delete users[msg.userId];
   });
 

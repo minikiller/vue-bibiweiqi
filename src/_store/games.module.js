@@ -14,7 +14,7 @@ const mutations = {
     if (state.onlineUsers.indexOf(userId) == -1) state.onlineUsers.push(userId);
   },
   deleteUser(state, userId) {
-    state.onlineUsers.pop(userId);
+    if (state.onlineUsers.indexOf(userId) != -1) state.onlineUsers.pop(userId);
   },
   updateGame(state, game) {
     state.game = game;

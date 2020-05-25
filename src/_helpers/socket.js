@@ -41,6 +41,30 @@ socket.on("beginGame", function(msg) {
   // removeUser(msg);
 });
 
+//全部用户准备开始终局
+socket.on("endGame", function(msg) {
+  EventBus.$emit("endGame", msg);
+  // removeUser(msg);
+});
+
+//数子双方未达成一致
+socket.on("noagreeGame", function(msg) {
+  EventBus.$emit("noagreeGame", msg);
+  // removeUser(msg);
+});
+
+ //数子结束，双方达成一致
+socket.on("finishGame", function(msg) {
+  EventBus.$emit("finishGame", msg);
+  // removeUser(msg);
+});
+
+//确认数子结果
+socket.on("resultGame", function(msg) {
+  EventBus.$emit("resultGame", msg);
+  // removeUser(msg);
+});
+
 socket.on("resign", function(msg) {
   gameResign(msg.result);
   EventBus.$emit("resign", msg);

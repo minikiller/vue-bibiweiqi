@@ -15,33 +15,33 @@
             >
               <b-card-text>
                 <div v-if="account.user.name==data.blackone_id">
-                  黑选手1:
-                  <b-badge variant="success">{{ `${data.blackone_id}` }}</b-badge>
+                  <b-avatar variant="dark" size="sm"/>
+                  <b-badge variant="success" >{{ `${ data.blackone_id }` }}</b-badge>
                 </div>
-                <div v-else>{{ `黑选手1:${data.blackone_id}` }}</div>
+                <div v-else><b-avatar variant="dark" size="sm"/>{{ `${ data.blackone_id }` }}</div>
               </b-card-text>
               <b-card-text>
                 <div v-if="account.user.name==data.whiteone_id">
-                  白选手1:
-                  <b-badge variant="success">{{ `${data.whiteone_id}` }}</b-badge>
+                  <b-avatar variant="light" size="sm"/>
+                  <b-badge variant="success">{{ `${ data.whiteone_id }` }}</b-badge>
                 </div>
-                <div v-else>{{ `白选手1:${data.whiteone_id}` }}</div>
+                <div v-else><b-avatar variant="light" size="sm"/>{{ `${ data.whiteone_id }` }}</div>
               </b-card-text>
               <b-card-text>
                 <div v-if="account.user.name==data.blacktwo_id">
-                  黑选手2:
-                  <b-badge variant="success">{{ `${data.blacktwo_id}` }}</b-badge>
+                  <b-avatar variant="dark" size="sm"/>
+                  <b-badge variant="success">{{ `${ data.blacktwo_id }` }}</b-badge>
                 </div>
-                <div v-else>{{ `黑选手2:${data.blacktwo_id}` }}</div>
+                <div v-else><b-avatar variant="dark" size="sm"/>{{ `${ data.blacktwo_id }` }}</div>
               </b-card-text>
               <b-card-text>
                 <div v-if="account.user.name==data.whitetwo_id">
-                  白选手2:
-                  <b-badge variant="success" m4>{{ `${data.whitetwo_id}` }}</b-badge>
+                  <b-avatar variant="light" size="sm"/>
+                  <b-badge variant="success" m4>{{ `${ data.whitetwo_id }` }}</b-badge>
                 </div>
-                <div v-else>{{ `白选手2:${data.whitetwo_id}` }}</div>
+                <div v-else><b-avatar variant="light" size="sm"/>{{ `${ data.whitetwo_id }` }}</div>
               </b-card-text>
-              <b-card-text>{{ `对局时长:${data.total_time}` }}</b-card-text>
+              <b-card-text>{{ `对局时长:${ data.total_time }` }}</b-card-text>
               <!-- <b-card-text>{{ `预定时间:${data.create_date}` }}</b-card-text> -->
               <!-- <b-card-text>{{ `创建时间:${data.dur_date}` }}</b-card-text> -->
               <b-card-text>
