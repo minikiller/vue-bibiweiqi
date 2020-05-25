@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="width: 90%; margin: 0" ref="player"></div>
+    <div style="width: 80%; margin: 0" ref="player"></div>
   </div>
 </template>
 

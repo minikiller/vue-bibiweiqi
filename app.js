@@ -150,31 +150,31 @@ io.on("connection", function(socket) {
   //准备开始终局
   socket.on("passedGame", function(msg) {
     gamePassed[msg.gameId][msg.userId] = true;
-    io.sockets.in(msg.gameId).emit("passed", getUserPassed(msg.gameId));
     if (checkGamePassed(msg.gameId)) {
       activeGames[msg.gameId].status = "passed";
-      var black1=activeGames[msg.gameId].users.black1;
-      var white1=activeGames[msg.gameId].users.white1;
-      var msg =
-        `进入数子状态，由${black1}数子，由${white1}确认结果！如有异议，${white1}数子，${black1}确认！`;
-      io.sockets.in(msg.gameId).emit("endGame", msg);
-      
+      var black1 = activeGames[msg.gameId].users.black1;
+      var white1 = activeGames[msg.gameId].users.white1;
+      var result = `进入数子状态，由${black1}数子，由${white1}确认结果！如有异议，${white1}数子，${black1}确认！`;
+      io.sockets.in(msg.gameId).emit("endGame", result);
+    } else {
+      io.sockets.in(msg.gameId).emit("passed", getUserPassed(msg.gameId));
     }
     redis_client.set("activeGames", JSON.stringify(activeGames));
     redis_client.set("gamePassed", JSON.stringify(gamePassed));
   });
   //数子结果
   socket.on("resultGame", function(msg) {
-    io.sockets.in(msg.gameId).emit("resultGame", msg);
+    socket.broadcast.to(msg.gameId).emit("resultGame", msg);
   });
 
   //数子双方未达成一致
   socket.on("noagreeGame", function(msg) {
-    io.sockets.in(msg.gameId).emit("noagreeGame", msg);
+    socket.broadcast.to(msg.gameId).emit("noagreeGame", msg);
   });
 
   //数子结束，双方达成一致
-  socket.on("finishGame", function(msg) {
+  socket.on("finishGame", function (msg) {
+    console.log("finish game is received!");
     io.sockets.in(msg.gameId).emit("finishGame", msg);
   });
 
@@ -356,12 +356,10 @@ io.on("connection", function(socket) {
   socket.on("resignGame", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
     console.log(activeGames[msg.gameId]);
-    if (activeGames[msg.gameId].users) {
-      delete activeUsers[activeGames[msg.gameId].users.black1];
-      delete activeUsers[activeGames[msg.gameId].users.black2];
-      delete activeUsers[activeGames[msg.gameId].users.white1];
-      delete activeUsers[activeGames[msg.gameId].users.white2];
-    }
+    delete activeUsers[activeGames[msg.gameId].users.black1];
+    delete activeUsers[activeGames[msg.gameId].users.black2];
+    delete activeUsers[activeGames[msg.gameId].users.white1];
+    delete activeUsers[activeGames[msg.gameId].users.white2];
     delete activeGames[msg.gameId];
     delete gameInfos[msg.gameId]; //存储对局室的信息
     delete gameStatus[msg.gameId]; //game对局者是否准备的信息

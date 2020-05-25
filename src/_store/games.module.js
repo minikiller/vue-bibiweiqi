@@ -5,6 +5,7 @@ const state = {
   game: null,
   navTitle: "",
   result: "no result",
+  turn: "black", //数子顺序，默认是黑开始，数值为black或white
 };
 
 const actions = {};
@@ -24,6 +25,12 @@ const mutations = {
   },
   setResult(state, value) {
     state.result = value;
+  },
+  setTurn(state) {
+    if (state.turn == "black") state.turn = "white";
+    else if (state.turn == "white") {
+      state.turn = "black";
+    }
   },
 };
 

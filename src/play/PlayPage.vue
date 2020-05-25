@@ -104,7 +104,12 @@ export default {
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
-    ...mapMutations("games", ["updateGame", "updateNavTitle", "setResult"]),
+    ...mapMutations("games", [
+      "updateGame",
+      "updateNavTitle",
+      "setResult",
+      "setTurn"
+    ]),
     setStatus() {
       this.btnText = "认输";
       this.canBegin = true;
@@ -124,11 +129,9 @@ export default {
         this.endText = "结束数目";
         showScore();
       } else if (this.endText == "结束数目") {
-        this.endText = "开始数目";
-        this.canEnd = false;
-        let result = showScore();
+        // let result = showScore();
         this.$bvModal
-          .msgBoxConfirm(result, {
+          .msgBoxConfirm(this.games.result, {
             title: "请确认",
             size: "sm",
             buttonSize: "sm",
@@ -140,12 +143,15 @@ export default {
           })
           .then(value => {
             if (value) {
-              this.setResult(result);
+              //this.setResult(result);
+              showScore();
+              this.endText = "开始数目";
+              this.canEnd = false;
               this._socket.emit("resultGame", {
                 userId: this.account.user.name,
                 gameId: this.game_id,
-                result: result,
-                count: 0
+                result: this.games.result,
+                turn: this.games.turn
               });
             }
           })
@@ -213,7 +219,7 @@ export default {
       this.$router.push({ path: "/" });
     },
 
-    checkResult() {
+    checkResult(msg) {
       //判断是黑还是白，需要确定
       this.$bvModal
         .msgBoxConfirm(msg.result, {
@@ -361,6 +367,7 @@ export default {
 
     //棋局正式开始,黑1开始数目
     EventBus.$on("endGame", msg => {
+      console.log("begin to end game");
       this.success(msg);
       if (this.account.user.name == this.game.blackone_id) {
         this.canEnd = true; //启用数目按钮
@@ -369,47 +376,55 @@ export default {
         this.canEnd = false;
       }
     });
-
+    //是否同意对局结果
     EventBus.$on("resultGame", msg => {
+      this.setTurn();
       this.success(msg.result);
       if (
-        msg.count % 2 == 0 && //需要白确认并且是白1
+        this.games.turn == "white" && //需要白确认并且是白1
         this.account.user.name == this.game.whiteone_id
       ) {
-        this.checkResult();
+        this.checkResult(msg);
       } else if (
-        msg.count % 2 == 1 &&
+        this.games.turn == "black" &&
         this.account.user.name == this.game.blackone_id //需要黑确认并且是黑1
       ) {
-        this.checkResult();
+        this.checkResult(msg);
       }
     });
 
+    //数子结束
+    EventBus.$on("finishGame", msg => {
+      this.success(msg.result);
+      console.log("game is over! result is " + msg.result);
+    });
+
+    //数子结果未得到双方认可
     EventBus.$on("noagreeGame", msg => {
       this.success(msg.result);
+      this.setTurn();
       if (
-        msg.count % 2 == 0 && //需要白确认并且是白1
+        this.games.turn == "white" && //需要白确认并且是白1
         this.account.user.name == this.game.whiteone_id
       ) {
-        this.checkResult();
+        this.canEnd = true; //启用数目按钮
+        this.endText = "开始数目";
       } else if (
-        msg.count % 2 == 1 &&
+        this.games.turn == "black" &&
         this.account.user.name == this.game.blackone_id //需要黑确认并且是黑1
       ) {
-        this.checkResult();
+        this.canEnd = true; //启用数目按钮
+        this.endText = "开始数目";
       }
     });
 
     EventBus.$on("showScore", msg => {
       this.success(msg);
+      this.setResult(msg);
     });
     //棋局进入计算最终结果状态
     EventBus.$on("passed", msg => {
-      this.success(
-        "棋手{}已经点击终局按钮，请点击终局按钮进入数子状态！ ".format(
-          msg.userId
-        )
-      );
+      this.success(msg);
     });
 
     //棋局正式结束

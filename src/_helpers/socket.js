@@ -35,6 +35,12 @@ socket.on("prepare", function(msg) {
   // removeUser(msg);
 });
 
+//用户准备开始对局
+socket.on("passed", function(msg) {
+  EventBus.$emit("passed", msg);
+  // removeUser(msg);
+});
+
 //全部用户准备开始对局
 socket.on("beginGame", function(msg) {
   EventBus.$emit("beginGame", msg);

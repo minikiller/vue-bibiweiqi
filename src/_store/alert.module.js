@@ -2,7 +2,7 @@ const state = {
   type: null,
   message: null,
 };
-const time_out = 5000;
+const time_out = 30000;
 const actions = {
   success({ commit }, message) {
     commit("success", message);
