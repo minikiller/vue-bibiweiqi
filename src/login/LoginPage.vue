@@ -98,5 +98,8 @@ export default {
   margin-bottom: 1rem;
   vertical-align: middle;
   text-align: center;
+}
+.col-sm-6 {
+  margin: 15px;
 }</style
 >>
