@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="info">
+  <b-navbar v-if="account.user" toggleable="lg" type="dark" variant="info">
     <b-container>
       <b-navbar-brand href="#">{{ games.navTitle }}</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
