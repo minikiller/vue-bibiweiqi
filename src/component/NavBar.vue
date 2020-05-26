@@ -10,7 +10,11 @@
           <b-nav-item href="/kifu">我的棋友 </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-text>{{ account.user.name }}[6D]</b-nav-text>
+          <b-nav-text
+            ><div v-if="account.user">
+              {{ account.user.name }}[6D]
+            </div></b-nav-text
+          >
           <b-nav-item href="/profile">修改个人信息 </b-nav-item>
           <b-nav-item @click="logout">退出 </b-nav-item>
         </b-navbar-nav>
