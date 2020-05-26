@@ -11,9 +11,15 @@
               @click="begin"
               ref="btnResign"
               :disabled="btnBeginDisable"
-            >{{ btnText }}</button>
-            <button class="btn btn-primary" v-if="canEnd" @click="getScore">{{endText}}</button>
-            <button class="btn btn-primary" v-if="canBegin" @click="passed">终局</button>
+            >
+              {{ btnText }}
+            </button>
+            <button class="btn btn-primary" v-if="canEnd" @click="getScore">
+              {{ endText }}
+            </button>
+            <button class="btn btn-primary" v-if="canBegin" @click="passed">
+              终局
+            </button>
             <!-- <button class="btn btn-primary" @click="test">test</button> -->
             <button
               class="btn btn-primary"
@@ -21,7 +27,9 @@
               @click="exit"
               ref="quit"
               id="quit"
-            >退出</button>
+            >
+              退出
+            </button>
           </div>
           <my-go
             v-if="game"
@@ -52,10 +60,30 @@
               </div>
               <div class="row">
                 <div class="col-md-12 my-3">
-                  <button type="button" class="btn btn-primary" @click="onJoin">Join</button>
-                  <button type="button" class="btn btn-primary" @click="onLeave">Leave</button>
-                  <button type="button" class="btn btn-primary" @click="onCapture">Capture Photo</button>
-                  <button type="button" class="btn btn-primary" @click="onShareScreen">Share Screen</button>
+                  <button type="button" class="btn btn-primary" @click="onJoin">
+                    Join
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="onLeave"
+                  >
+                    Leave
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="onCapture"
+                  >
+                    Capture Photo
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="onShareScreen"
+                  >
+                    Share Screen
+                  </button>
                 </div>
               </div>
               <!-- <my-video :gameId="game_id"></my-video> -->
@@ -64,7 +92,10 @@
               <chat v-if="game" :gameId="game_id" :gameInfo="game" />
             </b-tab>
             <b-tab title="观众">
-              <b-list-group v-for="(user, index) in games.onlineUsers" :key="index">
+              <b-list-group
+                v-for="(user, index) in games.onlineUsers"
+                :key="index"
+              >
                 <b-list-group-item>{{ user }}</b-list-group-item>
               </b-list-group>
             </b-tab>
@@ -87,7 +118,8 @@ import {
   enable_board,
   initGameData,
   showScore,
-  getResult
+  getResult,
+  setPassedStatus,
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -98,9 +130,9 @@ Vue.component(WebRTC.name, WebRTC);
 export default {
   computed: {
     ...mapState({
-      account: state => state.account,
-      games: state => state.games
-    })
+      account: (state) => state.account,
+      games: (state) => state.games,
+    }),
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
@@ -108,7 +140,7 @@ export default {
       "updateGame",
       "updateNavTitle",
       "setResult",
-      "setTurn"
+      "setTurn",
     ]),
     setStatus() {
       this.btnText = "认输";
@@ -139,9 +171,9 @@ export default {
             okTitle: "确定",
             cancelTitle: "取消",
             hideHeaderClose: false,
-            centered: true
+            centered: true,
           })
-          .then(value => {
+          .then((value) => {
             if (value) {
               //this.setResult(result);
               showScore();
@@ -151,11 +183,11 @@ export default {
                 userId: this.account.user.name,
                 gameId: this.game_id,
                 result: this.games.result,
-                turn: this.games.turn
+                turn: this.games.turn,
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             // An error occurred
           });
       }
@@ -167,9 +199,11 @@ export default {
       // alert(testStore());
     },
     passed() {
+      setPassedStatus();
+      this.setResult("passed");
       this._socket.emit("passedGame", {
         userId: this.account.user.name,
-        gameId: this.game_id
+        gameId: this.game_id,
       });
     },
     begin() {
@@ -180,7 +214,7 @@ export default {
         this.$refs.quit.disabled = true;
         this._socket.emit("prepareGame", {
           userId: this.account.user.name,
-          gameId: this.game_id
+          gameId: this.game_id,
         });
       } else if (this.btnText == "认输") {
         this.$bvModal
@@ -192,20 +226,20 @@ export default {
             okTitle: "确定",
             cancelTitle: "取消",
             hideHeaderClose: false,
-            centered: true
+            centered: true,
           })
-          .then(value => {
+          .then((value) => {
             if (value) {
               var result = getResult();
               this.setResult(result);
               this._socket.emit("resignGame", {
                 userId: this.account.user.name,
                 gameId: this.game_id,
-                result: result
+                result: result,
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             // An error occurred
           });
       }
@@ -214,15 +248,16 @@ export default {
       console.log(`${this.account.user.name} is me`);
       socket.emit("logout", {
         userId: this.account.user.name,
-        gameId: this.game_id
+        gameId: this.game_id,
       });
       this.$router.push({ path: "/" });
     },
 
     checkResult(msg) {
       //判断是黑还是白，需要确定
+      var result = matchResult(msg.result);
       this.$bvModal
-        .msgBoxConfirm(msg.result, {
+        .msgBoxConfirm(result, {
           title: "请确认",
           size: "sm",
           buttonSize: "sm",
@@ -230,15 +265,15 @@ export default {
           okTitle: "确定",
           cancelTitle: "取消",
           hideHeaderClose: false,
-          centered: true
+          centered: true,
         })
-        .then(value => {
+        .then((value) => {
           if (value) {
             //同意数子结果，对局结束
             this._socket.emit("finishGame", {
               userId: this.account.user.name,
               gameId: this.game_id,
-              result: msg.result
+              result: result,
             });
           } else {
             //不同意结果，继续数子
@@ -246,20 +281,43 @@ export default {
               userId: this.account.user.name,
               gameId: this.game_id,
               result: "数子结果未达成一致，继续数目",
-              count: msg.count + 1
             });
             this.canEnd = true;
             this.endText = "开始数目";
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // An error occurred
         });
     },
-    matchResult(value) {//正则表达式返回对局结果
+    matchResult(value) {
+      //正则表达式返回对局结果
       var _result = value.match(">([黑白]胜.*)<");
       if (_result) return _result[1];
       else return "";
+    },
+    //对局结束，保存棋谱
+    finishGame(msg) {
+      this.error(msg.result);
+      console.log("game is over,result is {}".format(msg.result));
+      this.btnQuitDisable = false;
+      this.btnBeginDisable = false;
+      this.score_selected = false;
+
+      let save_data = {
+        black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
+        white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
+        kifu_data: this.games.game.kifu,
+        result: msg.result,
+      };
+
+      gameService.saveKifu(save_data).then((data) => {
+        this.success(data.message);
+      });
+
+      gameService.completeGame(this.game_id).then((msg) => {
+        console.log(msg);
+      });
     },
     onCapture() {
       this.img = this.$refs.webrtc.capture();
@@ -278,17 +336,17 @@ export default {
     },
     logEvent(event) {
       console.log("Event : ", event);
-    }
+    },
   },
   props: ["game_id"],
   data() {
     return {
-      btnBeginDisable: false,
-      btnQuitDisable: false,
-      score_selected: false,
+      btnBeginDisable: false, //开始按钮的控制状态
+      btnQuitDisable: false, //退出按钮的控制状态
+      score_selected: false, //数目按钮的控制状态
       btnText: "开始",
       _socket: null,
-      isOpponent: false,
+      isOpponent: false, //是否为对局者
       game: null, //本对局的对局信息
       gameUser: [], //本对局的对手信息
       userStatus: {}, //对局用户的准备状态
@@ -298,13 +356,13 @@ export default {
       endText: "开始数目",
       kifu: "", //棋谱
       img: null,
-      roomId: "public-room"
+      roomId: "public-room",
     };
   },
   mounted() {
     this._socket = socket;
 
-    gameService.getById(this.game_id).then(data => {
+    gameService.getById(this.game_id).then((data) => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
       this.gameUser.push(this.game.blacktwo_id);
@@ -335,7 +393,7 @@ export default {
 
           socket.emit("view", {
             userId: this.account.user.name,
-            gameId: this.game_id
+            gameId: this.game_id,
           });
         } else {
           //已结束
@@ -346,24 +404,24 @@ export default {
       return data;
     });
     //棋手对局进入准备状态
-    EventBus.$on("prepare", msg => {
+    EventBus.$on("prepare", (msg) => {
       this.success(msg);
     });
     //超时判负
-    EventBus.$on("timeout", msg => {
+    EventBus.$on("timeout", (msg) => {
       this.setResult(msg);
       this.error(msg);
       this._socket.emit("resignGame", {
         userId: this.account.user.name,
         gameId: this.game_id,
-        result: msg
+        result: msg,
       }); //发送信息
     });
     //棋局正式开始
-    EventBus.$on("beginGame", game => {
+    EventBus.$on("beginGame", (game) => {
       this.success("对局正式开始");
       this.setStatus();
-      gameService.beginGame(this.game_id).then(msg => {
+      gameService.beginGame(this.game_id).then((msg) => {
         console.log(msg);
       });
       initGameData(this.account.user.name, game);
@@ -371,7 +429,7 @@ export default {
     });
 
     //棋局正式开始,黑1开始数目
-    EventBus.$on("endGame", msg => {
+    EventBus.$on("endGame", (msg) => {
       console.log("begin to end game");
       this.success(msg);
       if (this.account.user.name == this.game.blackone_id) {
@@ -382,7 +440,7 @@ export default {
       }
     });
     //是否同意对局结果
-    EventBus.$on("resultGame", msg => {
+    EventBus.$on("resultGame", (msg) => {
       this.setTurn();
       this.success(matchResult(msg.result));
       if (
@@ -399,13 +457,13 @@ export default {
     });
 
     //数子结束
-    EventBus.$on("finishGame", msg => {
-      this.success(msg.result);
+    EventBus.$on("finishGame", (msg) => {
+      finishGame(msg);
       console.log("game is over! result is " + msg.result);
     });
 
     //数子结果未得到双方认可
-    EventBus.$on("noagreeGame", msg => {
+    EventBus.$on("noagreeGame", (msg) => {
       this.success(msg.result);
       this.setTurn();
       if (
@@ -423,40 +481,25 @@ export default {
       }
     });
 
-    EventBus.$on("showScore", msg => {
+    EventBus.$on("showScore", (msg) => {
       this.success(msg);
       this.setResult(msg);
     });
     //棋局进入计算最终结果状态
-    EventBus.$on("passed", msg => {
+    EventBus.$on("passed", (msg) => {
       this.success(msg);
     });
 
     //棋局正式结束
-    EventBus.$on("resign", msg => {
+    EventBus.$on("resign", (msg) => {
       // this.success(msg);
-      this.error(msg.result);
-      console.log("game is over,result is {}".format(msg.result));
-      this.btnQuitDisable = false;
-      let save_data = {
-        black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
-        white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
-        kifu_data: this.games.game.kifu,
-        result: msg.result
-      };
-      gameService.saveKifu(save_data).then(data => {
-        this.success(data.message);
-      });
-
-      gameService.completeGame(this.game_id).then(msg => {
-        console.log(msg);
-      });
+      finishGame(msg);
     });
   },
   components: {
     MyGo,
     Chat,
-    MyVideo
-  }
+    MyVideo,
+  },
 };
 </script>

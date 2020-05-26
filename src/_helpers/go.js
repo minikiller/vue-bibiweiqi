@@ -36,7 +36,7 @@ export function initGame(ele, gameinfo) {
   myboard = myplayer.board;
 }
 
-export function initResumeGame(ele, gameinfo) {
+export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.BL;
   white_time = gameinfo.WL;
@@ -50,8 +50,12 @@ export function initResumeGame(ele, gameinfo) {
   myplayer.last();
   // move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
   // if (!isView)
-  enable_board();
-  read_time();
+  if (result == "begin") {
+    enable_board();
+    read_time();
+  } else if (result == "passed") {
+    setPassedStatus();
+  }
 }
 
 // board mouseout callback for edit move
@@ -170,7 +174,7 @@ var read_time = function() {
       myplayer.update();
       if (myplayer.kifuReader.node.BL == 0) {
         // game_over("白超时胜");
-        EventBus.$emit("timeout","白超时胜");
+        EventBus.$emit("timeout", "白超时胜");
       }
     }, 1000);
   } else {
@@ -181,7 +185,7 @@ var read_time = function() {
       myplayer.update();
       if (myplayer.kifuReader.node.WL == 0) {
         // game_over("黑超时胜");
-        EventBus.$emit("timeout","黑超时胜");
+        EventBus.$emit("timeout", "黑超时胜");
       }
     }, 1000);
   }
@@ -245,7 +249,7 @@ export function game_over(result) {
   myplayer.update();
   alert(result);
   disable_board();
-  
+
   return myplayer.kifu.toSgf();
 }
 
@@ -316,6 +320,12 @@ function showScoreResult(msg) {
   console.log(msg);
   EventBus.$emit("showScore", msg);
 }
+
+export function setPassedStatus() {
+  disable_board();
+  clearTimeout(timer_loop);
+}
+
 export function showScore() {
   if (score_selected) {
     myplayer.setFrozen(false);
@@ -335,7 +345,7 @@ export function showScore() {
       // myplayer.notification
       showScoreResult
     );
-    
+
     score_selected = true;
     return _score_mode.start();
   }

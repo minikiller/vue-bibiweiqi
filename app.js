@@ -151,7 +151,7 @@ io.on("connection", function(socket) {
   socket.on("passedGame", function(msg) {
     gamePassed[msg.gameId][msg.userId] = true;
     if (checkGamePassed(msg.gameId)) {
-      activeGames[msg.gameId].status = "passed";
+      activeGames[msg.gameId].result = "passed";
       var black1 = activeGames[msg.gameId].users.black1;
       var white1 = activeGames[msg.gameId].users.white1;
       var result = `进入数子状态，由${black1}数子，由${white1}确认结果！如有异议，${white1}数子，${black1}确认！`;
@@ -173,7 +173,7 @@ io.on("connection", function(socket) {
   });
 
   //数子结束，双方达成一致
-  socket.on("finishGame", function (msg) {
+  socket.on("finishGame", function(msg) {
     console.log("finish game is received!");
     io.sockets.in(msg.gameId).emit("finishGame", msg);
   });
@@ -229,7 +229,7 @@ io.on("connection", function(socket) {
         WL: "",
         move: null,
         gameId: msg.gameId,
-        status: "begin",
+        result: "begin",
       };
       activeUsers[gameInfos[msg.gameId].blackone_id] = msg.gameId;
       activeUsers[gameInfos[msg.gameId].blacktwo_id] = msg.gameId;
@@ -287,11 +287,13 @@ io.on("connection", function(socket) {
   //检查用户是否有正在进行的对局
   socket.on("resume", function(msg) {
     if (activeUsers[msg.userId] !== undefined) {
-      gameId = activeUsers[msg.userId];
-      game = activeGames[gameId];
+      var gameId = activeUsers[msg.userId];
+      var game = activeGames[gameId];
+      var result = activeGames[gameId].result;
       socket.emit("resume", {
         gameId: gameId,
         game: game,
+        result: result,
       });
     }
   });
