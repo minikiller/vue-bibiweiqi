@@ -169,12 +169,14 @@ io.on("connection", function(socket) {
 
   //数子双方未达成一致
   socket.on("noagreeGame", function(msg) {
+    console.log("noagreeGame is received!");
     socket.broadcast.to(msg.gameId).emit("noagreeGame", msg);
   });
 
   //数子结束，双方达成一致
   socket.on("finishGame", function(msg) {
     console.log("finish game is received!");
+    clearGame(msg);
     io.sockets.in(msg.gameId).emit("finishGame", msg);
   });
 
@@ -290,6 +292,7 @@ io.on("connection", function(socket) {
       var gameId = activeUsers[msg.userId];
       var game = activeGames[gameId];
       var result = activeGames[gameId].result;
+      socket.join(gameId, () => {});
       socket.emit("resume", {
         gameId: gameId,
         game: game,
@@ -327,7 +330,7 @@ io.on("connection", function(socket) {
     lobbyUsers[msg.userId].emit("viewgame", { game: game });
   });
 
-  socket.on("resumegame", function(gameId) {
+  /* socket.on("resumegame", function(gameId) {
     console.log(getFormattedDate() + "ready to resume game: " + gameId);
 
     socket.gameId = gameId;
@@ -353,22 +356,28 @@ io.on("connection", function(socket) {
         });
       delete lobbyUsers[game.users.black];
     }
-  });
+  }); */
+
+  function clearGame(msg) {
+    if (activeGames[msg.gameId]) {
+      delete activeUsers[activeGames[msg.gameId].users.black1];
+      delete activeUsers[activeGames[msg.gameId].users.black2];
+      delete activeUsers[activeGames[msg.gameId].users.white1];
+      delete activeUsers[activeGames[msg.gameId].users.white2];
+      delete activeGames[msg.gameId];
+      delete gameInfos[msg.gameId]; //存储对局室的信息
+      delete gameStatus[msg.gameId]; //game对局者是否准备的信息
+      redis_client.set("activeUsers", JSON.stringify(activeUsers));
+      redis_client.set("activeGames", JSON.stringify(activeGames));
+      redis_client.set("gameInfos", JSON.stringify(gameInfos));
+      redis_client.set("gameStatus", JSON.stringify(gameStatus));
+    }
+  }
 
   socket.on("resignGame", function(msg) {
     console.log(getFormattedDate() + "resign: " + msg);
     console.log(activeGames[msg.gameId]);
-    delete activeUsers[activeGames[msg.gameId].users.black1];
-    delete activeUsers[activeGames[msg.gameId].users.black2];
-    delete activeUsers[activeGames[msg.gameId].users.white1];
-    delete activeUsers[activeGames[msg.gameId].users.white2];
-    delete activeGames[msg.gameId];
-    delete gameInfos[msg.gameId]; //存储对局室的信息
-    delete gameStatus[msg.gameId]; //game对局者是否准备的信息
-    redis_client.set("activeUsers", JSON.stringify(activeUsers));
-    redis_client.set("activeGames", JSON.stringify(activeGames));
-    redis_client.set("gameInfos", JSON.stringify(gameInfos));
-    redis_client.set("gameStatus", JSON.stringify(gameStatus));
+    clearGame(msg);
 
     // socket.broadcast.emit("resign", msg);
     io.sockets.in(msg.gameId).emit("resign", msg);

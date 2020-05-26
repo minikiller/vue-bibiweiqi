@@ -83,7 +83,7 @@
               <!-- TODO add status check -->
               <!-- <b-card-text>{{ `备注:${data.comment.slice(0,100)}` }}</b-card-text> -->
               <router-link :to="{ path: '/play/' + data.id }">
-                <b-button variant="primary">进入房间</b-button>
+                <b-button variant="primary">进入</b-button>
               </router-link>
               <b-button
                 v-if="account.user.user_id == data.user_id"

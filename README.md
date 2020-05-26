@@ -118,3 +118,9 @@ Vue.use(VeeValidate, {
           })
       }
 ```
+
+### clear redis all key
+
+```
+redis-cli flushall
+```
