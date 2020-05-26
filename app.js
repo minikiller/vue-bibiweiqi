@@ -13,7 +13,9 @@ var https = require("https").Server(
 );
 
 // var io = require('socket.io')(http);
-var io = require("socket.io")(https);
+var io = require("socket.io")(https, { pingInterval: 2000, pingTimeout: 5000 });
+// io.set('heartbeat timeout', 5000);
+// io.set('heartbeat interval', 2000);
 
 var port = process.env.PORT || 3000;
 
@@ -132,7 +134,9 @@ io.on("connection", function(socket) {
     // socket.emit("login", userinGame[gameId]);
     lobbyUsers[userId] = socket;
     socket.join(gameId, () => {}); //进入对局室
-
+    io.in(gameId).clients((err, clients) => {
+      console.log("room has client is: " + clients); // an array containing socket ids in 'room3'
+    });
     // io.sockets.in(gameId).emit("joinlobby", userId);
     // 给房间内的所有人发送新人进入对局室消息，不包括sender本身
     socket.broadcast.to(gameId).emit("joinlobby", userId);
@@ -381,6 +385,15 @@ io.on("connection", function(socket) {
 
     // socket.broadcast.emit("resign", msg);
     io.sockets.in(msg.gameId).emit("resign", msg);
+  });
+
+  socket.on("hello", function(msg) {
+    // socket.broadcast.emit("resign", msg);
+    io.in(msg.gameId).clients((err, clients) => {
+      console.log(clients); // an array containing socket ids in 'room3'
+    });
+    io.sockets.in(msg.gameId).emit("hello", msg);
+    // socket.broadcast.to(msg.gameId).emit('hello', 'nice game');
   });
 
   //listen on new_message

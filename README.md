@@ -124,3 +124,9 @@ Vue.use(VeeValidate, {
 ```
 redis-cli flushall
 ```
+
+### print a object
+```
+var inspect = require('util').inspect;
+console.log(inspect(response))
+```

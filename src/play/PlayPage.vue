@@ -14,7 +14,7 @@
             >{{ btnText }}</button>
             <button class="btn btn-primary" v-if="canEnd" @click="getScore">{{ endText }}</button>
             <button class="btn btn-primary" v-if="canBegin" @click="passed">终局</button>
-            <!-- <button class="btn btn-primary" @click="test">test</button> -->
+            <button class="btn btn-primary" @click="test">test</button>
             <button
               class="btn btn-primary"
               :disabled="btnQuitDisable"
@@ -166,6 +166,10 @@ export default {
     test() {
       // this.$refs["modal"].show();
       // alert(testStore());
+      this._socket.emit("hello", {
+        userId: this.account.user.name,
+        gameId: this.game_id
+      });
     },
     passed() {
       setPassedStatus();
@@ -432,6 +436,12 @@ export default {
     EventBus.$on("finishGame", msg => {
       this.finishGame(msg);
       console.log("game is over! result is " + msg.result);
+    });
+
+    //test
+    EventBus.$on("hello", msg => {
+       
+      alert("game is helloMsg " + msg);
     });
 
     //数子结果未得到双方认可

@@ -65,6 +65,12 @@ socket.on("finishGame", function(msg) {
   // removeUser(msg);
 });
 
+//数子结束，双方达成一致
+socket.on("hello", function(msg) {
+  EventBus.$emit("hello", msg);
+  // removeUser(msg);
+});
+
 //确认数子结果
 socket.on("resultGame", function(msg) {
   EventBus.$emit("resultGame", msg);
