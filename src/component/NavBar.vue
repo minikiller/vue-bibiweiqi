@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="info">
+  <b-navbar v-if="account.user" toggleable="lg" type="dark" variant="info">
     <b-container>
       <b-navbar-brand href="#">{{ games.navTitle }}</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -10,7 +10,11 @@
           <b-nav-item href="/kifu">我的棋友 </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-text>{{ account.user.name }}[6D]</b-nav-text>
+          <b-nav-text
+            ><div v-if="account.user">
+              {{ account.user.name }}[6D]
+            </div></b-nav-text
+          >
           <b-nav-item href="/profile">修改个人信息 </b-nav-item>
           <b-nav-item @click="logout">退出 </b-nav-item>
         </b-navbar-nav>
