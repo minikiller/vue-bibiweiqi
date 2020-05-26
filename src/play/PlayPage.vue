@@ -256,6 +256,11 @@ export default {
           // An error occurred
         });
     },
+    matchResult(value) {//正则表达式返回对局结果
+      var _result = value.match(">([黑白]胜.*)<");
+      if (_result) return _result[1];
+      else return "";
+    },
     onCapture() {
       this.img = this.$refs.webrtc.capture();
     },
@@ -379,7 +384,7 @@ export default {
     //是否同意对局结果
     EventBus.$on("resultGame", msg => {
       this.setTurn();
-      this.success(msg.result);
+      this.success(matchResult(msg.result));
       if (
         this.games.turn == "white" && //需要白确认并且是白1
         this.account.user.name == this.game.whiteone_id
