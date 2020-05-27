@@ -12,6 +12,8 @@ var https = require("https").Server(
   app
 );
 
+var inspect = require("util").inspect;
+
 // var io = require('socket.io')(http);
 var io = require("socket.io")(https, { pingInterval: 2000, pingTimeout: 5000 });
 // io.set('heartbeat timeout', 5000);
@@ -26,7 +28,7 @@ https.listen(port, function() {
 const redis_client = require("redis").createClient();
 
 var lobbyUsers = {};
-var users = {};
+var users = {}; //保存用户所在的game信息
 var activeGames = {}; //正在进行的对局字典
 var activeUsers = {}; //正在进行对局的用户字典
 var gameInfos = {}; //存储对局室的信息
@@ -77,13 +79,24 @@ redis_client.once("ready", () => {
       activeGames = JSON.parse(reply);
     }
   });
+  // Initialize activeGames
+  redis_client.get("users", function(err, reply) {
+    if (reply) {
+      users = JSON.parse(reply);
+    }
+  });
 });
 
 io.on("connection", function(socket) {
   console.log(getFormattedDate() + "new connection " + socket);
-
+  // console.log(inspect(socket))
+  // if (socket.userId && users[socket.userId]) {
+  //   socket.join(users[userId].gameId);
+  //   console.log("reconnect to room id is " + users[userId].gameId);
+  // }
   //用户进入对局室的处理过程
   socket.on("login", function(msg) {
+    console.log(getFormattedDate() + " login " + inspect(msg));
     doLogin(socket, msg);
   });
 
@@ -119,6 +132,7 @@ io.on("connection", function(socket) {
     if (!users[userId]) {
       console.log(getFormattedDate() + "creating new user " + userId);
       users[userId] = { userId: socket.userId, games: gameId, prepared: false };
+      redis_client.set("users", JSON.stringify(users));
     } else {
       console.log("user found!");
       // Object.keys(users[userId].games).forEach(function(gameId) {
@@ -315,9 +329,16 @@ io.on("connection", function(socket) {
   });
 
   socket.on("logout", function(msg) {
-    socket.leave(msg.gameId);
-    socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
-    delete users[msg.userId];
+    socket.leave(msg.gameId, () => {
+      console.log(socket.adapter.rooms);
+      io.in(msg.gameId).clients((err, clients) => {
+        console.log("leave room client is " + clients); // an array containing socket ids in 'room3'
+      });
+      socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
+      delete users[msg.userId];
+
+      redis_client.set("users", JSON.stringify(users));
+    });
   });
 
   socket.on("viewgame", function(msg) {
@@ -392,7 +413,8 @@ io.on("connection", function(socket) {
     io.in(msg.gameId).clients((err, clients) => {
       console.log(clients); // an array containing socket ids in 'room3'
     });
-    io.sockets.in(msg.gameId).emit("hello", msg);
+    console.log(socket.adapter.rooms);
+    io.in(msg.gameId).emit("helloMsg", msg);
     // socket.broadcast.to(msg.gameId).emit('hello', 'nice game');
   });
 

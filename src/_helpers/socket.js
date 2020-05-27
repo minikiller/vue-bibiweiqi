@@ -2,18 +2,19 @@
  * 处理websocket相关的业务方法
  */
 import config from "config";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 // export let socketServer = "dfdfdf";
 
 export let socket = io.connect(`${config.socketUrl}`);
 
 import { EventBus } from "../index.js";
-import { readyMove,gameResign } from "./go";
+import { readyMove, gameResign } from "./go";
 // var connection = new RTCMultiConnection();
 
 //////////////////////////////
 // Socket.io handlers
 //////////////////////////////
+// socket.removeAllListeners();
 
 socket.on("initGameUser", function(msg) {
   EventBus.$emit("initGameUser", msg);
@@ -59,18 +60,20 @@ socket.on("noagreeGame", function(msg) {
   // removeUser(msg);
 });
 
- //数子结束，双方达成一致
+//数子结束，双方达成一致
 socket.on("finishGame", function(msg) {
   EventBus.$emit("finishGame", msg);
   // removeUser(msg);
 });
 
-//数子结束，双方达成一致
-socket.on("hello", function(msg) {
-  EventBus.$emit("hello", msg);
+/* export function hello(msg) {
+  EventBus.$emit("helloMsg", msg);
   // removeUser(msg);
-});
+}
 
+//数子结束，双方达成一致
+socket.on("helloMsg", hello);
+ */
 //确认数子结果
 socket.on("resultGame", function(msg) {
   EventBus.$emit("resultGame", msg);
@@ -102,7 +105,7 @@ socket.on("view", function(msg) {
   EventBus.$emit("view", msg);
 });
 
-socket.on("move", function (msg) {
+socket.on("move", function(msg) {
   readyMove(msg);
   EventBus.$emit("move", msg);
 });

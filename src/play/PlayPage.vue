@@ -88,7 +88,8 @@ import {
   initGameData,
   showScore,
   getResult,
-  setPassedStatus
+  setPassedStatus,
+  hello
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -219,10 +220,11 @@ export default {
     },
     exit() {
       console.log(`${this.account.user.name} is me`);
-      socket.emit("logout", {
+      this._socket.emit("logout", {
         userId: this.account.user.name,
         gameId: this.game_id
       });
+      // this._socket.removeAllListeners();
       this.$router.push({ path: "/" });
     },
 
@@ -272,7 +274,7 @@ export default {
     },
     //对局结束，保存棋谱
     finishGame(msg) {
-      this.error("对局结束： "+msg.result);
+      this.error("对局结束： " + msg.result);
       console.log("game is over,result is {}".format(msg.result));
       this.btnQuitDisable = false;
       this.btnBeginDisable = true;
@@ -313,6 +315,10 @@ export default {
     },
     logEvent(event) {
       console.log("Event : ", event);
+    },
+    hello(msg) {
+      alert(msg);
+      // removeUser(msg);
     }
   },
   props: ["game_id"],
@@ -335,9 +341,16 @@ export default {
       img: null
     };
   },
+  beforeDestroy() {
+    console.log("destroy is called");
+    this._socket.removeListener("helloMsg",this.hello);
+  },
+  created() {
+    //数子结束，双方达成一致
+  },
   mounted() {
     this._socket = socket;
-
+    this._socket.on("helloMsg", this.hello);
     gameService.getById(this.game_id).then(data => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
@@ -367,7 +380,7 @@ export default {
         } else if (this.game.status == "进行中") {
           this.success("对局正在进行中，请欣赏对局！");
 
-          socket.emit("view", {
+          this._socket.emit("view", {
             userId: this.account.user.name,
             gameId: this.game_id
           });
@@ -439,8 +452,7 @@ export default {
     });
 
     //test
-    EventBus.$on("hello", msg => {
-       
+    EventBus.$on("helloMsg", msg => {
       alert("game is helloMsg " + msg);
     });
 
