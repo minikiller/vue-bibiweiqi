@@ -6,7 +6,7 @@ import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
 import KifuPage from "../kifu/KifuPage";
-import GamePage from "../game/GamePage";
+import CreateGamePage from "../creategame/CreateGamePage";
 import ProfilePage from "../profile/ProfilePage";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -19,7 +19,7 @@ export const router = new Router({
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/play/:game_id", component: PlayPage, props: true },
-    { path: "/game", component: GamePage },
+    { path: "/creategame", component: CreateGamePage },
     { path: "/kifu", component: KifuPage },
     { path: "/profile", component: ProfilePage },
 

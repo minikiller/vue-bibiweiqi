@@ -5,6 +5,7 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
+          <b-nav-item href="/creategame">新建對局 </b-nav-item>
           <b-nav-item href="/">对局日程 </b-nav-item>
           <b-nav-item href="/kifu">我的棋谱 </b-nav-item>
           <b-nav-item href="/kifu">我的棋友 </b-nav-item>
