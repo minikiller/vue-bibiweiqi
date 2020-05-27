@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import HomePage from "../home/HomePage";
 import Home from "../home/Home";
 import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
@@ -16,9 +15,7 @@ Vue.use(Router);
 export const router = new Router({
   mode: "history",
   routes: [
-    // { path: "/", component: HomePage },
     { path: "/", component: Home },
-    { path: "/home", component: HomePage },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/play/:game_id", component: PlayPage, props: true },
