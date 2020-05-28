@@ -6,11 +6,16 @@ const state = {
   navTitle: "",
   result: "no result",
   turn: "black", //数子顺序，默认是黑开始，数值为black或white
+  connected: false,
 };
 
 const actions = {};
 
 const mutations = {
+  SOCKET_connect(state) {
+    console.log("i got it");
+    state.connected = true;
+  },
   addUser(state, userId) {
     if (state.onlineUsers.indexOf(userId) == -1) state.onlineUsers.push(userId);
   },
