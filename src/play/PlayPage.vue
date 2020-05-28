@@ -98,6 +98,7 @@ import Vue from "vue";
 Vue.component(WebRTC.name, WebRTC);
 
 export default {
+  name: "playPage",
   computed: {
     ...mapState({
       account: state => state.account,
@@ -343,7 +344,7 @@ export default {
   },
   beforeDestroy() {
     console.log("destroy is called");
-    this._socket.removeListener("helloMsg",this.hello);
+    this._socket.removeListener("helloMsg", this.hello);
   },
   created() {
     //数子结束，双方达成一致

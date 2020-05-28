@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import Home from "../home/Home";
+import Hello from "../component/Hello";
 import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
@@ -15,6 +16,7 @@ Vue.use(Router);
 export const router = new Router({
   mode: "history",
   routes: [
+    // { path: "/", component: Hello },
     { path: "/", component: Home },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },

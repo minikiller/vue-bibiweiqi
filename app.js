@@ -414,7 +414,8 @@ io.on("connection", function(socket) {
       console.log(clients); // an array containing socket ids in 'room3'
     });
     console.log(socket.adapter.rooms);
-    io.in(msg.gameId).emit("helloMsg", msg);
+    socket.emit("helloMsg", msg);
+    // io.in(msg.gameId).emit("helloMsg", msg);
     // socket.broadcast.to(msg.gameId).emit('hello', 'nice game');
   });
 

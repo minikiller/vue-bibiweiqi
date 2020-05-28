@@ -1,7 +1,7 @@
 let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var black_time, white_time;
-import { socket } from "./socket";
+// import { socket } from "./socket";
 import { EventBus } from "../index.js";
 var username, game;
 var timer_loop = null; //定时器

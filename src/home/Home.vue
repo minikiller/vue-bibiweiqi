@@ -2,53 +2,69 @@
   <div id="app">
     <!-- <Navbar /> -->
     <Card />
+    <!-- <b-button @click="hello">hello</b-button> -->
   </div>
 </template>
 <script>
 import Card from "../component/Card.vue";
 import { mapState, mapMutations } from "vuex";
 import Navbar from "../component/NavBar.vue";
-import { socket } from "../_helpers";
-import { EventBus } from "../index.js";
 
 export default {
   name: "home",
   components: {
     Navbar,
-    Card,
+    Card
   },
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle", "setResult"]),
+    hello() {
+      this.$socket.emit("hello", { data: "1212" });
+    }
   },
   data() {
     return {
       name: "我的对局室",
-      _socket: null,
+      _socket: null
     };
   },
   computed: {
     ...mapState({
-      account: (state) => state.account,
-      users: (state) => state.users.all,
-    }),
+      account: state => state.account,
+      users: state => state.users.all
+    })
   },
-  mounted() {
-    this._socket = socket;
-    this.updateNavTitle(this.name);
-    this._socket.emit("resume", {
-      userId: this.account.user.name,
-    });
-    EventBus.$on("resume", (msg) => {
+  sockets: {
+    //查看socket是否渲染成功
+    connect() {
+      console.log("链接成功");
+    },
+    disconnect() {
+      console.log("断开链接");
+    }, //检测socket断开链接
+    reconnect() {
+      console.log("重新链接");
+    },
+    // helloMsg(msg) {
+    //   console.log(msg);
+    // },
+    resume() {
       this.updateGame(msg.game);
       this.setResult(msg.result);
       this.$router.push({
         path: `/play/${msg.gameId}`,
-        query: { type: "resume" },
+        query: { type: "resume" }
       });
-    });
-    EventBus.$on("move", (game) => {
+    },
+    move() {
       this.updateGame(game);
-    });
+    }
   },
+  mounted() {
+    this.updateNavTitle(this.name);
+    this.$socket.emit("resume", { //检查是否有需要恢复的对局
+      userId: this.account.user.name
+    });
+  }
 };
 </script>

@@ -105,6 +105,7 @@
 import { gameService } from "../_services";
 import { mapState, mapMutations } from "vuex";
 export default {
+  name: "card",
   data() {
     return {
       games: [],

@@ -5,7 +5,8 @@ import config from "config";
 import io from "socket.io-client";
 // export let socketServer = "dfdfdf";
 
-export let socket = io.connect(`${config.socketUrl}`);
+export let socket ;
+// export let socket = io.connect(`${config.socketUrl}`);
 
 import { EventBus } from "../index.js";
 import { readyMove, gameResign } from "./go";

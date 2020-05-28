@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VeeValidate from 'vee-validate';
-
+import config from "config";
 import { store } from './_store';
 import { router } from './_helpers';
 import App from './app/App';
@@ -14,6 +14,19 @@ import 'vue-select/dist/vue-select.css';
 
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
+
+import VueSocketIO from 'vue-socket.io'
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: `${config.socketUrl}`,
+    vuex: {
+        store,
+        actionPrefix: 'SOCKET_', //为vuex设置的两个前缀
+        mutationPrefix: 'SOCKET_'
+    },
+    // options: { path: "/my-app/" } //Optional options
+}))
+
 Vue.use(BootstrapVue)
 // Vue.use(VeeValidate);
 Vue.use(VeeValidate, {
