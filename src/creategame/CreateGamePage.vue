@@ -1,101 +1,123 @@
 <template>
   <b-container fluid>
-    <b-row>
+    <b-row sm="6">
       <b-col>
-        <div>
+        <b-card>
           <b-container fluid>
             <b-row>
-              <b-col>
-                <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-                  <v-select
-                    label="name"
-                    :filterable="false"
-                    :options="options"
-                    @search="onSearch"
-                    placeholder="黑一"
-                  >
-                    <template slot="no-options">請選擇棋友 </template>
-                    <template slot="option" slot-scope="option">
-                      <div class="d-center">{{ option.name }}</div>
-                    </template>
-                  </v-select>
-                </b-form></b-col
+              <b-col cols="8"
+                ><b-row
+                  ><b-col>
+                    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+                      <v-select
+                        label="name"
+                        :filterable="false"
+                        :clearable="false"
+                        :options="options"
+                        @search="onSearch"
+                      >
+                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="option" slot-scope="option">
+                          <div class="d-center">{{ option.name }}</div>
+                        </template>
+                      </v-select>
+                    </b-form></b-col
+                  ></b-row
+                ><b-row
+                  ><b-col>
+                    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+                      <v-select
+                        label="name"
+                        :filterable="false"
+                        :clearable="false"
+                        :options="options"
+                        @search="onSearch"
+                      >
+                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="option" slot-scope="option">
+                          <div class="d-center">{{ option.name }}</div>
+                        </template>
+                      </v-select>
+                    </b-form></b-col
+                  ></b-row
+                ><b-row
+                  ><b-col>
+                    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+                      <v-select
+                        label="name"
+                        :filterable="false"
+                        :clearable="false"
+                        :options="options"
+                        @search="onSearch"
+                      >
+                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="option" slot-scope="option">
+                          <div class="d-center">{{ option.name }}</div>
+                        </template>
+                      </v-select>
+                    </b-form></b-col
+                  ></b-row
+                ><b-row
+                  ><b-col>
+                    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+                      <v-select
+                        label="name"
+                        :filterable="false"
+                        :clearable="false"
+                        :options="options"
+                        @search="onSearch"
+                      >
+                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="option" slot-scope="option">
+                          <div class="d-center">{{ option.name }}</div>
+                        </template>
+                      </v-select>
+                    </b-form></b-col
+                  ></b-row
+                ></b-col
               >
-              <b-col>
-                <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-                  <v-select
-                    label="name"
-                    :filterable="false"
-                    :options="options"
-                    @search="onSearch"
-                    placeholder="白一"
-                  >
-                    <template slot="no-options">請選擇棋友 </template>
-                    <template slot="option" slot-scope="option">
-                      <div class="d-center">{{ option.name }}</div>
-                    </template>
-                  </v-select>
-                </b-form></b-col
-              >
+              <b-col cols="4" align-self="center">
+                <b-container>
+                  <b-row
+                    ><b-col class="avatars_l"
+                      ><b-avatar
+                        badge="1"
+                        badge-variant="dark"
+                        size="3rem"
+                      ></b-avatar></b-col
+                    ><b-col class="avatars_r"
+                      ><b-avatar
+                        badge="2"
+                        badge-variant="light"
+                        size="3rem"
+                      ></b-avatar></b-col
+                  ></b-row>
+                  <b-row
+                    ><b-col class="avatars_l"
+                      ><b-avatar
+                        badge="4"
+                        badge-variant="light"
+                        size="3rem"
+                      ></b-avatar></b-col
+                    ><b-col class="avatars_r"
+                      ><b-avatar
+                        badge="3"
+                        badge-variant="dark"
+                        size="3rem"
+                      ></b-avatar></b-col
+                  ></b-row>
+                </b-container>
+              </b-col>
             </b-row>
-            <b-row>
-              <b-col>
-                <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-                  <v-select
-                    label="name"
-                    :filterable="false"
-                    :options="options"
-                    @search="onSearch"
-                    placeholder="白二"
-                  >
-                    <template slot="no-options">請選擇棋友 </template>
-                    <template slot="option" slot-scope="option">
-                      <div class="d-center">{{ option.name }}</div>
-                    </template>
-                  </v-select>
-                </b-form></b-col
-              >
-              <b-col>
-                <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-                  <v-select
-                    label="name"
-                    :filterable="false"
-                    :options="options"
-                    @search="onSearch"
-                    placeholder="黑二"
-                  >
-                    <template slot="no-options">請選擇棋友 </template>
-                    <template slot="option" slot-scope="option">
-                      <div class="d-center">{{ option.name }}</div>
-                    </template>
-                  </v-select>
-                </b-form></b-col
-              >
-            </b-row>
-          </b-container>
-        </div></b-col
-      >
-      <b-col>
-        <div>
-          <label for="example-datepicker">Choose a date</label>
-          <b-form-datepicker
-            id="example-datepicker"
-            v-model="value"
-            class="mb-2"
-          ></b-form-datepicker>
-        </div>
-
-        <div>
-          <b-form-timepicker v-model="value" locale="en"></b-form-timepicker>
-        </div>
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button></b-col
-      >
+          </b-container> </b-card
+      ></b-col>
+      <b-col> </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
+import "vue-select/dist/vue-select.css";
 import _ from "lodash";
 import { mapState, mapMutations } from "vuex";
 
@@ -157,6 +179,15 @@ export default {
 
 <style scoped>
 .col {
-  padding: 1rem 2rem;
+  padding: 0.25rem 1rem;
+}
+.b-avatar {
+  margin: 0.5rem;
+}
+.avatars_l {
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+}
+.avatars_r {
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
 }
 </style>
