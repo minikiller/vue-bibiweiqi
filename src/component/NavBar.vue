@@ -46,6 +46,7 @@
 import { mapState } from "vuex";
 import { userService } from "../_services";
 export default {
+  name: "navBar",
   computed: {
     ...mapState({
       account: (state) => state.account,

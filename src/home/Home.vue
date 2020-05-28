@@ -25,7 +25,6 @@ export default {
   data() {
     return {
       name: "我的对局室",
-      _socket: null
     };
   },
   computed: {

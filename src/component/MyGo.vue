@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import { initGame, initResumeGame, initGameData, socket } from "../_helpers";
+import { initGame, initResumeGame, initGameData } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
-import { EventBus } from "../../src/index";
 
 export default {
+  name: "mygo",
   computed: {
     ...mapState({
       account: (state) => state.account,
@@ -31,6 +31,17 @@ export default {
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle"]),
   },
+  sockets: {
+    view(msg) {
+      // this.success(msg);
+      this.updateGame(msg.game);
+
+      //观战
+      initGameData(this.account.user.name, this.games.game);
+      initResumeGame(this.$refs.player, this.games.game, this.games.result);
+      document.getElementById("wgo-control").style.display = "";
+    },
+  },
   mounted() {
     // document.getElementById("wgo-control").style.display = "none";
     if (this.$route.query.type == "resume") {
@@ -45,15 +56,6 @@ export default {
         whiteTwo: this.whiteTwo,
       });
     }
-    EventBus.$on("view", (msg) => {
-      // this.success(msg);
-      this.updateGame(msg.game);
-
-      //观战
-      initGameData(this.account.user.name, this.games.game);
-      initResumeGame(this.$refs.player, this.games.game, this.games.result);
-      document.getElementById("wgo-control").style.display = "";
-    });
   },
 };
 </script>
