@@ -15,7 +15,7 @@ function getAll() {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/games`, requestOptions).then(handleResponse);
+  return fetch(`${config.apiUrl}/games/`, requestOptions).then(handleResponse);
 }
 
 function getById(id) {
@@ -66,7 +66,7 @@ function saveKifu(_data) {
     body: JSON.stringify(_data),
   };
   console.log(requestOptions['body']);
-  return fetch(`${config.apiUrl}/kifus`, requestOptions).then(
+  return fetch(`${config.apiUrl}/kifus/`, requestOptions).then(
     handleResponse
   );
 }
