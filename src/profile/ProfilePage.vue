@@ -1,21 +1,67 @@
-<template> </template>>
+<template>
+  <v-app id="app" class="mt-0">
+    <v-container grid-list-xl>
+      <image-input v-model="avatar">
+        <div slot="activator">
+          <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+            <span>Click to add avatar</span>
+          </v-avatar>
+          <v-avatar size="150px" v-ripple v-else class="mb-3">
+            <img :src="avatar.imageURL" alt="avatar">
+          </v-avatar>
+        </div>
+      </image-input>
+      <v-slide-x-transition>
+        <div v-if="avatar && saved == false">
+          <v-btn class="primary" @click="uploadImage" :loading="saving">Save Avatar</v-btn>
+        </div>
+      </v-slide-x-transition>
+    </v-container>
+  </v-app>
+</template>
 
 <script>
-import config from "config";
-import { authHeader, handleResponse } from "../_helpers";
-import { userService } from "../_services";
-import { mapState, mapMutations } from "vuex";
+import ImageInput from '../component/ImageInput.vue'
+
 export default {
-  computed: {
-    ...mapState({
-      account: (state) => state.account,
-    }),
-  },
-  data() {
+  name: 'app',
+  data () {
     return {
-      name: "我的棋谱",
-    };
+      avatar: null,
+      saving: false,
+      saved: false
+    }
   },
-  mounted() {},
-};
+  components: {
+    ImageInput: ImageInput
+  },
+  watch:{
+    avatar: {
+      handler: function() {
+        this.saved = false
+      },
+      deep: true
+    }
+  },
+  methods: {
+    uploadImage() {
+      this.saving = true
+      setTimeout(() => this.savedAvatar(), 1000)
+    },
+    savedAvatar() {
+      this.saving = false
+      this.saved = true
+    }
+  }
+}
 </script>
+
+<style>
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
