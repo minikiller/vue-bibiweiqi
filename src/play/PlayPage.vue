@@ -1,4 +1,4 @@
-<template src="./PlayPage.html"> </template>
+<template src="./PlayPage.html"></template>
 <script>
 import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
@@ -11,7 +11,7 @@ import {
   initGameData,
   showScore,
   getResult,
-  setPassedStatus,
+  setPassedStatus
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -23,9 +23,10 @@ export default {
   name: "playPage",
   computed: {
     ...mapState({
-      account: (state) => state.account,
-      games: (state) => state.games,
+      account: state => state.account,
+      games: state => state.games
     }),
+    
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
@@ -33,7 +34,7 @@ export default {
       "updateGame",
       "updateNavTitle",
       "setResult",
-      "setTurn",
+      "setTurn"
     ]),
     setStatus() {
       this.btnText = "认输";
@@ -64,9 +65,9 @@ export default {
             okTitle: "确定",
             cancelTitle: "取消",
             hideHeaderClose: false,
-            centered: true,
+            centered: true
           })
-          .then((value) => {
+          .then(value => {
             if (value) {
               //this.setResult(result);
               showScore();
@@ -76,11 +77,11 @@ export default {
                 userId: this.account.user.name,
                 gameId: this.game_id,
                 result: this.games.result,
-                turn: this.games.turn,
+                turn: this.games.turn
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             // An error occurred
           });
       }
@@ -92,7 +93,7 @@ export default {
       // alert(testStore());
       this.$socket.emit("hello", {
         userId: this.account.user.name,
-        gameId: this.game_id,
+        gameId: this.game_id
       });
     },
     passed() {
@@ -100,7 +101,7 @@ export default {
       this.setResult("passed");
       this.$socket.emit("passedGame", {
         userId: this.account.user.name,
-        gameId: this.game_id,
+        gameId: this.game_id
       });
     },
     begin() {
@@ -111,7 +112,7 @@ export default {
         this.$refs.quit.disabled = true;
         this.$socket.emit("prepareGame", {
           userId: this.account.user.name,
-          gameId: this.game_id,
+          gameId: this.game_id
         });
       } else if (this.btnText == "认输") {
         this.$bvModal
@@ -123,20 +124,20 @@ export default {
             okTitle: "确定",
             cancelTitle: "取消",
             hideHeaderClose: false,
-            centered: true,
+            centered: true
           })
-          .then((value) => {
+          .then(value => {
             if (value) {
               var result = getResult();
               this.setResult(result);
               this.$socket.emit("resignGame", {
                 userId: this.account.user.name,
                 gameId: this.game_id,
-                result: result,
+                result: result
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             // An error occurred
           });
       }
@@ -145,7 +146,7 @@ export default {
       console.log(`${this.account.user.name} is me`);
       this.$socket.emit("logout", {
         userId: this.account.user.name,
-        gameId: this.game_id,
+        gameId: this.game_id
       });
       this.$router.push({ path: "/" });
     },
@@ -162,29 +163,29 @@ export default {
           okTitle: "确定",
           cancelTitle: "取消",
           hideHeaderClose: false,
-          centered: true,
+          centered: true
         })
-        .then((value) => {
+        .then(value => {
           if (value) {
             //同意数子结果，对局结束
             this.$socket.emit("finishGame", {
               userId: this.account.user.name,
               gameId: this.game_id,
-              result: result,
+              result: result
             });
           } else {
             //不同意结果，继续数子
             this.$socket.emit("noagreeGame", {
               userId: this.account.user.name,
               gameId: this.game_id,
-              result: "数子结果未达成一致，继续数目",
+              result: "数子结果未达成一致，继续数目"
             });
             this.success("数子结果未达成一致，继续数目");
             this.canEnd = true;
             this.endText = "开始数目";
           }
         })
-        .catch((err) => {
+        .catch(err => {
           // An error occurred
         });
     },
@@ -208,14 +209,14 @@ export default {
           black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
           white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
           kifu_data: this.games.game.kifu,
-          result: msg.result,
+          result: msg.result
         };
 
-        gameService.saveKifu(save_data).then((data) => {
+        gameService.saveKifu(save_data).then(data => {
           this.success(data.message);
         });
 
-        gameService.completeGame(this.game_id).then((msg) => {
+        gameService.completeGame(this.game_id).then(msg => {
           console.log(msg);
         });
       }
@@ -241,7 +242,7 @@ export default {
     hello(msg) {
       alert(msg);
       // removeUser(msg);
-    },
+    }
   },
   sockets: {
     //棋手对局进入准备状态
@@ -255,7 +256,7 @@ export default {
       this.$socket.emit("resignGame", {
         userId: this.account.user.name,
         gameId: this.game_id,
-        result: msg,
+        result: msg
       }); //发送信息
     },
 
@@ -263,7 +264,7 @@ export default {
     beginGame(game) {
       this.success("对局正式开始");
       this.setStatus();
-      gameService.beginGame(this.game_id).then((msg) => {
+      gameService.beginGame(this.game_id).then(msg => {
         console.log(msg);
       });
       initGameData(this.account.user.name, game);
@@ -342,7 +343,7 @@ export default {
     resign(msg) {
       // this.success(msg);
       this.finishGame(msg);
-    },
+    }
   },
   props: ["game_id"],
   data() {
@@ -360,7 +361,7 @@ export default {
       canEnd: false, //是否可以开始数目
       endText: "开始数目",
       kifu: "", //棋谱
-      img: null,
+      img: null
     };
   },
   beforeDestroy() {
@@ -372,7 +373,7 @@ export default {
   },
   mounted() {
     // this.$socket.on("helloMsg", this.hello);
-    gameService.getById(this.game_id).then((data) => {
+    gameService.getById(this.game_id).then(data => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
       this.gameUser.push(this.game.blacktwo_id);
@@ -403,7 +404,7 @@ export default {
 
           this.$socket.emit("view", {
             userId: this.account.user.name,
-            gameId: this.game_id,
+            gameId: this.game_id
           });
         } else {
           //已结束
@@ -417,7 +418,7 @@ export default {
   components: {
     MyGo,
     Chat,
-    MyVideo,
-  },
+    MyVideo
+  }
 };
 </script>

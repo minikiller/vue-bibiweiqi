@@ -142,3 +142,5 @@ redis-cli flushall
 var inspect = require('util').inspect;
 console.log(inspect(response))
 ```
+### base64 image
+https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript

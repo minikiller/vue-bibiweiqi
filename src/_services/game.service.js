@@ -7,6 +7,7 @@ export const gameService = {
   saveKifu,
   beginGame,
   completeGame,
+  deleteById
 };
 
 function getAll() {
@@ -21,6 +22,17 @@ function getAll() {
 function getById(id) {
   const requestOptions = {
     method: "GET",
+    headers: authHeader(),
+  };
+
+  return fetch(`${config.apiUrl}/games/${id}`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function deleteById(id) {
+  const requestOptions = {
+    method: "DELETE",
     headers: authHeader(),
   };
 
