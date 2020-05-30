@@ -132,7 +132,7 @@ export default {
         let time = item.total_time;
         var min = Math.floor(time / 60);
         var sec = Math.round(time) % 60;
-        return min + "分钟:" + (sec < 10 ? "0秒" + sec : sec) + "秒";
+        return min + "分钟:" + (sec < 10 ? "0" + sec : sec) + "秒";
       });
     }
   },

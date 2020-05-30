@@ -35,6 +35,11 @@ export default {
     };
   },
   props: {
+    isOpponent: {
+      //是否是对局者
+      type: Boolean,
+      default: false
+    },
     roomId: {
       type: String,
       default: "public-room"
@@ -49,7 +54,7 @@ export default {
     },
     cameraHeight: {
       type: [Number, String],
-      default: 160
+      default: 200
     },
     autoplay: {
       type: Boolean,
@@ -80,14 +85,10 @@ export default {
     this.rtcmConnection.socketURL = this.socketURL;
     this.rtcmConnection.autoCreateMediaElement = false;
     this.rtcmConnection.enableLogs = this.enableLogs;
-    this.rtcmConnection.session = {
-      audio: this.enableAudio,
-      video: this.enableVideo
-    };
-    this.rtcmConnection.sdpConstraints.mandatory = {
+    /* this.rtcmConnection.sdpConstraints.mandatory = {
       OfferToReceiveAudio: this.enableAudio,
       OfferToReceiveVideo: this.enableVideo
-    };
+    }; */
     this.rtcmConnection.onstream = function(stream) {
       let found = that.videoList.find(video => {
         return video.id === stream.streamid;
@@ -96,9 +97,9 @@ export default {
         let video = {
           id: stream.streamid,
           muted: stream.type === "local",
-          title : stream.userid
+          title: stream.userid
         };
-        
+
         that.videoList.push(video);
 
         if (stream.type === "local") {
@@ -114,6 +115,10 @@ export default {
           }
         }
       }, 1000);
+      /* if (!that.isOpponent) {
+        let st= that.rtcmConnection.attachStreams[0];
+        st.stop();
+      } */
 
       that.$emit("joined-room", stream.streamid);
     };
@@ -130,6 +135,26 @@ export default {
   },
   methods: {
     join() {
+      if (this.isOpponent) {
+        this.rtcmConnection.session = {
+          audio: this.enableAudio,
+          video: this.enableVideo
+        };
+        this.rtcmConnection.mediaConstraints = {
+          audio: this.enableAudio,
+          video: this.enableVideo
+        };
+      } else {
+        this.rtcmConnection.session = {
+          audio: true,
+          video: true,
+          oneway: true
+        };
+        this.rtcmConnection.mediaConstraints = {
+          audio: false,
+          video: false
+        };
+      }
       var that = this;
       this.rtcmConnection.userid = this.userId;
 
@@ -236,8 +261,8 @@ export default {
   padding: 0px;
 }
 
-.video-item {
+/* .video-item {
   background: #c5c4c4;
   display: inline-block;
-}
+} */
 </style>
