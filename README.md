@@ -1,8 +1,20 @@
-# vue-vuex-registration-login-example
+## qucik start 
 
-Vue + Vuex - User Registration and Login Tutorial & Example
+```
+git clone https://github.com/minikiller/vue-bibiweiqi
+npm install
+npm run start
+node app.js
+```
+install redis
 
-To see a demo and further details go to http://jasonwatmore.com/post/2018/07/14/vue-vuex-user-registration-and-login-tutorial-example
+```
+git clone https://github.com/minikiller/flask-app
+pip install -r requirements.txt
+python api.py
+```
+access https://localhost:8080
+
 
 ### TODO i18n vue
 
