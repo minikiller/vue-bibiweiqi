@@ -4,12 +4,13 @@
       <b-row>
         <b-col>
           <Navbar />
-          <div
+          <notifications group="foo" position="top right" />
+          <!-- <div
             v-if="alert.message"
             :class="`alert ${alert.type}`"
             v-html="alert.message"
-          ></div>
-          <br />
+          ></div> -->
+          <br/>
           <router-view></router-view>
         </b-col>
       </b-row>
