@@ -84,7 +84,7 @@ export default {
         method: "GET",
         headers: authHeader()
       };
-      let _data = fetch(`${config.apiUrl}/kifus`, requestOptions)
+      let _data = fetch(`${config.apiUrl}/kifus/`, requestOptions)
         .then(handleResponse)
         .then(data => {
           this.items = data.kifus;

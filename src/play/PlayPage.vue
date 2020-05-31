@@ -6,12 +6,15 @@ import MyVideo from "../component/MyVideo";
 import WebRTC from "../component/webrtc";
 import { gameService } from "../_services";
 import { mapState, mapMutations } from "vuex";
+import { EventBus } from "../index.js";
 import {
   enable_board,
   initGameData,
   showScore,
   getResult,
-  setPassedStatus
+  setPassedStatus,
+  readyMove,
+  gameResign
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -25,8 +28,7 @@ export default {
     ...mapState({
       account: state => state.account,
       games: state => state.games
-    }),
-    
+    })
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
@@ -55,7 +57,8 @@ export default {
         this.endText = "结束数目";
         showScore();
       } else if (this.endText == "结束数目") {
-        let _result = this.matchResult(this.games.result);
+        // let _result = this.matchResult(this.games.result);
+        let _result="balck";  
         this.$bvModal
           .msgBoxConfirm(_result, {
             title: "请确认",
@@ -245,6 +248,9 @@ export default {
     }
   },
   sockets: {
+    move(msg) {
+      readyMove(msg);
+    },
     //棋手对局进入准备状态
     prepare(msg) {
       this.success(msg);
@@ -342,6 +348,7 @@ export default {
     //棋局正式结束
     resign(msg) {
       // this.success(msg);
+      gameResign(msg.result);
       this.finishGame(msg);
     }
   },
@@ -413,6 +420,10 @@ export default {
       }
       this.updateNavTitle(this.game.name);
       return data;
+    });
+
+    EventBus.$on("move", data => {
+      this.$socket.emit("move", data);
     });
   },
   components: {

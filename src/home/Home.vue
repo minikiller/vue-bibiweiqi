@@ -47,7 +47,7 @@ export default {
     // helloMsg(msg) {
     //   console.log(msg);
     // },
-    resume() {
+    resume(msg) {
       this.updateGame(msg.game);
       this.setResult(msg.result);
       this.$router.push({
