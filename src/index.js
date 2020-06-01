@@ -5,6 +5,9 @@ import { store } from "./_store";
 import { router } from "./_helpers";
 import App from "./app/App";
 
+import Notifications from "vue-notification";
+Vue.use(Notifications);
+
 import BootstrapVue from "bootstrap-vue";
 
 import "bootstrap/dist/css/bootstrap.css";
