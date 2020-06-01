@@ -324,7 +324,7 @@ export function setPassedStatus() {
   disable_board();
   clearTimeout(timer_loop);
 }
-
+//显示数子结果
 export function showScore() {
   if (score_selected) {
     myplayer.setFrozen(false);

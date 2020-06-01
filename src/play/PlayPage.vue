@@ -38,7 +38,7 @@ export default {
       "setResult",
       "setTurn"
     ]),
-    setStatus() {
+    setButtonStatus() {
       this.btnText = "认输";
       this.canBegin = true;
       if (
@@ -57,8 +57,8 @@ export default {
         this.endText = "结束数目";
         showScore();
       } else if (this.endText == "结束数目") {
-        // let _result = this.matchResult(this.games.result);
-        let _result="balck";  
+        let _result = this.matchResult(this.games.result);
+        // let _result="balck";
         this.$bvModal
           .msgBoxConfirm(_result, {
             title: "请确认",
@@ -255,21 +255,11 @@ export default {
     prepare(msg) {
       this.success(msg);
     },
-    //超时判负
-    timeout(msg) {
-      this.setResult(msg);
-      this.error(msg);
-      this.$socket.emit("resignGame", {
-        userId: this.account.user.name,
-        gameId: this.game_id,
-        result: msg
-      }); //发送信息
-    },
 
     //棋局正式开始
     beginGame(game) {
       this.success("对局正式开始");
-      this.setStatus();
+      this.setButtonStatus();
       gameService.beginGame(this.game_id).then(msg => {
         console.log(msg);
       });
@@ -336,10 +326,6 @@ export default {
       }
     },
 
-    showScore(msg) {
-      this.success(msg);
-      this.setResult(msg);
-    },
     //棋局进入计算最终结果状态
     passed(msg) {
       this.success(msg);
@@ -400,7 +386,7 @@ export default {
           this.success("对局者请点击开始按钮，进入对局！");
         } else if (this.game.status == "进行中") {
           this.success("对局成功恢复，请继续对局！");
-          this.setStatus();
+          this.setButtonStatus();
         }
       } else {
         //观战者
@@ -424,6 +410,20 @@ export default {
 
     EventBus.$on("move", data => {
       this.$socket.emit("move", data);
+    });
+    EventBus.$on("showScore", msg => {
+      this.success(msg);
+      this.setResult(msg);
+    });
+    //超时判负
+    EventBus.$on("timeout", msg => {
+      this.setResult(msg);
+      this.error(msg);
+      this.$socket.emit("resignGame", {
+        userId: this.account.user.name,
+        gameId: this.game_id,
+        result: msg
+      }); //发送信息
     });
   },
   components: {
