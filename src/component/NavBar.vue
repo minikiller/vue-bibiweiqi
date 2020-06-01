@@ -5,19 +5,20 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="/creategame">新建對局 </b-nav-item>
-          <b-nav-item href="/">对局日程 </b-nav-item>
-          <b-nav-item href="/kifu">我的棋谱 </b-nav-item>
-          <b-nav-item href="/kifu">我的棋友 </b-nav-item>
+          <b-nav-item href="/creategame">新建對局</b-nav-item>
+          <b-nav-item href="/">对局日程</b-nav-item>
+          <b-nav-item href="/kifu">我的棋谱</b-nav-item>
+          <b-nav-item href="/kifu">我的棋友</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-text
-            ><div v-if="account.user">
+          <b-nav-text>
+            <div v-if="account.user">
+              <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
               {{ account.user.name }}[6D]
-            </div></b-nav-text
-          >
-          <b-nav-item href="/profile">修改个人信息 </b-nav-item>
-          <b-nav-item @click="logout">退出 </b-nav-item>
+            </div>
+          </b-nav-text>
+          <b-nav-item href="/profile">修改个人信息</b-nav-item>
+          <b-nav-item @click="logout">退出</b-nav-item>
         </b-navbar-nav>
         <!--
               <template slot="button-content">
@@ -37,7 +38,7 @@
               <b-dropdown-item @click="logout">退出</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
-          -->
+        -->
       </b-collapse>
     </b-container>
   </b-navbar>
@@ -49,13 +50,13 @@ export default {
   name: "navBar",
   computed: {
     ...mapState({
-      account: (state) => state.account,
-      games: (state) => state.games,
-    }),
+      account: state => state.account,
+      games: state => state.games
+    })
   },
   data() {
     return {
-      meal: "",
+      meal: ""
     };
   },
   methods: {
@@ -65,8 +66,8 @@ export default {
     logout() {
       userService.logout();
       location.reload(true);
-    },
-  },
+    }
+  }
 };
 </script>
 

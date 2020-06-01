@@ -15,7 +15,7 @@
             >
               <b-card-text>
                 <div v-if="account.user.name == data.blackone_id">
-                  <b-avatar variant="dark" size="sm" />
+                  <b-avatar variant="dark" :src="data.avatar" size="sm" />
                   <b-badge variant="success">
                     {{
                     `${data.blackone_id}`
@@ -23,7 +23,7 @@
                   </b-badge>
                 </div>
                 <div v-else>
-                  <b-avatar variant="dark" size="sm" />
+                  <b-avatar variant="dark" :src="data.avatar" size="sm" />
                   {{
                   `${data.blackone_id}`
                   }}
@@ -31,7 +31,7 @@
               </b-card-text>
               <b-card-text>
                 <div v-if="account.user.name == data.whiteone_id">
-                  <b-avatar variant="light" size="sm" />
+                  <b-avatar variant="light" :src="data.avatar" size="sm" />
                   <b-badge variant="success">
                     {{
                     `${data.whiteone_id}`
@@ -39,7 +39,7 @@
                   </b-badge>
                 </div>
                 <div v-else>
-                  <b-avatar variant="light" size="sm" />
+                  <b-avatar variant="light" :src="data.avatar" size="sm" />
                   {{
                   `${data.whiteone_id}`
                   }}
@@ -47,7 +47,7 @@
               </b-card-text>
               <b-card-text>
                 <div v-if="account.user.name == data.blacktwo_id">
-                  <b-avatar variant="dark" size="sm" />
+                  <b-avatar variant="dark" :src="data.avatar" size="sm" />
                   <b-badge variant="success">
                     {{
                     `${data.blacktwo_id}`
@@ -55,7 +55,7 @@
                   </b-badge>
                 </div>
                 <div v-else>
-                  <b-avatar variant="dark" size="sm" />
+                  <b-avatar variant="dark" :src="data.avatar" size="sm" />
                   {{
                   `${data.blacktwo_id}`
                   }}
@@ -63,7 +63,7 @@
               </b-card-text>
               <b-card-text>
                 <div v-if="account.user.name == data.whitetwo_id">
-                  <b-avatar variant="light" size="sm" />
+                  <b-avatar variant="light" :src="data.avatar" size="sm" />
                   <b-badge variant="success" m4>
                     {{
                     `${data.whitetwo_id}`
@@ -71,7 +71,7 @@
                   </b-badge>
                 </div>
                 <div v-else>
-                  <b-avatar variant="light" size="sm" />
+                  <b-avatar variant="light" :src="data.avatar" size="sm" />
                   {{
                   `${data.whitetwo_id}`
                   }}

@@ -92,7 +92,10 @@
               v-for="(user, index) in games.onlineUsers"
               :key="index"
             >
-              <b-list-group-item>{{ user }}</b-list-group-item>
+              <b-list-group-item>
+                <b-avatar variant="info" :src="user.avatar"></b-avatar>
+                {{ user }}
+              </b-list-group-item>
             </b-list-group>
           </b-tab>
         </b-tabs>
