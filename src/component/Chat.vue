@@ -66,7 +66,7 @@ export default {
   },
   sockets: {
     //通知新的用户进入房间
-    joinlobbye(user) {
+    joinlobby(user) {
       this.addUser(user);
       this.text =
         this.text +

@@ -55,9 +55,9 @@ export default {
         query: { type: "resume" }
       });
     },
-    move() {
-      this.updateGame(game);
-    }
+    // move() {
+    //   this.updateGame(game);
+    // }
   },
   mounted() {
     this.updateNavTitle(this.name);

@@ -102,6 +102,7 @@ export default {
     passed() {
       setPassedStatus();
       this.setResult("passed");
+      this.btnPassedDisable = true;
       this.$socket.emit("passedGame", {
         userId: this.account.user.name,
         gameId: this.game_id
@@ -248,8 +249,9 @@ export default {
     }
   },
   sockets: {
-    move(msg) {
-      readyMove(msg);
+    move(game) {
+      readyMove(game);
+      this.updateGame(game);
     },
     //棋手对局进入准备状态
     prepare(msg) {
@@ -341,8 +343,10 @@ export default {
   props: ["game_id"],
   data() {
     return {
+      status: "not_accepted",
       btnBeginDisable: false, //开始按钮的控制状态
       btnQuitDisable: false, //退出按钮的控制状态
+      btnPassedDisable: false, //终局按钮的控制状态
       // score_selected: false, //数目按钮的控制状态
       btnText: "开始",
       isOpponent: false, //是否为对局者
@@ -408,8 +412,9 @@ export default {
       return data;
     });
 
-    EventBus.$on("move", data => {
-      this.$socket.emit("move", data);
+    EventBus.$on("move", game => {
+      this.$socket.emit("move", game);
+      this.updateGame(game);
     });
     EventBus.$on("showScore", msg => {
       this.success(msg);
