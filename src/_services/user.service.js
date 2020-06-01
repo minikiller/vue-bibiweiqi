@@ -8,6 +8,7 @@ export const userService = {
   getAll,
   getById,
   update,
+  change_avatar,
   delete: _delete,
 };
 
@@ -65,9 +66,8 @@ function getById(id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(`${config.apiUrl}/users/${id}`, requestOptions)
+    .then(handleResponse);
 }
 
 function update(user) {
@@ -78,6 +78,18 @@ function update(user) {
   };
 
   return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function change_avatar(user) {
+  const requestOptions = {
+    method: "PUT",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify(user),
+  };
+
+  return fetch(`${config.apiUrl}/users/change_avatar/${user.public_id}`, requestOptions).then(
     handleResponse
   );
 }

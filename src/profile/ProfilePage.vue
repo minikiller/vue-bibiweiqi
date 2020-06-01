@@ -21,19 +21,28 @@
 </template>
 
 <script>
-import ImageInput from '../component/ImageInput.vue'
-
+import ImageInput from '../component/ImageInput.vue';
+import { userService } from "../_services";
+import { mapState, mapActions } from "vuex";
 export default {
   name: 'app',
   data () {
     return {
       avatar: null,
       saving: false,
-      saved: false
+      saved: false,
+      user : null
     }
   },
+  computed: {
+    ...mapState({
+      account: state => state.account,
+      games: state => state.games
+    }),
+    
+  },
   components: {
-    ImageInput: ImageInput
+    ImageInput
   },
   watch:{
     avatar: {
@@ -49,9 +58,22 @@ export default {
       setTimeout(() => this.savedAvatar(), 1000)
     },
     savedAvatar() {
+      this.account.user.avatar_base_64_str = this.getBase64Str(this.avatar.imageData)
+      userService.change_avatar(this.account.user);
       this.saving = false
       this.saved = true
+    },
+    getBase64Str(imgData) {
+      return imgData.replace(/^data:image\/\w+;base64,/, "");
+    },
+    init(){
+      console.log(this.account.user)
+      this.avatar = {};
+      this.avatar.imageURL = this.account.user.avator;
     }
+  },
+  mounted() {
+		this.init()
   }
 }
 </script>
