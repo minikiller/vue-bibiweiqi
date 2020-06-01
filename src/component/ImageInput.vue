@@ -58,6 +58,9 @@ export default {
 
       return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
     },
+    getBase64Str(imgData) {
+      return imgData.replace(/^data:image\/\w+;base64,/, "");
+    },
     launchFilePicker() {
       this.$refs.file.click();
     },
@@ -77,15 +80,19 @@ export default {
     encodeImageFileAsURL(file) {
       // var file = element.files[0];
       var reader = new FileReader();
+      let vm = this ;
       reader.onloadend = function() {
-        console.log("RESULT", reader.result);
+        //console.log("RESULT", reader.result);
+        let imageData = reader.result;
+        let imageURL = URL.createObjectURL(file);
+        vm.$emit("input", { imageData,imageURL });
       };
       reader.readAsDataURL(file);
     },
     onFileChange(fieldName, file) {
       const { maxSize } = this;
       let imageFile = file[0];
-      this.encodeImageFileAsURL(imageFile);
+      
       if (file.length > 0) {
         let size = imageFile.size / maxSize / maxSize;
         if (!imageFile.type.match("image.*")) {
@@ -98,19 +105,7 @@ export default {
           this.errorText =
             "Your file is too big! Please select an image under 1MB";
         } else {
-          // Append file into FormData and turn file into image URL
-          let formData = new FormData();
-          let imageURL = URL.createObjectURL(imageFile);
-          formData.append(fieldName, imageFile);
-          // let value = this.getBase64Image(imageFile);
-          this.toDataURL(
-            "https://www.gravatar.com/avatar/d50c83cc0c6523b4d3f6085295c953e0",
-            function(dataUrl) {
-              console.log("RESULT:", dataUrl);
-            }
-          );
-          // Emit the FormData and image URL to the parent component
-          this.$emit("input", { formData, imageURL });
+            this.encodeImageFileAsURL(imageFile);
         }
       }
     }
