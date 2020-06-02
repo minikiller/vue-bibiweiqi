@@ -9,22 +9,26 @@
           <div>
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
-                <b-input-group prepend="U">
+                <b-input-group>
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="person-fill"></b-icon>
+                  </b-input-group-prepend>
                   <b-form-input
                     type="text"
                     v-model="username"
                     name="username"
-                    placeholder="用户名"
+                    placeholder="用户"
                     class="form-control"
                     :class="{ 'is-invalid': submitted && !username }"
                   />
                 </b-input-group>
-                <div v-show="submitted && !username" class="invalid-feedback">
-                  请输入登陆用户名
-                </div>
+                <div v-show="submitted && !username" class="invalid-feedback">请输入登陆用户名</div>
               </div>
               <div class="form-group">
-                <b-input-group prepend="P">
+                <b-input-group>
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="lock-fill"></b-icon>
+                  </b-input-group-prepend>
                   <b-form-input
                     type="password"
                     v-model="password"
@@ -34,24 +38,18 @@
                     :class="{ 'is-invalid': submitted && !password }"
                   />
                 </b-input-group>
-                <div v-show="submitted && !password" class="invalid-feedback">
-                  Password is required
-                </div>
+                <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
               </div>
               <div class="form-group">
                 <!--<b-button block variant="success" :disabled="status.loggingIn">登录</b-button>-->
-                <b-button
-                  type="submit"
-                  block
-                  variant="success"
-                  :disabled="status.loggingIn"
-                  >登录</b-button
-                >
+                <b-button type="submit" block variant="success" :disabled="status.loggingIn">登录</b-button>
               </div>
               <div>
-                <router-link to="/register" class="btn btn-link"
-                  >注册</router-link
-                >
+                <router-link to="/register" class="btn btn-link">
+                  <b-button variant="outline-info" class="mb-2">
+                    <b-icon icon="person-plus-fill"></b-icon> &nbsp注册
+                  </b-button>
+                </router-link>
               </div>
             </form>
           </div>
@@ -70,11 +68,11 @@ export default {
     return {
       username: "",
       password: "",
-      submitted: false,
+      submitted: false
     };
   },
   computed: {
-    ...mapState("account", ["status"]),
+    ...mapState("account", ["status"])
   },
   created() {
     // reset login status
@@ -88,8 +86,8 @@ export default {
       if (username && password) {
         this.login({ username, password });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -101,5 +99,19 @@ export default {
 }
 .col-sm-6 {
   margin: 15px;
-}</style
->>
+}
+</style>
+
+<style lang="scss" scoped>
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
+
+.svg-container {
+  padding: 6px 5px 6px 15px;
+  color: $dark_gray;
+  vertical-align: middle;
+  width: 30px;
+  display: inline-block;
+}
+</style>

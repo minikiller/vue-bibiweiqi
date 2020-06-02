@@ -8,8 +8,10 @@ import './icons' //
 import Notifications from "vue-notification";
 Vue.use(Notifications);
 
-import BootstrapVue from "bootstrap-vue";
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "vue-select/dist/vue-select.css";
@@ -42,7 +44,6 @@ Vue.use(Vuetify, {
   },
 });
 
-Vue.use(BootstrapVue);
 // Vue.use(VeeValidate);
 Vue.use(VeeValidate, {
   inject: true,

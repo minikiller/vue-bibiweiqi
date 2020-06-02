@@ -1,9 +1,15 @@
 var HtmlWebpackPlugin = require("html-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-  .BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+//   .BundleAnalyzerPlugin;
 const NODE_API_ENV = process.env.NODE_API_ENV || "https://localhost:5000";
 const NODE_SOCKET_ENV = process.env.NODE_SOCKET_ENV || "https://localhost:3000";
 
+const path = require("path");
+// const utils = require("./utils");
+
+function resolve(dir) {
+  return path.join(__dirname, "..", dir);
+}
 module.exports = {
   mode: "development",
   resolve: {
@@ -37,8 +43,8 @@ module.exports = {
         loader: "url-loader",
         exclude: [resolve('src/icons')],
         options: {
-          limit: 10000,
-          name: utils.assetsPath("img/[name].[hash:7].[ext]")
+          name: "[name].[ext]?[hash]",
+          publicPath: "assets/",
         }
       },
       {
@@ -55,11 +61,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    new BundleAnalyzerPlugin({
+    /* new BundleAnalyzerPlugin({
       analyzerMode: "disabled",
       generateStatsFile: true,
       statsOptions: { source: false },
-    }),
+    }), */
   ],
   devServer: {
     historyApiFallback: true,
