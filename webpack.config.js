@@ -46,7 +46,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: "disabled",
+      generateStatsFile: true,
+      statsOptions: { source: false },
+    }),
   ],
   devServer: {
     historyApiFallback: true,

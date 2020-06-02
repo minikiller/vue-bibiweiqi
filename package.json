@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --https --cert ./cert.pem --key ./privkey.pem",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "analyzer": "webpack-bundle-analyzer --port 8123 dist/stats.json"
   },
   "dependencies": {
     "JSON": "^1.0.0",

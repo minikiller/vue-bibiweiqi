@@ -48,6 +48,7 @@ Vue.use(VeeValidate, {
   inject: true,
   fieldsBagName: "veeFields",
 });
+
 require("exports-loader?WGo!./wgo/wgo.js");
 require("exports-loader?WGo.KifuReader,WGo.Kifu!./wgo/kifu.js");
 require("exports-loader?WGo.SGF!./wgo/sgfparser.js");
