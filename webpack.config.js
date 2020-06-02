@@ -33,13 +33,22 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: "file-loader",
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: "url-loader",
+        exclude: [resolve('src/icons')],
         options: {
-          name: "[name].[ext]?[hash]",
-          publicPath: "assets/",
-        },
+          limit: 10000,
+          name: utils.assetsPath("img/[name].[hash:7].[ext]")
+        }
       },
+      {
+        test: /.svg$/,
+        loader: "svg-sprite-loader",
+        include: [resolve("src/icons")],
+        options: {
+          symbolId: "icon-[name]"
+        }
+      }
     ],
   },
   plugins: [

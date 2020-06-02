@@ -4,7 +4,7 @@ import config from "config";
 import { store } from "./_store";
 import { router } from "./_helpers";
 import App from "./app/App";
-
+import './icons' // 
 import Notifications from "vue-notification";
 Vue.use(Notifications);
 
