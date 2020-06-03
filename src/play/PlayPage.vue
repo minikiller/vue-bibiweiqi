@@ -18,7 +18,7 @@ import {
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
-import { find, head } from "lodash";
+import { find, head } from "lodash/core";
 import Vue from "vue";
 Vue.component(WebRTC.name, WebRTC);
 

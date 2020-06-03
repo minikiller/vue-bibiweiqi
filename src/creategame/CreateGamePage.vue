@@ -118,7 +118,7 @@
 
 <script>
 import "vue-select/dist/vue-select.css";
-import _ from "lodash";
+import {debounce} from "lodash/core";
 import { mapState, mapMutations } from "vuex";
 
 export default {
@@ -146,7 +146,7 @@ export default {
       loading(true);
       this.search(loading, search, this);
     },
-    search: _.debounce((loading, search, vm) => {
+    search: debounce((loading, search, vm) => {
       fetch(
         `https://localhost:5000/users/data?userName=${escape(search)}`
       ).then((res) => {

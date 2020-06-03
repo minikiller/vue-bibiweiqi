@@ -144,3 +144,9 @@ console.log(inspect(response))
 ```
 ### base64 image
 https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript
+
+### webpack 
+
+https://medium.com/js-dojo/how-to-configure-webpack-4-with-vuejs-a-complete-guide-209e943c4772
+
+https://vuejsdevelopers.com/2017/06/18/vue-js-boost-your-app-with-webpack/
