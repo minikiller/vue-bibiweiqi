@@ -1,6 +1,6 @@
 var HtmlWebpackPlugin = require("html-webpack-plugin");
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-//   .BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 const NODE_API_ENV = process.env.NODE_API_ENV || "https://localhost:5000";
 const NODE_SOCKET_ENV = process.env.NODE_SOCKET_ENV || "https://localhost:3000";
 
@@ -61,11 +61,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    /* new BundleAnalyzerPlugin({
+    new BundleAnalyzerPlugin({
       analyzerMode: "disabled",
       generateStatsFile: true,
       statsOptions: { source: false },
-    }), */
+    }),
   ],
   devServer: {
     historyApiFallback: true,

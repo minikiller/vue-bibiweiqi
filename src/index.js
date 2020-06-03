@@ -33,7 +33,7 @@ Vue.use(
   })
 );
 
-import Vuetify from "vuetify";
+/* import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 
 Vue.use(Vuetify, {
@@ -42,7 +42,7 @@ Vue.use(Vuetify, {
     primary: "#52c2b8",
     accent: "#e95e29",
   },
-});
+}); */
 
 // Vue.use(VeeValidate);
 Vue.use(VeeValidate, {
