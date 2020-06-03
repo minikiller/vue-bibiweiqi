@@ -79,5 +79,6 @@ module.exports = {
       apiUrl: NODE_API_ENV,
       socketUrl: NODE_SOCKET_ENV,
     }),
+    'vue': 'Vue',
   },
 };
