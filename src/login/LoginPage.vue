@@ -47,9 +47,13 @@
               <div>
                 <router-link to="/register" class="btn btn-link">
                   <b-button variant="outline-info" class="mb-2">
-                    <b-icon icon="person-plus-fill"></b-icon> &nbsp注册
+                    <b-icon icon="person-plus-fill"></b-icon>&nbsp注册
                   </b-button>
                 </router-link>
+
+                <b-button variant="outline-info" class="mb-2" @click="test">
+                  <b-icon icon="person-plus-fill"></b-icon>test
+                </b-button>
               </div>
             </form>
           </div>
@@ -84,6 +88,14 @@ export default {
       const { username, password } = this;
       if (username && password) {
         this.login({ username, password });
+      }
+    },
+    test() {
+      if ("vibrate" in window.navigator) {
+        // window.navigator.vibrate(100); 震动
+        window.navigator.vibrate([200, 100, 200]); // 震动200停100再震动200，和qq的消息震动一样
+      } else {
+        console.log("浏览器不支持震动");
       }
     }
   }
