@@ -5,9 +5,9 @@
         <b-card>
           <b-container fluid>
             <b-row>
-              <b-col cols="8"
-                ><b-row
-                  ><b-col>
+              <b-col cols="8">
+                <b-row>
+                  <b-col>
                     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
                       <v-select
                         label="name"
@@ -16,15 +16,16 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="no-options">請選擇棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
                       </v-select>
-                    </b-form></b-col
-                  ></b-row
-                ><b-row
-                  ><b-col>
+                    </b-form>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
                     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
                       <v-select
                         label="name"
@@ -33,15 +34,16 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="no-options">請選擇棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
                       </v-select>
-                    </b-form></b-col
-                  ></b-row
-                ><b-row
-                  ><b-col>
+                    </b-form>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
                     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
                       <v-select
                         label="name"
@@ -50,15 +52,16 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="no-options">請選擇棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
                       </v-select>
-                    </b-form></b-col
-                  ></b-row
-                ><b-row
-                  ><b-col>
+                    </b-form>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
                     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
                       <v-select
                         label="name"
@@ -67,58 +70,47 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友 </template>
+                        <template slot="no-options">請選擇棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
                       </v-select>
-                    </b-form></b-col
-                  ></b-row
-                ></b-col
-              >
+                    </b-form>
+                  </b-col>
+                </b-row>
+              </b-col>
               <b-col cols="4" align-self="center">
                 <b-container>
-                  <b-row
-                    ><b-col class="avatars_l"
-                      ><b-avatar
-                        badge="1"
-                        badge-variant="dark"
-                        size="3rem"
-                      ></b-avatar></b-col
-                    ><b-col class="avatars_r"
-                      ><b-avatar
-                        badge="2"
-                        badge-variant="light"
-                        size="3rem"
-                      ></b-avatar></b-col
-                  ></b-row>
-                  <b-row
-                    ><b-col class="avatars_l"
-                      ><b-avatar
-                        badge="4"
-                        badge-variant="light"
-                        size="3rem"
-                      ></b-avatar></b-col
-                    ><b-col class="avatars_r"
-                      ><b-avatar
-                        badge="3"
-                        badge-variant="dark"
-                        size="3rem"
-                      ></b-avatar></b-col
-                  ></b-row>
+                  <b-row>
+                    <b-col class="avatars_l">
+                      <b-avatar badge="1" badge-variant="dark" size="3rem"></b-avatar>
+                    </b-col>
+                    <b-col class="avatars_r">
+                      <b-avatar badge="2" badge-variant="light" size="3rem"></b-avatar>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col class="avatars_l">
+                      <b-avatar badge="4" badge-variant="light" size="3rem"></b-avatar>
+                    </b-col>
+                    <b-col class="avatars_r">
+                      <b-avatar badge="3" badge-variant="dark" size="3rem"></b-avatar>
+                    </b-col>
+                  </b-row>
                 </b-container>
               </b-col>
             </b-row>
-          </b-container> </b-card
-      ></b-col>
-      <b-col> </b-col>
+          </b-container>
+        </b-card>
+      </b-col>
+      <b-col></b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
 import "vue-select/dist/vue-select.css";
-import {debounce} from "lodash/core";
+import { debounce } from "lodash";
 import { mapState, mapMutations } from "vuex";
 
 export default {
@@ -134,9 +126,9 @@ export default {
         email: "",
         name: "",
         food: null,
-        checked: [],
+        checked: []
       },
-      show: true,
+      show: true
     };
   },
   methods: {
@@ -149,8 +141,8 @@ export default {
     search: debounce((loading, search, vm) => {
       fetch(
         `https://localhost:5000/users/data?userName=${escape(search)}`
-      ).then((res) => {
-        res.json().then((json) => {
+      ).then(res => {
+        res.json().then(json => {
           vm.options = json;
         });
         loading(false);
@@ -172,8 +164,8 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
