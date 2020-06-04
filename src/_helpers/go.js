@@ -8,7 +8,8 @@ var username, game;
 var timer_loop = null; //定时器
 var _score_mode;
 var score_selected = false;
-var _marker;
+var _marker, _isFirst;
+
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -256,17 +257,32 @@ export function toggleCoordinates(value) {
   myplayer.setCoordinates(!myplayer.coordinates);
 }
 
-export function showMarker(value) {
+export function showMarker() {
   _marker = _marker || new WGo.Player.Marker(myplayer, myplayer.board);
-  if (value) {
+  if (!_isFirst) {
+    myplayer.config.markLastMove = false;
+    _marker.clearDefaultSytle();
+    _marker.switchMaker();
+    _isFirst = true;
+  } else if (
+    _marker.config.markerStyle == "LB" &&
+    _marker.config.markerNum != 0
+  ) {
     _marker.switchMaker({
-      'markerStyle': 'LB',
-      'markerNum': 5
+      markerNum: 0,
     });
-  } else {
+  } else if (
+    _marker.config.markerStyle == "LB" &&
+    _marker.config.markerNum == 0
+  ) {
     _marker.switchMaker({
       markerStyle: "TRS",
       markerNum: 1,
+    });
+  } else {
+    _marker.switchMaker({
+      markerStyle: "LB",
+      markerNum: 5,
     });
   }
 }

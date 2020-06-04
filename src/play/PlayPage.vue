@@ -227,8 +227,8 @@ export default {
         });
       }
     },
-    toggleMarker(checked) {
-      showMarker(checked);
+    toggleMarker() {
+      showMarker();
     },
     toggleAll(checked) {
       toggleCoordinates(checked);
