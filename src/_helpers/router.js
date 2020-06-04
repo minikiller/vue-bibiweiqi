@@ -14,7 +14,9 @@ import 'nprogress/nprogress.css'
 
 const Router =require("vue-router");
 
-Vue.use(Router);
+if (process.env.NODE_ENV === 'development') {
+  Vue.use(Router)
+}
 
 export const router = new Router({
   mode: "history",

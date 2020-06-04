@@ -8,7 +8,7 @@ var username, game;
 var timer_loop = null; //定时器
 var _score_mode;
 var score_selected = false;
-
+var _marker;
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -254,6 +254,21 @@ export function game_over(result) {
 
 export function toggleCoordinates(value) {
   myplayer.setCoordinates(!myplayer.coordinates);
+}
+
+export function showMarker(value) {
+  _marker = _marker || new WGo.Player.Marker(myplayer, myplayer.board);
+  if (value) {
+    _marker.switchMaker({
+      'markerStyle': 'LB',
+      'markerNum': 5
+    });
+  } else {
+    _marker.switchMaker({
+      markerStyle: "TRS",
+      markerNum: 1,
+    });
+  }
 }
 
 export function initGameData(_username, _game) {

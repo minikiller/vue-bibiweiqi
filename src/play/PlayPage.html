@@ -51,6 +51,14 @@
                 >
                   显示坐标
                 </b-form-checkbox>
+                <b-form-checkbox
+                  id="checkbox-2"
+                  name="checkbox-2"
+                  value="true"
+                  unchecked-value="false" @change="toggleMarker"
+                >
+                  显示手数
+                </b-form-checkbox>
               </div>
               <my-go
                 v-if="game"

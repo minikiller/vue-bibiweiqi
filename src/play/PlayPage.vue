@@ -16,6 +16,7 @@ import {
   readyMove,
   gameResign,
   toggleCoordinates,
+  showMarker,
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -225,6 +226,9 @@ export default {
           console.log(msg);
         });
       }
+    },
+    toggleMarker(checked) {
+      showMarker(checked);
     },
     toggleAll(checked) {
       toggleCoordinates(checked);
