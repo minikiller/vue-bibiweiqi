@@ -2,7 +2,7 @@ let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var black_time, white_time;
 // import { socket } from "./socket";
-import Vue from 'vue'
+import Vue from "vue";
 import { EventBus } from "../index.js";
 var username, game;
 var timer_loop = null; //定时器
@@ -250,6 +250,10 @@ export function game_over(result) {
   disable_board();
 
   return myplayer.kifu.toSgf();
+}
+
+export function toggleCoordinates(value) {
+  myplayer.setCoordinates(!myplayer.coordinates);
 }
 
 export function initGameData(_username, _game) {
