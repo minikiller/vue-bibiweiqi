@@ -1,5 +1,5 @@
 import config from "config";
-import { authHeader, handleResponse } from "../_helpers";
+import { authHeader, handleResponse, encode } from "../_helpers";
 
 export const userService = {
   login,
@@ -13,9 +13,10 @@ export const userService = {
 };
 
 function login(username, password) {
+  const str = Base64_encode(username + ":" + password);
   const requestOptions = {
     method: "GET",
-    headers: { Authorization: "Basic " + btoa(username + ":" + password) },
+    headers: { Authorization: "Basic " + str },
   };
   /* const requestOptions = {
         method: 'POST',
@@ -66,8 +67,9 @@ function getById(id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/users/${id}`, requestOptions)
-    .then(handleResponse);
+  return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function update(user) {
@@ -89,9 +91,10 @@ function change_avatar(user) {
     body: JSON.stringify(user),
   };
 
-  return fetch(`${config.apiUrl}/users/change_avatar/${user.public_id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `${config.apiUrl}/users/change_avatar/${user.public_id}`,
+    requestOptions
+  ).then(handleResponse);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

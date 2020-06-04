@@ -136,6 +136,8 @@ var play = function(x, y) {
 
   // show next move
   myplayer.next(myplayer.kifuReader.node.children.length - 1);
+  disable_board();
+  read_time();
   var data = {
     move: move,
     gameId: game.gameId,
@@ -144,8 +146,6 @@ var play = function(x, y) {
     WL: white_time,
   };
   EventBus.$emit("move", data);
-  disable_board();
-  read_time();
 };
 
 function add_event() {
