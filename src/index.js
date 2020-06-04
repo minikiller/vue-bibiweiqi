@@ -1,11 +1,8 @@
-import Vue from "vue";
-import VeeValidate from "vee-validate";
 import config from "config";
 import { store } from "./_store";
 import { router } from "./_helpers";
 import App from "./app/App";
 import Notifications from "vue-notification";
-Vue.use(Notifications);
 
 // import { IconsPlugin } from "bootstrap-vue";
 
@@ -33,12 +30,15 @@ Vue.use(Notifications);
 
 // import "bootstrap/dist/css/bootstrap.css";
 // import "bootstrap-vue/dist/bootstrap-vue.css"  ;
+const Vue = require("vue");
+
+Vue.use(Notifications);
 import "vue-select/dist/vue-select.css";
 
 import vSelect from "vue-select";
 Vue.component("v-select", vSelect);
 
-import VueSocketIO from "vue-socket.io";
+const VueSocketIO = require("vue-socket.io");
 Vue.use(
   new VueSocketIO({
     debug: true,
@@ -64,6 +64,8 @@ Vue.use(Vuetify, {
 }); */
 
 // Vue.use(VeeValidate);
+// import VeeValidate from "vee-validate";
+const VeeValidate = require("vee-validate");
 Vue.use(VeeValidate, {
   inject: true,
   fieldsBagName: "veeFields",

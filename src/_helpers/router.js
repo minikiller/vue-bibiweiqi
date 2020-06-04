@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Router from "vue-router";
+
 
 import Home from "../home/Home";
 import Hello from "../component/Hello";
@@ -11,6 +11,9 @@ import CreateGamePage from "../creategame/CreateGamePage";
 import ProfilePage from "../profile/ProfilePage";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+
+const Router =require("vue-router");
+
 Vue.use(Router);
 
 export const router = new Router({

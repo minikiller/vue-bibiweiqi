@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import RTCMultiConnection from "rtcmulticonnection";
+RTCMultiConnection=require ("rtcmulticonnection");
 require("adapterjs");
 export default {
   name: "vue-webrtc",

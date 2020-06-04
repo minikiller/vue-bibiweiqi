@@ -41,20 +41,20 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: "url-loader",
-        exclude: [resolve('src/icons')],
+        exclude: [resolve("src/icons")],
         options: {
           name: "[name].[ext]?[hash]",
           publicPath: "assets/",
-        }
+        },
       },
       {
         test: /.svg$/,
         loader: "svg-sprite-loader",
         include: [resolve("src/icons")],
         options: {
-          symbolId: "icon-[name]"
-        }
-      }
+          symbolId: "icon-[name]",
+        },
+      },
     ],
   },
   plugins: [
@@ -79,6 +79,11 @@ module.exports = {
       apiUrl: NODE_API_ENV,
       socketUrl: NODE_SOCKET_ENV,
     }),
-    'vue': 'Vue',
+    vue: "Vue",
+    "vue-router": "VueRouter",
+    "vue-socket.io": "VueSocketIO",
+    "vee-validate": "VeeValidate",
+    adapterjs: "AdapterJS",
+    rtcmulticonnection: "RTCMultiConnection",
   },
 };
