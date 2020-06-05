@@ -71,17 +71,17 @@ Vue.use(VeeValidate, {
   fieldsBagName: "veeFields",
 });
 
-require("exports-loader?WGo!./wgo/wgo.js");
-require("exports-loader?WGo.KifuReader,WGo.Kifu!./wgo/kifu.js");
-require("exports-loader?WGo.SGF!./wgo/sgfparser.js");
-require("exports-loader?WGo.Player!./wgo/player.js");
-require("exports-loader?WGo.BasicPlayer!./wgo/basicplayer.js");
-require("exports-loader?WGo.BasicPlayer.component!./wgo/basicplayer.component.js");
-require("exports-loader?WGo.BasicPlayer.component.InfoBox!./wgo/basicplayer.infobox.js");
-require("exports-loader?WGo.BasicPlayer.component.Control!./wgo/basicplayer.control.js");
-require("exports-loader?WGo.Player.Marker!./wgo/player.marker.js");
-require('exports-loader?WGo.i18n["zh"]!./wgo/i18n.zh.js');
-require("exports-loader?WGo.ScoreMode!./wgo/scoremode.js");
+require("./wgo/wgo.js");
+require("./wgo/kifu.js");
+require("./wgo/sgfparser.js");
+require("./wgo/player.js");
+require("./wgo/basicplayer.js");
+require("./wgo/basicplayer.component.js");
+require("./wgo/basicplayer.infobox.js");
+require("./wgo/basicplayer.control.js");
+require("./wgo/player.marker.js");
+require("!./wgo/i18n.zh.js");
+require("./wgo/scoremode.js");
 
 // setup fake backend
 // import { configureFakeBackend } from './_helpers';

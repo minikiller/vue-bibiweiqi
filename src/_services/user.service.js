@@ -1,5 +1,5 @@
 import config from "config";
-import { authHeader, handleResponse, encode } from "../_helpers";
+import { authHeader, handleResponse, Base64_encode } from "../_helpers";
 
 export const userService = {
   login,
