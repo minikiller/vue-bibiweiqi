@@ -4,6 +4,12 @@ import { router } from "./_helpers";
 import App from "./app/App";
 import Notifications from "vue-notification";
 
+/* import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faSignOutAlt,faUserSecret } from "@fortawesome/free-solid-svg-icons";
+library.add(faSignOutAlt);
+library.add(faUserSecret); */
+
 // import { IconsPlugin } from "bootstrap-vue";
 
 // This imports all the layout components such as <b-container>, <b-row>, <b-col>:
@@ -31,6 +37,7 @@ import Notifications from "vue-notification";
 // import "bootstrap/dist/css/bootstrap.css";
 // import "bootstrap-vue/dist/bootstrap-vue.css"  ;
 const Vue = require("vue");
+// Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.use(Notifications);
 import "vue-select/dist/vue-select.css";

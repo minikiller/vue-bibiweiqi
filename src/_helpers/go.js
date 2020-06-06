@@ -99,6 +99,9 @@ var play = function(x, y) {
   // ignore invalid move
   if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;
 
+  if (!confirm("确认落子吗?")) {
+    return;
+  }
   var node;
 
   // create new node

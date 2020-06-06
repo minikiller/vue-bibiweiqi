@@ -5,10 +5,10 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="/creategame">新建對局</b-nav-item>
-          <b-nav-item href="/">对局日程</b-nav-item>
-          <b-nav-item href="/kifu">我的棋谱</b-nav-item>
-          <b-nav-item href="/kifu">我的棋友</b-nav-item>
+          <b-nav-item href="/creategame"><i class="fas fa-user-plus"></i>新建對局</b-nav-item>
+          <b-nav-item href="/"><i class="far fa-calendar-alt"></i>对局日程</b-nav-item>
+          <b-nav-item href="/kifu"><i class="far fa-list-alt"></i>我的棋谱</b-nav-item>
+          <b-nav-item href="/kifu"><i class="fas fa-users"></i>我的棋友</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-text>
@@ -17,8 +17,8 @@
               {{ account.user.name }}[6D]
             </div>
           </b-nav-text>
-          <b-nav-item href="/profile">修改个人信息</b-nav-item>
-          <b-nav-item @click="logout">退出</b-nav-item>
+          <b-nav-item href="/profile"><i class="fas fa-user-cog"></i>个人信息</b-nav-item>
+          <b-nav-item @click="logout"><i class="fas fa-sign-out-alt"></i>退出</b-nav-item>
         </b-navbar-nav>
         <!--
               <template slot="button-content">
@@ -65,7 +65,7 @@ export default {
     },
     logout() {
       userService.logout();
-      location.reload(true);
+      this.$router.push("/login");
     }
   }
 };
