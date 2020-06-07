@@ -9,7 +9,7 @@
 
     <section id="input_zone">
       <b-form-input placeholder="Enter your msg" v-model="msg"></b-form-input>
-      <b-button variant="primary" @click="send"><i class="fas fa-user-friends"></i>Send</b-button>
+      <b-button variant="primary" @click="send"><i class="fas fa-user-friends"></i> 发送 </b-button>
     </section>
   </div>
 </template>

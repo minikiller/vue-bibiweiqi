@@ -5,7 +5,7 @@ const state = {
   game: null,
   navTitle: "",
   result: "no result",
-  turn: "black", //数子顺序，默认是黑开始，数值为black或white
+  turn: "black", //用于记录数子时候的顺序，默认是黑先开始数子，数值为black或white,每次轮换
   connected: false,
 };
 

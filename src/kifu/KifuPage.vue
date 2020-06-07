@@ -1,7 +1,5 @@
 <template>
   <div>
-    <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
-    <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
     <b-table striped hover :items="items" :fields="fields">
       <template v-slot:cell(actions)="row">
         <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>

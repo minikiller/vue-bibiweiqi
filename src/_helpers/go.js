@@ -98,8 +98,8 @@ var edit_board_mouse_move = function(x, y) {
 var play = function(x, y) {
   // ignore invalid move
   if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;
-
-  if (!confirm("确认落子吗?")) {
+  var con = confirm("确认落子吗?");
+  if (con == false) {
     return;
   }
   var node;
@@ -232,6 +232,10 @@ var move_play = function(player, x, y) {
     read_time();
   }
 };
+//获得现在是黑骡子，还是白骡子
+export function getGameTurn() {
+  return myplayer.kifuReader.game.turn;
+}
 
 export function game_over(result) {
   clearTimeout(timer_loop);
@@ -255,11 +259,24 @@ export function game_over(result) {
 
   return myplayer.kifu.toSgf();
 }
-
+//显示坐标
 export function toggleCoordinates(value) {
   myplayer.setCoordinates(!myplayer.coordinates);
 }
-
+// 正在申请悔棋操作！
+export function regretCurrentGame() {
+  myplayer.kifuReader.node.remove();
+  myplayer.loadSgf(myplayer.kifu.toSgf());
+  myplayer.last();
+  disable_board();
+  enable_board();
+  read_time();
+}
+//获得当前对局棋谱
+export function getKifu() {
+  return myplayer.kifu.toSgf();
+}
+//显示手数功能
 export function showMarker() {
   _marker = _marker || new WGo.Player.Marker(myplayer, myplayer.board);
   if (!_isFirst) {

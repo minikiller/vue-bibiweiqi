@@ -154,3 +154,5 @@ https://vuejsdevelopers.com/2017/06/18/vue-js-boost-your-app-with-webpack/
 https://segmentfault.com/a/1190000016309142
 
 https://cdnjs.com/
+
+### fontawsome

@@ -198,6 +198,24 @@ io.on("connection", function(socket) {
     io.sockets.in(msg.gameId).emit("finishGame", msg);
   });
 
+  //正在申请悔棋操作！
+  socket.on("regretGame", function(msg) {
+    console.log("regret game is received!");
+    io.sockets.in(msg.gameId).emit("regretGame", msg);
+  });
+
+  //同意悔棋操作！
+  socket.on("failRegretGame", function(msg) {
+    console.log("failRegretGame game is received!");
+    io.sockets.in(msg.gameId).emit("failRegretGame", msg);
+  });
+
+  //不同意悔棋操作！
+  socket.on("successRegretGame", function(msg) {
+    console.log("successRegretGame game is received!");
+    io.sockets.in(msg.gameId).emit("successRegretGame", msg);
+  });
+
   //判断是否可以进入终局状态
   function checkGamePassed(gameId) {
     var userPassed = gamePassed[gameId];
@@ -290,6 +308,12 @@ io.on("connection", function(socket) {
     }
     return true;
   }
+  
+  //悔棋同意后，更新本地棋谱
+  socket.on("updateRegretKifu", function(msg) {
+    activeGames[msg.gameId].kifu = msg.kifu;
+  });
+
   //落子事件
   socket.on("move", function(msg) {
     socket.broadcast.to(msg.gameId).emit("move", msg);

@@ -34,6 +34,13 @@
                 </button>
                 <!-- <button class="btn btn-primary" @click="test">test</button> -->
 
+                
+                <button class="btn btn-primary" @click="toggleMarker">
+                  <i class="fas fa-list-ol"></i> 手数
+                </button>
+                <button class="btn btn-primary" @click="regret" :disabled="btnRegretDisable">
+                  <i class="fas fa-chevron-left"></i> 悔棋
+                </button>
                 <button
                   class="btn btn-primary"
                   :disabled="btnQuitDisable"
@@ -42,9 +49,6 @@
                   id="quit"
                 >
                   <i class="fas fa-sign-out-alt"></i> 退出
-                </button>
-                <button class="btn btn-primary" @click="toggleMarker">
-                  <i class="fas fa-list-ol"></i>手数
                 </button>
                 <b-form-checkbox
                   id="checkbox-1"
