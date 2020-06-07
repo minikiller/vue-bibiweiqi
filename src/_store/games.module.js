@@ -16,6 +16,10 @@ const mutations = {
     console.log("i got it");
     state.connected = true;
   },
+  SOCKET_disconnect(state) {
+    console.log("i don't got it");
+    state.connected = false;
+  },
   addUser(state, userId) {
     if (state.onlineUsers.indexOf(userId) == -1) state.onlineUsers.push(userId);
   },

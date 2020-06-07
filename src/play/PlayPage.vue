@@ -35,6 +35,18 @@ export default {
       games: state => state.games
     })
   },
+  watch: {
+    "$store.state.games.connected"(newValue, oldValue) {
+      console.log(`Updating from ${oldValue} to ${newValue}`);
+
+      // Do whatever makes sense now
+      if (newValue === true) {
+        this.$store.commit("alert/success", "连接服务器成功！");
+      } else {
+        this.$store.commit("alert/error", "连接服务器失败，请重新登陆！");
+      }
+    }
+  },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
     ...mapMutations("games", [
@@ -287,7 +299,6 @@ export default {
               gameId: data.gameId,
               kifu: getKifu()
             });
-
           } else {
             // var msg = "=> 不同意申请悔棋操作！";
             var msg = this.account.user.name + "=> 不同意申请悔棋操作！";
