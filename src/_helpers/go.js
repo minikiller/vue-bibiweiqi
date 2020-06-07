@@ -42,19 +42,41 @@ export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.BL;
   white_time = gameinfo.WL;
-  myplayer = new WGo.BasicPlayer(ele, {
-    sgf: gameinfo.kifu,
-    enableWheel: false,
-    enableKeys: false,
-    // move: 1000
-  });
+  if (gameinfo.kifu == "") {
+    myplayer = new WGo.BasicPlayer(ele, {
+      sgf:
+        "(;SZ[19]TM[" +
+        gameinfo.total_time +
+        "]KM[7.5]" +
+        "PB[" +
+        gameinfo.users.black1 +
+        "&" +
+        gameinfo.users.black2 +
+        "]PW[" +
+        gameinfo.users.white1 +
+        "&" +
+        gameinfo.users.white2 +
+        "])",
+      enableWheel: false,
+      enableKeys: false,
+      // move: 1000
+    });
+  } else {
+    myplayer = new WGo.BasicPlayer(ele, {
+      sgf: gameinfo.kifu,
+      enableWheel: false,
+      enableKeys: false,
+      // move: 1000
+    });
+  }
+
   myboard = myplayer.board;
   myplayer.last();
   // move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
   // if (!isView)
   if (result == "begin") {
-    enable_board();
-    read_time();
+    var step = enable_board();
+    if (step !== 0) read_time();
   } else if (result == "passed") {
     setPassedStatus();
   }
@@ -330,7 +352,12 @@ export function gameResign(result) {
 
 //enable board so it can play
 export function enable_board() {
-  var last_steps = myplayer.kifuReader.path.m;
+  var last_steps;
+  if (myplayer.kifuReader) {
+    last_steps = myplayer.kifuReader.path.m;
+  } else {
+    last_steps = 0;
+  }
   var turn = last_steps % 4;
   if (turn == 0 && username == game.users.black1) {
     //black 0
@@ -348,6 +375,7 @@ export function enable_board() {
     //white 1
     add_event();
   }
+  return last_steps;
 }
 
 export function readyMove(msg) {

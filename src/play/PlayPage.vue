@@ -533,7 +533,9 @@ export default {
     });
 
     EventBus.$on("move", game => {
-      this.$socket.emit("move", game);
+      this.$socket.emit("move", game, function(response) {
+        console.log("game move is recevie " + response);
+      });
       this.btnRegretDisable = false;
       this.updateGame(game);
     });

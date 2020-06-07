@@ -263,6 +263,7 @@ io.on("connection", function(socket) {
           white2: gameInfos[msg.gameId].whitetwo_id,
         },
         kifu: "",
+        total_time: gameInfos[msg.gameId].total_time,
         BL: "",
         WL: "",
         move: null,
@@ -308,14 +309,14 @@ io.on("connection", function(socket) {
     }
     return true;
   }
-  
+
   //悔棋同意后，更新本地棋谱
   socket.on("updateRegretKifu", function(msg) {
     activeGames[msg.gameId].kifu = msg.kifu;
   });
 
   //落子事件
-  socket.on("move", function(msg) {
+  socket.on("move", function(msg, callback) {
     socket.broadcast.to(msg.gameId).emit("move", msg);
     // activeGames[msg.gameId].board = msg.board;
     activeGames[msg.gameId].kifu = msg.kifu;
@@ -326,6 +327,7 @@ io.on("connection", function(socket) {
     // allGames[msg.gameId].kifu = msg.kifu;
     console.log(getFormattedDate() + "move data is " + msg.move);
     console.log(getFormattedDate() + "kifu data is " + msg.kifu);
+    callback("ok");
   });
 
   //检查用户是否有正在进行的对局

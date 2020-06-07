@@ -73,6 +73,7 @@ module.exports = {
     port: 8080,
     disableHostCheck: true,
   },
+  stats: { children: false },
   externals: {
     // global app config object
     config: JSON.stringify({
