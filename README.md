@@ -144,6 +144,7 @@ console.log(inspect(response))
 ```
 ### base64 image
 https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript
+https://github.com/dankogai/js-base64
 
 ### webpack 
 
@@ -154,3 +155,6 @@ https://vuejsdevelopers.com/2017/06/18/vue-js-boost-your-app-with-webpack/
 https://segmentfault.com/a/1190000016309142
 
 https://cdnjs.com/
+
+### flask deploy 
+gunicorn -w 4 --certfile=cert.pem --keyfile=privkey.pem --bind 0.0.0.0:5000 api:app
