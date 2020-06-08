@@ -51,9 +51,9 @@
                   </b-button>
                 </router-link>
 
-                <b-button variant="outline-info" class="mb-2" @click="test">
+                <!-- <b-button variant="outline-info" class="mb-2" @click="test">
                   <b-icon icon="person-plus-fill"></b-icon>test
-                </b-button>
+                </b-button> -->
               </div>
             </form>
           </div>

@@ -5,7 +5,7 @@ const state = {
   game: null,
   navTitle: "",
   result: "no result",
-  turn: "black", //数子顺序，默认是黑开始，数值为black或white
+  turn: "black", //用于记录数子时候的顺序，默认是黑先开始数子，数值为black或white,每次轮换
   connected: false,
 };
 
@@ -15,6 +15,10 @@ const mutations = {
   SOCKET_connect(state) {
     console.log("i got it");
     state.connected = true;
+  },
+  SOCKET_disconnect(state) {
+    console.log("i don't got it");
+    state.connected = false;
   },
   addUser(state, userId) {
     if (state.onlineUsers.indexOf(userId) == -1) state.onlineUsers.push(userId);

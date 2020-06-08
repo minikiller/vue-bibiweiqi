@@ -8,7 +8,8 @@ var username, game;
 var timer_loop = null; //定时器
 var _score_mode;
 var score_selected = false;
-var _marker;
+var _marker, _isFirst;
+
 //////////////////////////////
 // game init
 //////////////////////////////
@@ -41,19 +42,41 @@ export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.BL;
   white_time = gameinfo.WL;
-  myplayer = new WGo.BasicPlayer(ele, {
-    sgf: gameinfo.kifu,
-    enableWheel: false,
-    enableKeys: false,
-    // move: 1000
-  });
+  if (gameinfo.kifu == "") {
+    myplayer = new WGo.BasicPlayer(ele, {
+      sgf:
+        "(;SZ[19]TM[" +
+        gameinfo.total_time +
+        "]KM[7.5]" +
+        "PB[" +
+        gameinfo.users.black1 +
+        "&" +
+        gameinfo.users.black2 +
+        "]PW[" +
+        gameinfo.users.white1 +
+        "&" +
+        gameinfo.users.white2 +
+        "])",
+      enableWheel: false,
+      enableKeys: false,
+      // move: 1000
+    });
+  } else {
+    myplayer = new WGo.BasicPlayer(ele, {
+      sgf: gameinfo.kifu,
+      enableWheel: false,
+      enableKeys: false,
+      // move: 1000
+    });
+  }
+
   myboard = myplayer.board;
   myplayer.last();
   // move_play(myplayer, gameinfo.move.x, gameinfo.move.y);
   // if (!isView)
   if (result == "begin") {
-    enable_board();
-    read_time();
+    var step = enable_board();
+    if (step !== 0) read_time();
   } else if (result == "passed") {
     setPassedStatus();
   }
@@ -97,7 +120,10 @@ var edit_board_mouse_move = function(x, y) {
 var play = function(x, y) {
   // ignore invalid move
   if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;
-
+  var con = confirm("确认落子吗?");
+  if (con == false) {
+    return;
+  }
   var node;
 
   // create new node
@@ -135,6 +161,8 @@ var play = function(x, y) {
 
   // show next move
   myplayer.next(myplayer.kifuReader.node.children.length - 1);
+  disable_board();
+  read_time();
   var data = {
     move: move,
     gameId: game.gameId,
@@ -143,8 +171,6 @@ var play = function(x, y) {
     WL: white_time,
   };
   EventBus.$emit("move", data);
-  disable_board();
-  read_time();
 };
 
 function add_event() {
@@ -228,6 +254,10 @@ var move_play = function(player, x, y) {
     read_time();
   }
 };
+//获得现在是黑骡子，还是白骡子
+export function getGameTurn() {
+  return myplayer.kifuReader.game.turn;
+}
 
 export function game_over(result) {
   clearTimeout(timer_loop);
@@ -251,22 +281,50 @@ export function game_over(result) {
 
   return myplayer.kifu.toSgf();
 }
-
+//显示坐标
 export function toggleCoordinates(value) {
   myplayer.setCoordinates(!myplayer.coordinates);
 }
-
-export function showMarker(value) {
+// 正在申请悔棋操作！
+export function regretCurrentGame() {
+  myplayer.kifuReader.node.remove();
+  myplayer.loadSgf(myplayer.kifu.toSgf());
+  myplayer.last();
+  disable_board();
+  enable_board();
+  read_time();
+}
+//获得当前对局棋谱
+export function getKifu() {
+  return myplayer.kifu.toSgf();
+}
+//显示手数功能
+export function showMarker() {
   _marker = _marker || new WGo.Player.Marker(myplayer, myplayer.board);
-  if (value) {
+  if (!_isFirst) {
+    myplayer.config.markLastMove = false;
+    _marker.clearDefaultSytle();
+    _marker.switchMaker();
+    _isFirst = true;
+  } else if (
+    _marker.config.markerStyle == "LB" &&
+    _marker.config.markerNum != 0
+  ) {
     _marker.switchMaker({
-      'markerStyle': 'LB',
-      'markerNum': 5
+      markerNum: 0,
     });
-  } else {
+  } else if (
+    _marker.config.markerStyle == "LB" &&
+    _marker.config.markerNum == 0
+  ) {
     _marker.switchMaker({
       markerStyle: "TRS",
       markerNum: 1,
+    });
+  } else {
+    _marker.switchMaker({
+      markerStyle: "LB",
+      markerNum: 5,
     });
   }
 }
@@ -294,7 +352,12 @@ export function gameResign(result) {
 
 //enable board so it can play
 export function enable_board() {
-  var last_steps = myplayer.kifuReader.path.m;
+  var last_steps;
+  if (myplayer.kifuReader) {
+    last_steps = myplayer.kifuReader.path.m;
+  } else {
+    last_steps = 0;
+  }
   var turn = last_steps % 4;
   if (turn == 0 && username == game.users.black1) {
     //black 0
@@ -312,6 +375,7 @@ export function enable_board() {
     //white 1
     add_event();
   }
+  return last_steps;
 }
 
 export function readyMove(msg) {

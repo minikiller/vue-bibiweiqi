@@ -1,4 +1,4 @@
-## qucik start 
+## qucik start
 
 ```
 git clone https://github.com/minikiller/vue-bibiweiqi
@@ -6,6 +6,7 @@ npm install
 npm run start
 node app.js
 ```
+
 install redis
 
 ```
@@ -13,8 +14,8 @@ git clone https://github.com/minikiller/flask-app
 pip install -r requirements.txt
 python api.py
 ```
-access https://localhost:8080
 
+access https://localhost:8080
 
 ### TODO i18n vue
 
@@ -138,15 +139,18 @@ redis-cli flushall
 ```
 
 ### print a object
+
 ```
 var inspect = require('util').inspect;
 console.log(inspect(response))
 ```
+
 ### base64 image
+
 https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript
 https://github.com/dankogai/js-base64
 
-### webpack 
+### webpack
 
 https://medium.com/js-dojo/how-to-configure-webpack-4-with-vuejs-a-complete-guide-209e943c4772
 
@@ -158,3 +162,21 @@ https://cdnjs.com/
 
 ### flask deploy 
 gunicorn -w 4 --certfile=cert.pem --keyfile=privkey.pem --bind 0.0.0.0:5000 api:app
+### fontawsome
+
+### watch vuex module variant
+
+```
+watch: {
+    "$store.state.games.connected"(newValue, oldValue) {
+      console.log(`Updating from ${oldValue} to ${newValue}`);
+
+      // Do whatever makes sense now
+      if (newValue === true) {
+        this.$store.commit("alert/success", "连接服务器成功！");
+      } else {
+        this.$store.commit("alert/error", "连接服务器失败，请重新登陆！");
+      }
+    }
+  },
+```

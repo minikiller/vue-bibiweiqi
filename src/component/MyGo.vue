@@ -1,5 +1,7 @@
 <template>
   <div>
+    <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
+    <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
     <div style="width: 100%; margin: 0" ref="player"></div>
   </div>
 </template>

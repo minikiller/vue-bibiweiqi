@@ -19,7 +19,7 @@
                   ref="btnResign"
                   :disabled="btnBeginDisable"
                 >
-                  {{ btnText }}
+                <i class="fab fa-angellist"></i>  {{ btnText }}
                 </button>
                 <button class="btn btn-primary" v-if="canEnd" @click="getScore">
                   {{ endText }}
@@ -30,9 +30,17 @@
                   v-if="canBegin"
                   @click="passed"
                 >
-                  终局
+                  <i class="fas fa-coffee"></i> 终局
                 </button>
                 <!-- <button class="btn btn-primary" @click="test">test</button> -->
+
+                
+                <button class="btn btn-primary" @click="toggleMarker">
+                  <i class="fas fa-list-ol"></i> 手数
+                </button>
+                <button class="btn btn-primary" @click="regret" :disabled="btnRegretDisable">
+                  <i class="fas fa-chevron-left"></i> 悔棋
+                </button>
                 <button
                   class="btn btn-primary"
                   :disabled="btnQuitDisable"
@@ -40,24 +48,17 @@
                   ref="quit"
                   id="quit"
                 >
-                  退出
+                  <i class="fas fa-sign-out-alt"></i> 退出
                 </button>
                 <b-form-checkbox
                   id="checkbox-1"
                   v-model="status"
                   name="checkbox-1"
                   value="true"
-                  unchecked-value="false" @change="toggleAll"
+                  unchecked-value="false"
+                  @change="toggleAll"
                 >
                   显示坐标
-                </b-form-checkbox>
-                <b-form-checkbox
-                  id="checkbox-2"
-                  name="checkbox-2"
-                  value="true"
-                  unchecked-value="false" @change="toggleMarker"
-                >
-                  显示手数
                 </b-form-checkbox>
               </div>
               <my-go
@@ -93,7 +94,7 @@
                     <b-icon icon="camera-video"></b-icon>&nbsp加入
                   </b-button>
                   <b-button variant="primary" @click="onLeave">
-                    <b-icon icon="camera-video-fill"></b-icon>&nbsp离开
+                    <b-icon icon="camera-video-off"></b-icon>&nbsp离开
                   </b-button>
                   <!-- <button
                   type="button"
