@@ -9,6 +9,18 @@
                 <b-col>
                   <b-row>
                     <b-col>
+                      <b-form-group id="input-group-0" label-for="input-0" label="对局室名称">
+                        <b-form-input
+                          id="input-0"
+                          v-model="form.name"
+                          required
+                          placeholder="输入对局室名称"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col>
                       <b-form-group id="input-group-1" label="选择四位棋手" label-for="input-1">
                         <v-select
                           multiple
@@ -19,7 +31,7 @@
                           :options="options"
                           @search="onSearch"
                           v-model="form.opponent"
-                          :selectable="() => form.opponent.length < 5"
+                          :selectable="() => form.opponent.length < 4"
                         >
                           <template slot="no-options">输入棋友名称，进行搜索</template>
                           <template slot="option" slot-scope="option">
@@ -35,24 +47,36 @@
                   <b-row>
                     <b-col class="avatars_l">
                       <b-avatar badge="1" badge-variant="dark" size="3rem"></b-avatar>
-                      <div v-if="form.opponent[0]">{{ form.opponent[0].name }}</div>
+                      <div v-if="form.opponent[0]">
+                        <b-avatar variant="dark" :src="form.opponent[0].avatar" size="sm" />
+                        {{ form.opponent[0].name }}
+                      </div>
                     </b-col>
                     <b-col class="avatars_r">
                       <b-avatar badge="2" badge-variant="light" size="3rem"></b-avatar>
-                      <div v-if="form.opponent[1]">{{ form.opponent[1].name }}</div>
+                      <div v-if="form.opponent[1]">
+                        <b-avatar variant="dark" :src="form.opponent[1].avatar" size="sm" />
+                        {{ form.opponent[1].name }}
+                      </div>
                     </b-col>
                     <b-col class="avatars_l">
                       <b-avatar badge="3" badge-variant="dark" size="3rem"></b-avatar>
-                      <div v-if="form.opponent[2]">{{ form.opponent[2].name }}</div>
+                      <div v-if="form.opponent[2]">
+                        <b-avatar variant="dark" :src="form.opponent[2].avatar" size="sm" />
+                        {{ form.opponent[2].name }}
+                      </div>
                     </b-col>
                     <b-col class="avatars_r">
                       <b-avatar badge="4" badge-variant="light" size="3rem"></b-avatar>
-                      <div v-if="form.opponent[3]">{{ form.opponent[3].name }}</div>
+                      <div v-if="form.opponent[3]">
+                        <b-avatar variant="dark" :src="form.opponent[3].avatar" size="sm" />
+                        {{ form.opponent[3].name }}
+                      </div>
                     </b-col>
                   </b-row>
                   <b-row>
                     <b-col>
-                      <b-form-group id="input-group-2" label-for="input-2">
+                      <b-form-group id="input-group-2" label-for="input-2" label="对局时间(单位:分钟)">
                         <b-form-input
                           id="input-2"
                           v-model="form.total_time"
@@ -63,8 +87,12 @@
                     </b-col>
                   </b-row>
                   <b-row>
-                    <b-button type="submit" variant="primary">Submit</b-button>
-                    <b-button type="reset" variant="danger">Reset</b-button>
+                    <b-button type="submit" variant="primary">
+                      <i class="fa fa-shopping-cart"></i> 提交
+                    </b-button>
+                    <b-button type="reset" variant="danger">
+                      <i class="fas fa-history"></i> 重置
+                    </b-button>
                   </b-row>
                 </b-col>
               </b-row>
