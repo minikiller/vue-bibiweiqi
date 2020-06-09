@@ -1,81 +1,79 @@
 <template>
-  <v-app id="app" class="mt-0">
-    <v-container grid-list-xl>
-      <!-- <image-input v-model="avatar">
-        <div slot="activator">
-          <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
-            <span>Click to add avatar</span>
-          </v-avatar>
-          <v-avatar size="150px" v-ripple v-else class="mb-3">
-            <img :src="avatar.imageURL" alt="avatar">
-          </v-avatar>
-        </div>
-      </image-input> -->
-      <v-slide-x-transition>
-        <div v-if="avatar && saved == false">
-          <v-btn class="primary" @click="uploadImage" :loading="saving">Save Avatar</v-btn>
-        </div>
-      </v-slide-x-transition>
-    </v-container>
-  </v-app>
+  <div>
+    <image-input v-model="avatar">
+      <div slot="activator">
+        <b-avatar size="150px" v-if="!avatar" class="grey lighten-3 mb-3">
+          <span>Click to add avatar</span>
+        </b-avatar>
+        <b-avatar size="150px" v-else class="mb-3">
+          <img :src="avatar.imageURL" />
+        </b-avatar>
+      </div>
+    </image-input>
+    <div v-if="avatar && saved == false">
+      <b-button class="primary" @click="uploadImage" :loading="saving">保存头像</b-button>
+    </div>
+  </div>
 </template>
 
 <script>
-// import ImageInput from '../component/ImageInput.vue';
+import ImageInput from "../component/ImageInput.vue";
 import { userService } from "../_services";
 import { mapState, mapActions } from "vuex";
 export default {
-  name: 'app',
-  data () {
+  name: "profile",
+  data() {
     return {
       avatar: null,
       saving: false,
-      saved: false,
-      user : null
-    }
+      saved: true,
+      user: null
+    };
   },
   computed: {
     ...mapState({
       account: state => state.account,
       games: state => state.games
-    }),
-    
+    })
   },
   components: {
-    // ImageInput
+    ImageInput
   },
-  watch:{
+  watch: {
     avatar: {
       handler: function() {
-        this.saved = false
+        this.saved = false;
+        console.log("it changed it ");
       },
       deep: true
     }
   },
   methods: {
     uploadImage() {
-      this.saving = true
-      setTimeout(() => this.savedAvatar(), 1000)
+      this.saving = true;
+      setTimeout(() => this.savedAvatar(), 1000);
     },
     savedAvatar() {
-      this.account.user.avatar_base_64_str = this.getBase64Str(this.avatar.imageData)
+      this.account.user.avatar_base_64_str = this.getBase64Str(
+        this.avatar.imageData
+      );
       userService.change_avatar(this.account.user);
-      this.saving = false
-      this.saved = true
+      this.saving = false;
+      this.saved = true;
     },
     getBase64Str(imgData) {
       return imgData.replace(/^data:image\/\w+;base64,/, "");
     },
-    init(){
-      console.log(this.account.user)
+    init() {
+      console.log(this.account.user);
       this.avatar = {};
-      this.avatar.imageURL = this.account.user.avator;
+      this.avatar.imageURL = this.account.user.avatar;
     }
   },
   mounted() {
-		this.init()
+    this.init();
   }
-}
+};
 </script>
 
 <style>
