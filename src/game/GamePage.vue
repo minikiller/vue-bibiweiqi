@@ -9,7 +9,7 @@
                 <b-col>
                   <b-row>
                     <b-col>
-                      <b-input-group prepend="对局名称">
+                      <b-input-group prepend="棋局名称">
                         <b-form-input id="input-0" v-model="form.name" required></b-form-input>
                       </b-input-group>
                     </b-col>
@@ -18,8 +18,9 @@
                     <b-col>
                       <div>
                         <v-select
+                          class="style-chooser"
                           multiple
-                          placeholder="选择参赛选手"
+                          placeholder="棋局参赛选手"
                           label="name"
                           :filterable="false"
                           :clearable="false"
@@ -206,13 +207,13 @@ export default {
   height: 9rem;
   text-align: center;
 }
-.v-select .vs__dropdown-toggle {
-  height: 38px;
+</style>
+
+<style>
+.style-chooser .vs__search::placeholder {
+  padding-left: 3px;
 }
-.v-select .vs__search {
-  height: 38px;
-}
-.v-select .vs__dropdown-menu {
+.style-chooser .vs__dropdown-toggle {
   height: 38px;
 }
 </style>
