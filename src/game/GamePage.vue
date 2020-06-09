@@ -16,7 +16,7 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友</template>
+                        <template slot="no-options">请选择棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
@@ -34,7 +34,7 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友</template>
+                        <template slot="no-options">请选择棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
@@ -52,7 +52,7 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友</template>
+                        <template slot="no-options">请选择棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
@@ -70,7 +70,7 @@
                         :options="options"
                         @search="onSearch"
                       >
-                        <template slot="no-options">請選擇棋友</template>
+                        <template slot="no-options">请选择棋友</template>
                         <template slot="option" slot-scope="option">
                           <div class="d-center">{{ option.name }}</div>
                         </template>
