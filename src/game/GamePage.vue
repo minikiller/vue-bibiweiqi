@@ -1,20 +1,15 @@
 <template>
   <b-container fluid>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-row sm="6">
-        <b-col>
+      <b-row>
+        <b-col sm="6">
           <b-card>
             <b-container fluid>
               <b-row>
-                <b-col cols="8">
+                <b-col>
                   <b-row>
                     <b-col>
-                      <b-form-group
-                        id="input-group-1"
-                        label="选择对局棋友:"
-                        label-for="input-1"
-                        description="最多只能选择四个棋友"
-                      >
+                      <b-form-group id="input-group-1" label="选择四位棋手" label-for="input-1">
                         <v-select
                           multiple
                           id="input-1"
@@ -25,9 +20,7 @@
                           @search="onSearch"
                           v-model="form.opponent"
                         >
-                          <template slot="no-options"
-                            >输入棋友名称，进行搜索</template
-                          >
+                          <template slot="no-options">输入棋友名称，进行搜索</template>
                           <template slot="option" slot-scope="option">
                             <div class="d-center">{{ option.name }}</div>
                           </template>
@@ -36,63 +29,35 @@
                     </b-col>
                   </b-row>
                   <b-row>
+                    <b-col class="avatars_l">
+                      <b-avatar badge="1" badge-variant="dark" size="3rem"></b-avatar>
+                      <div v-if="form.opponent[0]">{{ form.opponent[0].name }}</div>
+                    </b-col>
+                    <b-col class="avatars_r">
+                      <b-avatar badge="2" badge-variant="light" size="3rem"></b-avatar>
+                      <div v-if="form.opponent[1]">{{ form.opponent[1].name }}</div>
+                    </b-col>
+                    <b-col class="avatars_l">
+                      <b-avatar badge="3" badge-variant="dark" size="3rem"></b-avatar>
+                      <div v-if="form.opponent[2]">{{ form.opponent[2].name }}</div>
+                    </b-col>
+                    <b-col class="avatars_r">
+                      <b-avatar badge="4" badge-variant="light" size="3rem"></b-avatar>
+                      <div v-if="form.opponent[3]">{{ form.opponent[3].name }}</div>
+                    </b-col>
+                  </b-row>
+                  <b-row>
                     <b-col>
-                      <b-form-group
-                        id="input-group-2"
-                        label="对局时长(单位:分钟):"
-                        label-for="input-2"
-                      >
+                      <b-form-group id="input-group-2" label-for="input-2">
                         <b-form-input
                           id="input-2"
                           v-model="form.name"
                           required
-                          placeholder="Enter name"
+                          placeholder="输入对局时间"
                         ></b-form-input>
                       </b-form-group>
                     </b-col>
                   </b-row>
-                </b-col>
-
-                <b-col cols="4" align-self="center">
-                  <b-container>
-                    <b-row>
-                      <b-col class="avatars_l">
-                        <b-avatar
-                          badge="1"
-                          badge-variant="dark"
-                          size="3rem"
-                        ></b-avatar>
-                        <div v-if="form.opponent[0]">
-                          {{ form.opponent[0].name }}
-                        </div>
-                      </b-col>
-                      <b-col class="avatars_r">
-                        <b-avatar badge="2" badge-variant="light" size="3rem">
-                        </b-avatar>
-                        <div v-if="form.opponent[1]">
-                          {{ form.opponent[1].name }}
-                        </div>
-                      </b-col>
-                    </b-row>
-                    <b-row>
-                      <b-col class="avatars_l">
-                        <b-avatar badge="3" badge-variant="dark" size="3rem">
-                        </b-avatar>
-                        <div v-if="form.opponent[2]">
-                          {{ form.opponent[2].name }}
-                        </div>
-                      </b-col>
-                      <b-col class="avatars_r">
-                        <b-avatar badge="4" badge-variant="light" size="3rem">
-                        </b-avatar>
-                        <div v-if="form.opponent[3]">
-                          {{ form.opponent[3].name }}
-                        </div>
-                      </b-col>
-                    </b-row>
-                  </b-container>
-                </b-col>
-                <b-col>
                   <b-row>
                     <b-button type="submit" variant="primary">Submit</b-button>
                     <b-button type="reset" variant="danger">Reset</b-button>
@@ -102,7 +67,6 @@
             </b-container>
           </b-card>
         </b-col>
-        <b-col></b-col>
       </b-row>
     </b-form>
   </b-container>
@@ -124,9 +88,9 @@ export default {
       options: [],
       form: {
         opponent: "",
-        name: "",
+        name: ""
       },
-      show: true,
+      show: true
     };
   },
   methods: {
@@ -138,8 +102,8 @@ export default {
     },
     search: debounce((loading, search, vm) => {
       fetch(`${config.apiUrl}/users/data?userName=${escape(search)}`).then(
-        (res) => {
-          res.json().then((json) => {
+        res => {
+          res.json().then(json => {
             vm.options = json;
           });
           loading(false);
@@ -162,8 +126,8 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
