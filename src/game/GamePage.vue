@@ -26,14 +26,16 @@
                           multiple
                           id="input-1"
                           label="name"
-                          :filterable="false"
-                          :clearable="false"
+                          :filterable="true"
+                          :clearable="true"
                           :options="options"
                           @search="onSearch"
+                          :clearSearchOnSelect="false"
+                          placeholder="输入棋友名称，进行搜索"
                           v-model="form.opponent"
                           :selectable="() => form.opponent.length < 4"
                         >
-                          <template slot="no-options">输入棋友名称，进行搜索</template>
+                          <template slot="no-options">未找到对应的记录</template>
                           <template slot="option" slot-scope="option">
                             <div class="d-center">
                               <b-avatar variant="dark" :src="option.avatar" size="sm" />
@@ -76,20 +78,25 @@
                   </b-row>
                   <b-row>
                     <b-col>
-                      <b-form-group id="input-group-2" label-for="input-2" label="对局时间(单位:分钟)">
+                      <b-form-group id="input-group-2" label-for="input-2" label="选择对局时长">
                         <b-form-input
                           id="input-2"
-                          v-model="form.total_time"
                           required
-                          placeholder="输入对局时间"
+                          v-model="form.total_time"
+                          type="range"
+                          min="5"
+                          max="100"
+                          step="5"
                         ></b-form-input>
+                        <!-- <b-form-spinbutton id="input-2" required v-model="form.total_time" min="5" max="100"></b-form-spinbutton> -->
+                        <div class="mt-2">对局时长: {{ form.total_time }}分钟</div>
                       </b-form-group>
                     </b-col>
                   </b-row>
                   <b-row>
                     <b-button type="submit" variant="primary">
                       <i class="fa fa-shopping-cart"></i> 提交
-                    </b-button>
+                    </b-button>&nbsp
                     <b-button type="reset" variant="danger">
                       <i class="fas fa-history"></i> 重置
                     </b-button>
@@ -121,7 +128,7 @@ export default {
       options: [],
       form: {
         opponent: [],
-        total_time: "",
+        total_time: 5,
         name: "",
         public: true,
         password: "",
@@ -151,6 +158,10 @@ export default {
 
     onSubmit(evt) {
       evt.preventDefault();
+      if (this.form.opponent.length == 0 || this.form.opponent.length < 4) {
+        this.error("请选择至少四位棋友！");
+        return;
+      }
       // alert(JSON.stringify(this.form));
       gameService.newGame(this.form).then(data => {
         this.success(data.message);
