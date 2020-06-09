@@ -2,12 +2,13 @@ import config from "config";
 import { authHeader, handleResponse } from "../_helpers";
 
 export const gameService = {
+  newGame,
   getAll,
   getById,
   saveKifu,
   beginGame,
   completeGame,
-  deleteById
+  deleteById,
 };
 
 function getAll() {
@@ -28,6 +29,19 @@ function getById(id) {
   return fetch(`${config.apiUrl}/games/${id}`, requestOptions).then(
     handleResponse
   );
+}
+
+function newGame(data) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      ...authHeader(),
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(data),
+  };
+
+  return fetch(`${config.apiUrl}/games/`, requestOptions).then(handleResponse);
 }
 
 function deleteById(id) {
@@ -74,11 +88,12 @@ function completeGame(id) {
 function saveKifu(_data) {
   const requestOptions = {
     method: "POST",
-    headers: { ...authHeader(), "Content-Type": "application/json; charset=utf-8" },
+    headers: {
+      ...authHeader(),
+      "Content-Type": "application/json; charset=utf-8",
+    },
     body: JSON.stringify(_data),
   };
-  console.log(requestOptions['body']);
-  return fetch(`${config.apiUrl}/kifus/`, requestOptions).then(
-    handleResponse
-  );
+  console.log(requestOptions["body"]);
+  return fetch(`${config.apiUrl}/kifus/`, requestOptions).then(handleResponse);
 }

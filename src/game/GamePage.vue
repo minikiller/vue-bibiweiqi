@@ -24,10 +24,14 @@
                           :options="options"
                           @search="onSearch"
                           v-model="form.opponent"
+                          :selectable="() => form.opponent.length < 5"
                         >
                           <template slot="no-options">输入棋友名称，进行搜索</template>
                           <template slot="option" slot-scope="option">
-                            <div class="d-center">{{ option.name }}</div>
+                            <div class="d-center">
+                              <b-avatar variant="dark" :src="option.avatar" size="sm" />
+                              {{ option.name }}
+                            </div>
                           </template>
                         </v-select>
                       </b-form-group>
@@ -38,7 +42,7 @@
                       <b-form-group id="input-group-2" label="对局时长(单位:分钟):" label-for="input-2">
                         <b-form-input
                           id="input-2"
-                          v-model="form.name"
+                          v-model="form.total_time"
                           required
                           placeholder="Enter name"
                         ></b-form-input>
@@ -61,20 +65,17 @@
                         <div v-if="form.opponent[0]">{{form.opponent[0].name}}</div>
                       </b-col>
                       <b-col class="avatars_r">
-                        <b-avatar badge="2" badge-variant="light" size="3rem">
-                        </b-avatar>
+                        <b-avatar badge="2" badge-variant="light" size="3rem"></b-avatar>
                         <div v-if="form.opponent[1]">{{form.opponent[1].name}}</div>
                       </b-col>
                     </b-row>
                     <b-row>
                       <b-col class="avatars_l">
-                        <b-avatar badge="3" badge-variant="dark" size="3rem">
-                        </b-avatar>
+                        <b-avatar badge="3" badge-variant="dark" size="3rem"></b-avatar>
                         <div v-if="form.opponent[2]">{{form.opponent[2].name}}</div>
                       </b-col>
                       <b-col class="avatars_r">
-                        <b-avatar badge="4" badge-variant="light" size="3rem">
-                        </b-avatar>
+                        <b-avatar badge="4" badge-variant="light" size="3rem"></b-avatar>
                         <div v-if="form.opponent[3]">{{form.opponent[3].name}}</div>
                       </b-col>
                     </b-row>
@@ -94,6 +95,7 @@
 import "vue-select/dist/vue-select.css";
 import { debounce } from "lodash";
 import { mapState, mapMutations } from "vuex";
+import { gameService } from "../_services";
 import config from "config";
 export default {
   mounted() {
@@ -105,16 +107,19 @@ export default {
       selected: null, // this needs to be filled with the selected value (id or object), but it stays empty
       options: [],
       form: {
-        opponent: "",
+        opponent: [],
+        total_time: "",
         name: "",
-         
+        public: true,
+        password: "",
+        comment: ""
       },
-      show: true,
-      
+      show: true
     };
   },
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+    ...mapMutations("alert", ["success", "error", "clear"]),
 
     onSearch(search, loading) {
       loading(true);
@@ -133,14 +138,18 @@ export default {
 
     onSubmit(evt) {
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
+      // alert(JSON.stringify(this.form));
+      gameService.newGame(this.form).then(data => {
+        this.success(data.message);
+      });
     },
     onReset(evt) {
       evt.preventDefault();
-      // Reset our form values
-      this.form.email = "";
+      // Reset our form valuesopponent: "",
+      this.form.opponent = "";
       this.form.name = "";
-      this.form.checked = [];
+      this.form.total_time = "";
+      this.form.comment = "";
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {
