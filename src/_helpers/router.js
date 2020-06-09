@@ -1,21 +1,20 @@
 import Vue from "vue";
 
-
 import Home from "../home/Home";
-import Hello from "../component/Hello";
 import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
 import KifuPage from "../kifu/KifuPage";
 import GamePage from "../game/GamePage";
+import FriendPage from "../friend/FriendPage";
 import ProfilePage from "../profile/ProfilePage";
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
-const Router =require("vue-router");
+const Router = require("vue-router");
 
-if (process.env.NODE_ENV === 'development') {
-  Vue.use(Router)
+if (process.env.NODE_ENV === "development") {
+  Vue.use(Router);
 }
 
 export const router = new Router({
@@ -29,6 +28,7 @@ export const router = new Router({
     { path: "/game", component: GamePage },
     { path: "/kifu", component: KifuPage },
     { path: "/profile", component: ProfilePage },
+    { path: "/friend", component: FriendPage },
 
     // otherwise redirect to home
     { path: "*", redirect: "/" },
