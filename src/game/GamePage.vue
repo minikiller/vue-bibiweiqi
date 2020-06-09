@@ -16,10 +16,10 @@
                   </b-row>
                   <b-row>
                     <b-col>
-                      <b-form-group id="input-group-1" label="参赛棋手" label-for="input-1">
+                      <div>
                         <v-select
                           multiple
-                          id="input-1"
+                          placeholder="选择参赛选手"
                           label="name"
                           :filterable="false"
                           :clearable="false"
@@ -36,7 +36,7 @@
                             </div>
                           </template>
                         </v-select>
-                      </b-form-group>
+                      </div>
                     </b-col>
                   </b-row>
                   <b-row class="row_avatars">
@@ -190,7 +190,7 @@ export default {
 
 <style scoped>
 .col {
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 1rem;
 }
 .b-avatar {
   margin: 0.5rem;
@@ -205,5 +205,14 @@ export default {
   padding-right: 4rem;
   height: 9rem;
   text-align: center;
+}
+.v-select .vs__dropdown-toggle {
+  height: 38px;
+}
+.v-select .vs__search {
+  height: 38px;
+}
+.v-select .vs__dropdown-menu {
+  height: 38px;
 }
 </style>
