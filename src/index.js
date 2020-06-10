@@ -55,7 +55,7 @@ Vue.use(
       actionPrefix: "SOCKET_", //为vuex设置的两个前缀
       mutationPrefix: "SOCKET_",
     },
-    // options: { path: "/my-app/" } //Optional options
+    // options: { autoConnect: false }, //Optional options
   })
 );
 

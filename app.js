@@ -86,6 +86,9 @@ redis_client.once("ready", () => {
     }
   });
 });
+io.on("reconnect", function(socket) {
+  console.log("it is reconnect by it!");
+});
 
 io.on("connection", function(socket) {
   console.log(getFormattedDate() + "new connection " + socket);
@@ -434,11 +437,12 @@ io.on("connection", function(socket) {
     io.sockets.in(msg.gameId).emit("resign", msg);
   });
 
-  socket.on("hello", function(msg) {
+  socket.on("hello", function(msg, callback) {
     // socket.broadcast.emit("resign", msg);
     io.in(msg.gameId).clients((err, clients) => {
       console.log(clients); // an array containing socket ids in 'room3'
     });
+    callback("test", "etste", "hlloe");
     console.log(socket.adapter.rooms);
     // socket.emit("helloMsg", msg);
     // socket.emit("hello_you", msg);
@@ -462,6 +466,11 @@ io.on("connection", function(socket) {
       username: socket.userId,
       gameId: data.gameId,
     });
+  });
+
+  socket.on("registerToRoom", function(gameId) {
+    console.log("socket is join to room id " + gameId);
+    socket.join(gameId);
   });
 
   socket.on("disconnect", function(msg) {

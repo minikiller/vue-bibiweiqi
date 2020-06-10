@@ -7,6 +7,7 @@ const state = {
   result: "no result",
   turn: "black", //用于记录数子时候的顺序，默认是黑先开始数子，数值为black或white,每次轮换
   connected: false,
+  roomId: "", //记录用户所在的房间号
 };
 
 const actions = {};
@@ -19,6 +20,11 @@ const mutations = {
   SOCKET_disconnect(state) {
     console.log("i don't got it");
     state.connected = false;
+  },
+  SOCKET_reconnect(state) {
+    console.log("i got it again");
+    // alert("connect");
+    state.connected = true;
   },
   addUser(state, userId) {
     if (state.onlineUsers.indexOf(userId) == -1) state.onlineUsers.push(userId);
@@ -40,6 +46,9 @@ const mutations = {
     else if (state.turn == "white") {
       state.turn = "black";
     }
+  },
+  setRoomId(state, value) {
+    state.roomId = value;
   },
 };
 

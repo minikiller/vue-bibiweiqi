@@ -19,21 +19,22 @@ import {
   showMarker,
   regretCurrentGame,
   getGameTurn,
-  getKifu
+  getKifu,
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
 import { find, head } from "lodash/core";
 import Vue from "vue";
+var timeoutCallback = require("timeout-callback");
 Vue.component(WebRTC.name, WebRTC);
 
 export default {
   name: "playPage",
   computed: {
     ...mapState({
-      account: state => state.account,
-      games: state => state.games
-    })
+      account: (state) => state.account,
+      games: (state) => state.games,
+    }),
   },
   watch: {
     "$store.state.games.connected"(newValue, oldValue) {
@@ -42,10 +43,11 @@ export default {
       // Do whatever makes sense now
       if (newValue === true) {
         this.$store.commit("alert/success", "连接服务器成功！");
+        this.$socket.emit("registerToRoom", this.game_id);
       } else {
         this.$store.commit("alert/error", "连接服务器失败，请重新登陆！");
       }
-    }
+    },
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
@@ -53,7 +55,7 @@ export default {
       "updateGame",
       "updateNavTitle",
       "setResult",
-      "setTurn"
+      "setTurn",
     ]),
     setButtonStatus() {
       this.btnText = "认输";
@@ -85,9 +87,9 @@ export default {
             okTitle: "确定",
             cancelTitle: "取消",
             hideHeaderClose: false,
-            centered: true
+            centered: true,
           })
-          .then(value => {
+          .then((value) => {
             if (value) {
               //this.setResult(result);
               showScore();
@@ -97,11 +99,11 @@ export default {
                 userId: this.account.user.name,
                 gameId: this.game_id,
                 result: this.games.result,
-                turn: this.games.turn
+                turn: this.games.turn,
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             // An error occurred
           });
       }
@@ -111,10 +113,18 @@ export default {
     test() {
       // this.$refs["modal"].show();
       // alert(testStore());
-      this.$socket.emit("hello", {
-        userId: this.account.user.name,
-        gameId: this.game_id
-      });
+      var timeoutCallback = require("timeout-callback");
+
+      this.$socket.emit(
+        "hello",
+        {
+          userId: this.account.user.name,
+          gameId: this.game_id,
+        },
+        timeoutCallback(function(err, arg1, arg2) {
+          console.log("this log is always displayed!");
+        })
+      );
     },
     passed() {
       setPassedStatus();
@@ -122,7 +132,7 @@ export default {
       this.btnPassedDisable = true;
       this.$socket.emit("passedGame", {
         userId: this.account.user.name,
-        gameId: this.game_id
+        gameId: this.game_id,
       });
     },
     begin() {
@@ -133,7 +143,7 @@ export default {
         this.$refs.quit.disabled = true;
         this.$socket.emit("prepareGame", {
           userId: this.account.user.name,
-          gameId: this.game_id
+          gameId: this.game_id,
         });
       } else if (this.btnText == "认输") {
         this.$bvModal
@@ -145,20 +155,20 @@ export default {
             okTitle: "确定",
             cancelTitle: "取消",
             hideHeaderClose: false,
-            centered: true
+            centered: true,
           })
-          .then(value => {
+          .then((value) => {
             if (value) {
               var result = getResult();
               this.setResult(result);
               this.$socket.emit("resignGame", {
                 userId: this.account.user.name,
                 gameId: this.game_id,
-                result: result
+                result: result,
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             // An error occurred
           });
       }
@@ -167,7 +177,7 @@ export default {
       console.log(`${this.account.user.name} is me`);
       this.$socket.emit("logout", {
         userId: this.account.user.name,
-        gameId: this.game_id
+        gameId: this.game_id,
       });
       this.$router.push({ path: "/" });
     },
@@ -184,29 +194,29 @@ export default {
           okTitle: "确定",
           cancelTitle: "取消",
           hideHeaderClose: false,
-          centered: true
+          centered: true,
         })
-        .then(value => {
+        .then((value) => {
           if (value) {
             //同意数子结果，对局结束
             this.$socket.emit("finishGame", {
               userId: this.account.user.name,
               gameId: this.game_id,
-              result: result
+              result: result,
             });
           } else {
             //不同意结果，继续数子
             this.$socket.emit("noagreeGame", {
               userId: this.account.user.name,
               gameId: this.game_id,
-              result: "数子结果未达成一致，继续数目"
+              result: "数子结果未达成一致，继续数目",
             });
             this.success("数子结果未达成一致，继续数目");
             this.canEnd = true;
             this.endText = "开始数目";
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // An error occurred
         });
     },
@@ -230,14 +240,14 @@ export default {
           black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
           white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
           kifu_data: this.games.game.kifu,
-          result: msg.result
+          result: msg.result,
         };
 
-        gameService.saveKifu(save_data).then(data => {
+        gameService.saveKifu(save_data).then((data) => {
           this.success(data.message);
         });
 
-        gameService.completeGame(this.game_id).then(msg => {
+        gameService.completeGame(this.game_id).then((msg) => {
           console.log(msg);
         });
       }
@@ -257,19 +267,19 @@ export default {
           okTitle: "确定",
           cancelTitle: "取消",
           hideHeaderClose: false,
-          centered: true
+          centered: true,
         })
-        .then(value => {
+        .then((value) => {
           if (value) {
             // this.success("正在申请悔棋操作！");
             this.$socket.emit("regretGame", {
               userId: this.account.user.name,
               gameId: this.game_id,
-              msg: this.account.user.name + "正在申请悔棋操作！"
+              msg: this.account.user.name + "正在申请悔棋操作！",
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // An error occurred
         });
     },
@@ -284,20 +294,20 @@ export default {
           okTitle: "确定",
           cancelTitle: "取消",
           hideHeaderClose: false,
-          centered: true
+          centered: true,
         })
-        .then(value => {
+        .then((value) => {
           if (value) {
             // var msg = "=> 同意申请悔棋操作！";
             var msg = this.account.user.name + " => 同意申请悔棋操作！";
             this.$socket.emit("successRegretGame", {
               userId: data.userId,
               gameId: data.gameId,
-              msg: msg
+              msg: msg,
             });
             this.$socket.emit("updateRegretKifu", {
               gameId: data.gameId,
-              kifu: getKifu()
+              kifu: getKifu(),
             });
           } else {
             // var msg = "=> 不同意申请悔棋操作！";
@@ -305,11 +315,11 @@ export default {
             this.$socket.emit("failRegretGame", {
               userId: data.userId,
               gameId: data.gameId,
-              msg: msg
+              msg: msg,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // An error occurred
           console.log(err);
         });
@@ -339,7 +349,7 @@ export default {
     hello(msg) {
       alert(msg);
       // removeUser(msg);
-    }
+    },
   },
   sockets: {
     move(game) {
@@ -356,7 +366,7 @@ export default {
     beginGame(game) {
       this.success("对局正式开始");
       this.setButtonStatus();
-      gameService.beginGame(this.game_id).then(msg => {
+      gameService.beginGame(this.game_id).then((msg) => {
         console.log(msg);
       });
       initGameData(this.account.user.name, game);
@@ -456,7 +466,7 @@ export default {
       // this.success(msg);
       gameResign(msg.result);
       this.finishGame(msg);
-    }
+    },
   },
   props: ["game_id"],
   data() {
@@ -478,7 +488,7 @@ export default {
       endText: "开始数目",
       kifu: "", //棋谱
       img: null,
-      status: false
+      status: false,
     };
   },
   beforeDestroy() {
@@ -489,8 +499,9 @@ export default {
     //数子结束，双方达成一致
   },
   mounted() {
+    // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
-    gameService.getById(this.game_id).then(data => {
+    gameService.getById(this.game_id).then((data) => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
       this.gameUser.push(this.game.blacktwo_id);
@@ -521,7 +532,7 @@ export default {
 
           this.$socket.emit("view", {
             userId: this.account.user.name,
-            gameId: this.game_id
+            gameId: this.game_id,
           });
         } else {
           //已结束
@@ -532,32 +543,40 @@ export default {
       return data;
     });
 
-    EventBus.$on("move", game => {
-      this.$socket.emit("move", game, function(response) {
-        console.log("game move is recevie " + response);
-      });
+    EventBus.$on("move", (game) => {
+      let that = this;
+      this.$socket.emit(
+        "move",
+        game,
+        timeoutCallback(function(err, response) {
+          if (err) that.error("落子信息发送服务器不成功，请重新刷新再发送！");
+          else if (response == "ok") {
+            that.success("落子信息发送服务器成功!");
+          }
+        })
+      );
       this.btnRegretDisable = false;
       this.updateGame(game);
     });
-    EventBus.$on("showScore", msg => {
+    EventBus.$on("showScore", (msg) => {
       this.success(msg);
       this.setResult(msg);
     });
     //超时判负
-    EventBus.$on("timeout", msg => {
+    EventBus.$on("timeout", (msg) => {
       this.setResult(msg);
       this.error(msg);
       this.$socket.emit("resignGame", {
         userId: this.account.user.name,
         gameId: this.game_id,
-        result: msg
+        result: msg,
       }); //发送信息
     });
   },
   components: {
     MyGo,
     Chat,
-    MyVideo
-  }
+    MyVideo,
+  },
 };
 </script>
