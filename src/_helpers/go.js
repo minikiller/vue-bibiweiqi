@@ -33,6 +33,11 @@ export function initGame(ele, gameinfo) {
       "])",
     enableWheel: false,
     enableKeys: false,
+    layout: {
+      // you can use static or dynamic layout
+      top: ["InfoBox"],
+      bottom: ["Control"],
+    },
     // move: 1000
   });
   myboard = myplayer.board;
@@ -59,6 +64,11 @@ export function initResumeGame(ele, gameinfo, result) {
         "])",
       enableWheel: false,
       enableKeys: false,
+      layout: {
+        // you can use static or dynamic layout
+        top: ["InfoBox"],
+        bottom: ["Control"],
+      },
       // move: 1000
     });
   } else {
@@ -66,6 +76,11 @@ export function initResumeGame(ele, gameinfo, result) {
       sgf: gameinfo.kifu,
       enableWheel: false,
       enableKeys: false,
+      layout: {
+        // you can use static or dynamic layout
+        top: ["InfoBox"],
+        bottom: ["Control"],
+      },
       // move: 1000
     });
   }
