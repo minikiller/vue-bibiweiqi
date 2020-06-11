@@ -41,7 +41,12 @@
           >
             悔棋
           </b-button>
-          <b-button variant="primary" :disabled="btnQuitDisable" @click="exit">
+          <b-button
+            variant="primary"
+            :disabled="btnQuitDisable"
+            @click="exit"
+            @ref="quit"
+          >
             结束
           </b-button>
         </div>
