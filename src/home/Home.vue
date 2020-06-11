@@ -1,19 +1,19 @@
 <template>
   <div id="app">
-    <!-- <Navbar /> -->
-    <Card />
-    <!-- <b-button @click="hello">hello</b-button> -->
+    <b-overlay :show="show" rounded="sm">
+      <!-- <Navbar /> -->
+      <Card />
+      <!-- <b-button @click="hello">hello</b-button> -->
+    </b-overlay>
   </div>
 </template>
 <script>
 import Card from "../component/Card.vue";
 import { mapState, mapMutations } from "vuex";
-import Navbar from "../component/NavBar.vue";
-
+import { EventBus } from "../index.js";
 export default {
   name: "home",
   components: {
-    Navbar,
     Card
   },
   methods: {
@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       name: "我的对局室",
+      show: false
     };
   },
   computed: {
@@ -54,15 +55,25 @@ export default {
         path: `/play/${msg.gameId}`,
         query: { type: "resume" }
       });
-    },
+    }
     // move() {
     //   this.updateGame(game);
     // }
   },
   mounted() {
+    this.show = true;
+    let that = this;
     this.updateNavTitle(this.name);
-    this.$socket.emit("resume", { //检查是否有需要恢复的对局
+    this.$socket.emit("resume", {
+      //检查是否有需要恢复的对局
       userId: this.account.user.name
+    });
+    EventBus.$on("loading", value => {
+      that.show = value;
+    });
+    this.$nextTick(function() {
+      // put code here
+      // that.show = false;
     });
   }
 };

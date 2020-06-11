@@ -488,7 +488,8 @@ export default {
       endText: "开始数目",
       kifu: "", //棋谱
       img: null,
-      status: false
+      status: false,
+      show: false
     };
   },
   beforeDestroy() {
@@ -501,6 +502,7 @@ export default {
   mounted() {
     // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
+    this.show = true;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id);
@@ -540,6 +542,7 @@ export default {
         }
       }
       this.updateNavTitle(this.game.name);
+      this.show = false;
       return data;
     });
 
