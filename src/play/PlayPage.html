@@ -12,8 +12,8 @@
             :disabled="btnBeginDisable"
           >
             {{ btnText }}
-          <b-button>
-          <button class="btn btn-primary" v-if="canEnd" @click="getScore">
+          </b-button>
+          <b-button variant="primary" v-if="canEnd" @click="getScore">
             {{ endText }}
           </b-button>
           <b-button
@@ -46,17 +46,18 @@
             切换坐标
           </b-button>
         </div>
-        <my-go
-          v-if="game"
-          :total_time="game.total_time.toString()"
-          :blackOne="game.blackone_id"
-          :whiteOne="game.whiteone_id"
-          :blackTwo="game.blacktwo_id"
-          :whiteTwo="game.whitetwo_id"
-          :gameStatus="game.status"
-        />
-
-        <div class>
+        <div>
+          <my-go
+            v-if="game"
+            :total_time="game.total_time.toString()"
+            :blackOne="game.blackone_id"
+            :whiteOne="game.whiteone_id"
+            :blackTwo="game.blacktwo_id"
+            :whiteTwo="game.whitetwo_id"
+            :gameStatus="game.status"
+          />
+        </div>
+        <div>
           <vue-webrtc
             ref="webrtc"
             width="100%"
