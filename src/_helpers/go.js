@@ -34,8 +34,7 @@ export function initGame(ele, gameinfo) {
     enableKeys: false,
     layout: {
       // you can use static or dynamic layout
-      top: ["InfoBox"],
-      bottom: ["Control"],
+      bottom: ["InfoBox","Control"],
     },
     // move: 1000
   });
