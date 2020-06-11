@@ -136,7 +136,7 @@ export default {
       });
     },
     begin() {
-      if (this.btnText == "开始对局") {
+      if (this.btnText == "开始") {
         console.log("game is begin,text is {}".format(this.btnText));
         this.btnText = "准备中";
         this.success("等待其他对局者进入对局！");
@@ -477,7 +477,7 @@ export default {
       btnPassedDisable: false, //终局按钮的控制状态
       btnRegretDisable: true, //悔棋按钮的控制状态
       // score_selected: false, //数目按钮的控制状态
-      btnText: "开始对局",
+      btnText: "开始",
       isOpponent: false, //是否为对局者
       game: null, //本对局的对局信息
       gameUser: [], //本对局的对手信息

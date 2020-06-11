@@ -22,11 +22,17 @@
             v-if="canBegin"
             @click="passed"
           >
-            开始数子
+            数子
           </b-button>
-
+          <b-button
+            variant="primary"
+            :disabled="btnQuitDisable"
+            @click="toggleAll"
+          >
+            坐标
+          </b-button>
           <b-button variant="primary" @click="toggleMarker">
-            显示手数
+            手数
           </b-button>
           <b-button
             variant="primary"
@@ -36,14 +42,7 @@
             悔棋
           </b-button>
           <b-button variant="primary" :disabled="btnQuitDisable" @click="exit">
-            结束对局
-          </b-button>
-          <b-button
-            variant="primary"
-            :disabled="btnQuitDisable"
-            @click="toggleAll"
-          >
-            切换坐标
+            结束
           </b-button>
         </div>
         <div>
