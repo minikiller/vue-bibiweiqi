@@ -9,7 +9,9 @@
 
     <section id="input_zone">
       <b-form-input placeholder="Enter your msg" v-model="msg"></b-form-input>
-      <b-button variant="primary" @click="send"><i class="fas fa-user-friends"></i> 发送 </b-button>
+      <b-button variant="primary" @click="send">
+        <i class="fas fa-user-friends"></i> 发送
+      </b-button>
     </section>
   </div>
 </template>
@@ -21,13 +23,13 @@ export default {
   name: "chat",
   props: {
     gameId: String,
-    gameInfo: null,
+    gameInfo: null
   },
   computed: {
     ...mapState({
-      account: (state) => state.account,
-      users: (state) => state.users.all,
-    }),
+      account: state => state.account,
+      users: state => state.users.all
+    })
   },
   mounted() {
     // this.$socket.emit(this.gameId); //进入gameId的房间
@@ -35,14 +37,14 @@ export default {
     this.$socket.emit("login", {
       userId: this.account.user.name,
       gameId: this.gameId,
-      gameInfo: this.gameInfo,
+      gameInfo: this.gameInfo
     });
   },
   data() {
     return {
       msg: "",
       text: "",
-      _socket: null,
+      _socket: null
     };
   },
   methods: {
@@ -52,17 +54,12 @@ export default {
         this.$socket.emit("new_message", {
           message: this.msg,
           gameId: this.gameId,
+          avatar: this.account.user.avatar,
+          username: this.account.user.name
         });
-        this.text =
-          this.text +
-          "<div class='badge badge-info'>" +
-          this.account.user.name +
-          ":</div> " +
-          this.msg +
-          "\n";
         this.msg = "";
       }
-    },
+    }
   },
   sockets: {
     //通知新的用户进入房间
@@ -73,11 +70,11 @@ export default {
         "<br><div class='badge badge-danger'>" +
         "系统:</div>" +
         user +
-        "进入聊天室</br>";
+        "进入对局室</br>";
     },
     //初始化聊天室用户列表
     initGameUser(userlist) {
-      userlist.forEach((user) => {
+      userlist.forEach(user => {
         this.addUser(user);
       });
     },
@@ -90,7 +87,7 @@ export default {
         "<br><div class='badge badge-danger'>" +
         "系统:</div>" +
         data +
-        "离开聊天室</br>";
+        "离开对局室</br>";
     },
 
     get_message(data) {
@@ -104,7 +101,7 @@ export default {
           data.message +
           "\n";
       }
-    },
-  },
+    }
+  }
 };
 </script>

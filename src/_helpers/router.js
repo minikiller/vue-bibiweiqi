@@ -8,6 +8,7 @@ import KifuPage from "../kifu/KifuPage";
 import GamePage from "../game/GamePage";
 import FriendPage from "../friend/FriendPage";
 import ProfilePage from "../profile/ProfilePage";
+import Timer from "../component/timer";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
@@ -29,6 +30,7 @@ export const router = new Router({
     { path: "/kifu", component: KifuPage },
     { path: "/profile", component: ProfilePage },
     { path: "/friend", component: FriendPage },
+    { path: "/timer", component: Timer },
 
     // otherwise redirect to home
     { path: "*", redirect: "/" },

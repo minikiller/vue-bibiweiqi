@@ -452,20 +452,21 @@ io.on("connection", function(socket) {
   });
 
   //listen on new_message
-  socket.on("new_message", function(data) {
+  socket.on("new_message", function(msg) {
     console.log(
       getFormattedDate() +
         "chat message received!" +
-        data.message +
+        msg.message +
         " user id is: " +
         socket.userId
     );
     //给房间内的其他用户发送消息，不包括sender本身
-    socket.broadcast.to(data.gameId).emit("get_message", {
+    io.sockets.in(msg.gameId).emit("get_message", msg);
+    /* socket.broadcast.to(data.gameId).emit("get_message", {
       message: data.message,
       username: socket.userId,
       gameId: data.gameId,
-    });
+    }); */
   });
 
   socket.on("registerToRoom", function(gameId) {

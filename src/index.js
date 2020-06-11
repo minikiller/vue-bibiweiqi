@@ -45,6 +45,9 @@ import "vue-select/dist/vue-select.css";
 import vSelect from "vue-select";
 Vue.component("v-select", vSelect);
 
+import { vueBaberrage } from 'vue-baberrage' //弹幕
+Vue.use(vueBaberrage)
+
 const VueSocketIO = require("vue-socket.io");
 Vue.use(
   new VueSocketIO({
