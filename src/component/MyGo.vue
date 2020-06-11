@@ -65,7 +65,7 @@ export default {
         id: ++this.currentId,
         avatar: data.avatar,
         msg: data.username + " => " + data.message,
-        time: 5,
+        time: 10,
         type: MESSAGE_TYPE.NORMAL,
         barrageStyle: "normal"
       });
@@ -75,7 +75,7 @@ export default {
         id: ++this.currentId,
         avatar: this.avatar,
         msg: "系统: " + user + "进入对局室",
-        time: 5,
+        time: 10,
         type: MESSAGE_TYPE.NORMAL,
         barrageStyle: "red"
       });
@@ -85,7 +85,7 @@ export default {
         id: ++this.currentId,
         avatar: this.avatar,
         msg: "系统: " + data + "离开对局室",
-        time: 5,
+        time: 10,
         type: MESSAGE_TYPE.NORMAL,
         barrageStyle: "red"
       });
