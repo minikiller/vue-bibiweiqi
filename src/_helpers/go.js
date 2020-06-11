@@ -2,7 +2,6 @@ let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var black_time, white_time;
 // import { socket } from "./socket";
-import Vue from "vue";
 import { EventBus } from "../index.js";
 var username, game;
 var timer_loop = null; //定时器
@@ -195,6 +194,7 @@ function add_event() {
   myboard.addEventListener("mousemove", _ev_move);
   myboard.addEventListener("click", _ev_click);
   myboard.addEventListener("mouseout", _ev_out);
+  EventBus.$emit("yourturn", "");
 }
 
 var disable_board = function() {
