@@ -332,6 +332,7 @@ export default {
       this.img = this.$refs.webrtc.capture();
     },
     onJoin() {
+      alert("hello");
       this.$refs.webrtc.join();
     },
     onLeave() {
