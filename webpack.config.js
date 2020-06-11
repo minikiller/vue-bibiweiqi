@@ -85,6 +85,6 @@ module.exports = {
     "vue-socket.io": "VueSocketIO",
     "vee-validate": "VeeValidate",
     adapterjs: "AdapterJS",
-    rtcmulticonnection: "RTCMultiConnection",
+    // rtcmulticonnection: "RTCMultiConnection",
   },
 };
