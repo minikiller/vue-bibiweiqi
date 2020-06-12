@@ -115,19 +115,19 @@ io.on("connection", function(socket) {
     }
 
     if (!gameStatus[gameId]) {
-      userStatus[msg.gameInfo.blackone_id] = false;
-      userStatus[msg.gameInfo.blacktwo_id] = false;
-      userStatus[msg.gameInfo.whiteone_id] = false;
-      userStatus[msg.gameInfo.whitetwo_id] = false;
+      userStatus[msg.gameInfo.blackone_id.name] = false;
+      userStatus[msg.gameInfo.blacktwo_id.name] = false;
+      userStatus[msg.gameInfo.whiteone_id.name] = false;
+      userStatus[msg.gameInfo.whitetwo_id.name] = false;
       gameStatus[gameId] = userStatus;
       redis_client.set("gameStatus", JSON.stringify(gameStatus));
     }
 
     if (!gamePassed[gameId]) {
-      userPassed[msg.gameInfo.blackone_id] = false;
-      userPassed[msg.gameInfo.blacktwo_id] = false;
-      userPassed[msg.gameInfo.whiteone_id] = false;
-      userPassed[msg.gameInfo.whitetwo_id] = false;
+      userPassed[msg.gameInfo.blackone_id.name] = false;
+      userPassed[msg.gameInfo.blacktwo_id.name] = false;
+      userPassed[msg.gameInfo.whiteone_id.name] = false;
+      userPassed[msg.gameInfo.whitetwo_id.name] = false;
       gamePassed[gameId] = userPassed;
       redis_client.set("gamePassed", JSON.stringify(gamePassed));
     }
@@ -260,10 +260,10 @@ io.on("connection", function(socket) {
       //进入对局状态
       var game = {
         users: {
-          black1: gameInfos[msg.gameId].blackone_id,
-          black2: gameInfos[msg.gameId].blacktwo_id,
-          white1: gameInfos[msg.gameId].whiteone_id,
-          white2: gameInfos[msg.gameId].whitetwo_id,
+          black1: gameInfos[msg.gameId].blackone_id.name,
+          black2: gameInfos[msg.gameId].blacktwo_id.name,
+          white1: gameInfos[msg.gameId].whiteone_id.name,
+          white2: gameInfos[msg.gameId].whitetwo_id.name,
         },
         kifu: "",
         total_time: gameInfos[msg.gameId].total_time,
@@ -273,10 +273,10 @@ io.on("connection", function(socket) {
         gameId: msg.gameId,
         result: "begin",
       };
-      activeUsers[gameInfos[msg.gameId].blackone_id] = msg.gameId;
-      activeUsers[gameInfos[msg.gameId].blacktwo_id] = msg.gameId;
-      activeUsers[gameInfos[msg.gameId].whiteone_id] = msg.gameId;
-      activeUsers[gameInfos[msg.gameId].whitetwo_id] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].blackone_id.name] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].blacktwo_id.name] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].whiteone_id.name] = msg.gameId;
+      activeUsers[gameInfos[msg.gameId].whitetwo_id.name] = msg.gameId;
       activeGames[msg.gameId] = game; //保存新的对局
       redis_client.set("activeUsers", JSON.stringify(activeUsers));
       redis_client.set("activeGames", JSON.stringify(activeGames));
