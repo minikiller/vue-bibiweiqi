@@ -36,7 +36,8 @@ export function initGame(ele, gameinfo) {
     enableKeys: false,
     layout: {
       // you can use static or dynamic layout
-      bottom: ["InfoBox", "Control"],
+      top: ["InfoBox"],
+      bottom: ["Control"],
     },
     // move: 1000
   });
@@ -371,7 +372,7 @@ export function gameResign(result) {
   return { result: result, kifu: kifu, game: game.id };
 }
 
-function getWhichTurn(){
+function getWhichTurn() {
   var last_steps;
   if (myplayer.kifuReader) {
     last_steps = myplayer.kifuReader.path.m;
@@ -380,7 +381,6 @@ function getWhichTurn(){
   }
   var turn = last_steps % 4;
   EventBus.$emit("myturn", turn);
-   
 }
 //enable board so it can play
 export function enable_board() {
