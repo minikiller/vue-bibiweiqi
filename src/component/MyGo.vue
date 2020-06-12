@@ -14,6 +14,52 @@
       ></vue-baberrage>
     </div>
     <div style="width: 100%; margin: 0" ref="player"></div>
+    <div>
+            <b-card-group deck>
+              <b-card title="Title" header-tag="header" footer-tag="footer">
+                <template v-slot:header>
+                  <h6 class="mb-0">Header Slot</h6>
+                </template>
+                <b-card-text>Header and footers using slots.</b-card-text>
+                <template v-slot:footer>
+                  <em>Footer Slot</em>
+                </template>
+              </b-card>
+
+              <b-card title="Title" header-tag="header" footer-tag="footer">
+                <template v-slot:header>
+                  <h6 class="mb-0">Header Slot</h6>
+                </template>
+                <b-card-text>Header and footers using slots.</b-card-text>
+                <template v-slot:footer>
+                  <em>Footer Slot</em>
+                </template>
+              </b-card>
+            </b-card-group>
+          </div>
+          <div class="mt-3">
+            <b-card-group deck>
+              <b-card title="Title" header-tag="header" footer-tag="footer">
+                <template v-slot:header>
+                  <h6 class="mb-0">Header Slot</h6>
+                </template>
+                <b-card-text>Header and footers using slots.</b-card-text>
+                <template v-slot:footer>
+                  <em>Footer Slot</em>
+                </template>
+              </b-card>
+
+              <b-card title="Title" header-tag="header" footer-tag="footer">
+                <template v-slot:header>
+                  <h6 class="mb-0">Header Slot</h6>
+                </template>
+                <b-card-text>Header and footers using slots.</b-card-text>
+                <template v-slot:footer>
+                  <em>Footer Slot</em>
+                </template>
+              </b-card>
+            </b-card-group>
+          </div>
   </div>
 </template>
 
