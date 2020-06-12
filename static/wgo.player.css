@@ -203,7 +203,7 @@
 .wgo-player-top .wgo-player-wrapper, .wgo-player-bottom .wgo-player-wrapper {
 	height: 40px;
 	display: inline-block;
-	width: 50%;
+	width: 100%;
 	margin: 0;
 	position: relative;
 }

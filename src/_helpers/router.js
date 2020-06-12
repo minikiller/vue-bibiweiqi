@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 export const router = new Router({
-  mode: "history",
+  // mode: "history",
   routes: [
     // { path: "/", component: Hello },
     { path: "/", component: Home },

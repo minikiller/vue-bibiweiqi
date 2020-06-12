@@ -16,6 +16,8 @@ export function initGame(ele, gameinfo) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.total_time;
   white_time = gameinfo.total_time;
+  EventBus.$emit("w_timeout", white_time);
+  EventBus.$emit("b_timeout", black_time);
   myplayer = new WGo.BasicPlayer(ele, {
     sgf:
       "(;SZ[19]TM[" +
@@ -34,7 +36,7 @@ export function initGame(ele, gameinfo) {
     enableKeys: false,
     layout: {
       // you can use static or dynamic layout
-      bottom: ["InfoBox","Control"],
+      bottom: ["InfoBox", "Control"],
     },
     // move: 1000
   });
@@ -45,6 +47,9 @@ export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.BL;
   white_time = gameinfo.WL;
+  EventBus.$emit("w_timeout", white_time);
+  EventBus.$emit("b_timeout", black_time);
+
   if (gameinfo.kifu == "") {
     myplayer = new WGo.BasicPlayer(ele, {
       sgf:
@@ -197,6 +202,7 @@ function add_event() {
 }
 
 var disable_board = function() {
+  getWhichTurn();
   myboard.removeEventListener("click", _ev_click);
   myboard.removeEventListener("mousemove", _ev_move);
   myboard.removeEventListener("mouseout", _ev_out);
@@ -209,7 +215,7 @@ var read_time = function() {
     timer_loop = setInterval(function() {
       black_time -= 1;
       myplayer.kifuReader.node.BL = black_time;
-
+      EventBus.$emit("b_timeout", black_time);
       myplayer.update();
       if (myplayer.kifuReader.node.BL == 0) {
         // game_over("白超时胜");
@@ -220,6 +226,7 @@ var read_time = function() {
     timer_loop = setInterval(function() {
       white_time -= 1;
       myplayer.kifuReader.node.WL = white_time;
+      EventBus.$emit("w_timeout", white_time);
 
       myplayer.update();
       if (myplayer.kifuReader.node.WL == 0) {
@@ -364,6 +371,17 @@ export function gameResign(result) {
   return { result: result, kifu: kifu, game: game.id };
 }
 
+function getWhichTurn(){
+  var last_steps;
+  if (myplayer.kifuReader) {
+    last_steps = myplayer.kifuReader.path.m;
+  } else {
+    last_steps = 0;
+  }
+  var turn = last_steps % 4;
+  EventBus.$emit("myturn", turn);
+   
+}
 //enable board so it can play
 export function enable_board() {
   var last_steps;
@@ -373,20 +391,24 @@ export function enable_board() {
     last_steps = 0;
   }
   var turn = last_steps % 4;
+  EventBus.$emit("myturn", turn);
   if (turn == 0 && username == game.users.black1) {
     //black 0
     add_event();
   }
   if (turn == 1 && username == game.users.white1) {
     //white 0
+
     add_event();
   }
   if (turn == 2 && username == game.users.black2) {
     //black 1
+
     add_event();
   }
   if (turn == 3 && username == game.users.white2) {
     //white 1
+
     add_event();
   }
   return last_steps;
