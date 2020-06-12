@@ -61,8 +61,8 @@ export default {
       this.btnText = "认输";
       this.canBegin = true;
       if (
-        this.account.user.name == this.game.blackone_id ||
-        this.account.user.name == this.game.whiteone_id
+        this.account.user.name == this.game.blackone_id.name ||
+        this.account.user.name == this.game.whiteone_id.name
       ) {
         this.btnBeginDisable = false;
       } else {
@@ -237,8 +237,8 @@ export default {
       this.canBegin = false;
       if (this.isOpponent) {
         let save_data = {
-          black_info: this.game.blackone_id + "&" + this.game.blacktwo_id,
-          white_info: this.game.whiteone_id + "&" + this.game.whitetwo_id,
+          black_info: this.game.blackone_id.name + "&" + this.game.blacktwo_id.name,
+          white_info: this.game.whiteone_id.name + "&" + this.game.whitetwo_id.name,
           kifu_data: this.games.game.kifu,
           result: msg.result
         };
@@ -378,7 +378,7 @@ export default {
     endGame(msg) {
       console.log("begin to end game");
       this.success(msg);
-      if (this.account.user.name == this.game.blackone_id) {
+      if (this.account.user.name == this.game.blackone_id.name) {
         this.canEnd = true; //启用数目按钮
         this.endText = "开始数目";
       } else {
@@ -392,12 +392,12 @@ export default {
       this.success(msg.userId + "=>" + msg.result);
       if (
         this.games.turn == "white" && //需要白确认并且是白1
-        this.account.user.name == this.game.whiteone_id
+        this.account.user.name == this.game.whiteone_id.name
       ) {
         this.checkResult(msg);
       } else if (
         this.games.turn == "black" &&
-        this.account.user.name == this.game.blackone_id //需要黑确认并且是黑1
+        this.account.user.name == this.game.blackone_id.name //需要黑确认并且是黑1
       ) {
         this.checkResult(msg);
       }
@@ -416,12 +416,12 @@ export default {
       this.success(data.msg);
       if (
         getGameTurn() == 1 && //需要黑确认并且是黑1
-        this.account.user.name == this.game.blackone_id
+        this.account.user.name == this.game.blackone_id.name
       ) {
         this.confirmRegret(data);
       } else if (
         getGameTurn() == -1 &&
-        this.account.user.name == this.game.whiteone_id //需要白确认并且是白1
+        this.account.user.name == this.game.whiteone_id.name //需要白确认并且是白1
       ) {
         this.confirmRegret(data);
       }
@@ -444,13 +444,13 @@ export default {
       this.setTurn();
       if (
         this.games.turn == "white" && //需要白确认并且是白1
-        this.account.user.name == this.game.whiteone_id
+        this.account.user.name == this.game.whiteone_id.name
       ) {
         this.canEnd = true; //启用数目按钮
         this.endText = "开始数目";
       } else if (
         this.games.turn == "black" &&
-        this.account.user.name == this.game.blackone_id //需要黑确认并且是黑1
+        this.account.user.name == this.game.blackone_id.name //需要黑确认并且是黑1
       ) {
         this.canEnd = true; //启用数目按钮
         this.endText = "开始数目";
