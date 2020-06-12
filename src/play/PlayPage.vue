@@ -506,10 +506,10 @@ export default {
     this.show = true;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
-      this.gameUser.push(this.game.blackone_id);
-      this.gameUser.push(this.game.blacktwo_id);
-      this.gameUser.push(this.game.whiteone_id);
-      this.gameUser.push(this.game.whitetwo_id);
+      this.gameUser.push(this.game.blackone_id.name);
+      this.gameUser.push(this.game.blacktwo_id.name);
+      this.gameUser.push(this.game.whiteone_id.name);
+      this.gameUser.push(this.game.whitetwo_id.name);
       /* this.userStatus[this.game.blackone_id] = false;
       this.userStatus[this.game.blacktwo_id] = false;
       this.userStatus[this.game.whiteone_id] = false;

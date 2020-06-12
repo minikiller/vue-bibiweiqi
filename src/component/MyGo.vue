@@ -24,24 +24,28 @@
               {{ blackOne }}
             </h6>
             <div v-if="b1_turn" class="text-success">行棋</div>
-          </template> -->
+          </template>-->
           <b-card-text>
             <b-row>
               <b-col class="col-8">
-                <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
-                {{ blackOne }} <br/>
-                <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
+                <b-avatar variant="info" :src="blackOne.avatar"></b-avatar>
+                {{ blackOne.name }}
+                <b-img src="/static/black_64.png" fluid alt="Responsive image" width="20px"></b-img>
+                <br />
+                <div v-if="b1_turn">
+                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
+                </div>
               </b-col>
               <b-col>
                 <b-row>
                   <b-col>用时：{{ b_playTime }}</b-col>
                 </b-row>
                 <b-row>
-                  <b-col>提子：</b-col>
+                  <b-col>提子：{{ b_caps }}</b-col>
                   <!-- <b-card-text>提子：</b-card-text> -->
                 </b-row>
                 <b-row>
-                  <b-col>读秒: {{ b_playTime }}</b-col>
+                  <b-col>读秒:</b-col>
                 </b-row>
               </b-col>
             </b-row>
@@ -49,39 +53,90 @@
         </b-card>
 
         <b-card header-tag="header" footer-tag="footer">
-          <template v-slot:header>
-            <h6 class="mb-0">
-              {{ whiteOne }}
-              <div v-if="w1_turn" class="text-success">行棋</div>
-            </h6>
-          </template>
-          <b-card-text>用时：{{ w_playTime }}</b-card-text>
-          <b-card-text>提子：</b-card-text>
+          <b-card-text>
+            <b-row>
+              <b-col class="col-8">
+                <b-avatar variant="info" :src="whiteOne.avatar"></b-avatar>
+                {{ whiteOne.name }}
+                <b-img src="/static/white_64.png" fluid alt="Responsive image" width="20px"></b-img>
+                <br />
+                <div v-if="w1_turn">
+                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
+                </div>
+              </b-col>
+              <b-col>
+                <b-row>
+                  <b-col>用时：{{ w_playTime }}</b-col>
+                </b-row>
+                <b-row>
+                  <b-col>提子：{{ w_caps }}</b-col>
+                  <!-- <b-card-text>提子：</b-card-text> -->
+                </b-row>
+                <b-row>
+                  <b-col>读秒:</b-col>
+                </b-row>
+              </b-col>
+            </b-row>
+          </b-card-text>
         </b-card>
       </b-card-group>
     </div>
     <div class="mt-3">
       <b-card-group deck>
         <b-card header-tag="header" footer-tag="footer">
-          <template v-slot:header>
-            <h6 class="mb-0">
-              {{ blackTwo }}
-              <div v-if="b2_turn" class="text-success">行棋</div>
-            </h6>
-          </template>
-          <b-card-text>用时：{{ b_playTime }}</b-card-text>
-          <b-card-text>提子：</b-card-text>
+          <b-card-text>
+            <b-row>
+              <b-col class="col-8">
+                <b-avatar variant="info" :src="blackTwo.avatar"></b-avatar>
+                {{ blackTwo.name }}
+                <b-img src="/static/black_64.png" fluid alt="Responsive image" width="20px"></b-img>
+                <br />
+                <div v-if="b2_turn">
+                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
+                </div>
+              </b-col>
+              <b-col>
+                <b-row>
+                  <b-col>用时：{{ b_playTime }}</b-col>
+                </b-row>
+                <b-row>
+                  <b-col>提子：{{ b_caps }}</b-col>
+                  <!-- <b-card-text>提子：</b-card-text> -->
+                </b-row>
+                <b-row>
+                  <b-col>读秒:</b-col>
+                </b-row>
+              </b-col>
+            </b-row>
+          </b-card-text>
         </b-card>
 
         <b-card header-tag="header" footer-tag="footer">
-          <template v-slot:header>
-            <h6 class="mb-0">
-              {{ whiteTwo }}
-              <div v-if="w2_turn" class="text-success">行棋</div>
-            </h6>
-          </template>
-          <b-card-text>用时：{{ w_playTime }}</b-card-text>
-          <b-card-text>提子：</b-card-text>
+          <b-card-text>
+            <b-row>
+              <b-col class="col-8">
+                <b-avatar variant="info" :src="whiteTwo.avatar"></b-avatar>
+                {{ whiteTwo.name }}
+                <b-img src="/static/white_64.png" fluid alt="Responsive image" width="20px"></b-img>
+                <br />
+                <div v-if="w2_turn">
+                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
+                </div>
+              </b-col>
+              <b-col>
+                <b-row>
+                  <b-col>用时：{{ w_playTime }}</b-col>
+                </b-row>
+                <b-row>
+                  <b-col>提子：{{ w_caps }}</b-col>
+                  <!-- <b-card-text>提子：</b-card-text> -->
+                </b-row>
+                <b-row>
+                  <b-col>读秒:</b-col>
+                </b-row>
+              </b-col>
+            </b-row>
+          </b-card-text>
         </b-card>
       </b-card-group>
     </div>
@@ -143,7 +198,9 @@ export default {
       b1_turn: false,
       w1_turn: false,
       b2_turn: false,
-      w2_turn: false
+      w2_turn: false,
+      w_caps: 0,
+      b_caps: 0 //提子
     };
   },
   watch: {
@@ -238,10 +295,10 @@ export default {
     } else if (this.gameStatus == "未开始") {
       initGame(this.$refs.player, {
         total_time: this.total_time,
-        blackOne: this.blackOne,
-        blackTwo: this.blackTwo,
-        whiteOne: this.whiteOne,
-        whiteTwo: this.whiteTwo
+        blackOne: this.blackOne.name,
+        blackTwo: this.blackTwo.name,
+        whiteOne: this.whiteOne.name,
+        whiteTwo: this.whiteTwo.name
       });
     }
   }
