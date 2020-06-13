@@ -2,7 +2,6 @@
 <script>
 import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
-import MyVideo from "../component/MyVideo";
 import WebRTC from "../component/webrtc";
 import { gameService } from "../_services";
 import { mapState, mapMutations } from "vuex";
@@ -11,7 +10,6 @@ import {
   enable_board,
   initGameData,
   showScore,
-  getResult,
   setPassedStatus,
   readyMove,
   gameResign,
@@ -135,6 +133,14 @@ export default {
         gameId: this.game_id
       });
     },
+    getResult() {
+      var result;
+      if (this.account.user.name == this.game.blackone_id.name)
+        result = "白中盘胜";
+      else if (this.account.user.name == this.game.whiteone_id.name)
+        result = "黑中盘胜";
+      return result;
+    },
     begin() {
       if (this.btnText == "开始") {
         console.log("game is begin,text is {}".format(this.btnText));
@@ -159,7 +165,7 @@ export default {
           })
           .then(value => {
             if (value) {
-              var result = getResult();
+              var result = this.getResult();
               this.setResult(result);
               this.$socket.emit("resignGame", {
                 userId: this.account.user.name,
@@ -585,8 +591,7 @@ export default {
   },
   components: {
     MyGo,
-    Chat,
-    MyVideo
+    Chat
   }
 };
 </script>
