@@ -71,11 +71,11 @@ export default {
     },
     enableVideo: {
       type: Boolean,
-      default: true
+      default: false
     },
     enableLogs: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   watch: {},
