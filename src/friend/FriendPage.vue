@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class>
-          <vue-my-webrtc
+          <my-video
             ref="webrtc"
             width="100%"
             :roomId="roomId"
@@ -44,12 +44,12 @@
 
 <script>
 import Vue from "vue";
-import "../component/video";
+import MyVideo from "../component/video/MyVideo";
 import { find, head } from "lodash";
 // Vue.component("vue-my-webrtc", MyVideo);
 export default {
-  name: "app",
-  components: {},
+  name: "friend",
+  components: {MyVideo},
   data() {
     return {
       img: null,
