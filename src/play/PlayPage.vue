@@ -227,8 +227,9 @@ export default {
       else return "";
     },
     //对局结束，保存棋谱
-    finishGame(msg) {
+    _finishGame(msg) {
       this.error("对局结束： " + msg.result);
+      EventBus.$emit("gameove", msg);
       console.log("game is over,result is {}".format(msg.result));
       this.btnQuitDisable = false;
       this.btnBeginDisable = true;
@@ -237,8 +238,10 @@ export default {
       this.canBegin = false;
       if (this.isOpponent) {
         let save_data = {
-          black_info: this.game.blackone_id.name + "&" + this.game.blacktwo_id.name,
-          white_info: this.game.whiteone_id.name + "&" + this.game.whitetwo_id.name,
+          black_info:
+            this.game.blackone_id.name + "&" + this.game.blacktwo_id.name,
+          white_info:
+            this.game.whiteone_id.name + "&" + this.game.whitetwo_id.name,
           kifu_data: this.games.game.kifu,
           result: msg.result
         };
@@ -429,7 +432,7 @@ export default {
 
     //数子结束
     finishGame(msg) {
-      this.finishGame(msg);
+      this._finishGame(msg);
       console.log("game is over! result is " + msg.result);
     },
 
@@ -466,7 +469,7 @@ export default {
     resign(msg) {
       // this.success(msg);
       gameResign(msg.result);
-      this.finishGame(msg);
+      this._finishGame(msg);
     }
   },
   props: ["game_id"],

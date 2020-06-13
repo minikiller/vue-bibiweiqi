@@ -36,18 +36,35 @@ export function initGame(ele, gameinfo) {
     enableKeys: false,
     layout: {
       // you can use static or dynamic layout
-      top: ["InfoBox"],
+      // top: ["InfoBox"],
       bottom: ["Control"],
     },
+    update: update,
     // move: 1000
   });
   myboard = myplayer.board;
 }
+//监听提子个数的函数
+function update(e) {
+  if (e.node.move) {
+    console.log("it my move");
+    EventBus.$emit("caps", {
+      black: e.position.capCount.black,
+      white: e.position.capCount.white,
+    });
+  }
+}
 
 export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
-  black_time = gameinfo.BL;
-  white_time = gameinfo.WL;
+  if (gameinfo.BL == "" && gameinfo.WL == "") {
+    black_time = gameinfo.total_time;
+    white_time = gameinfo.total_time;
+  } else {
+    black_time = gameinfo.BL;
+    white_time = gameinfo.WL;
+  }
+
   EventBus.$emit("w_timeout", white_time);
   EventBus.$emit("b_timeout", black_time);
 
@@ -70,9 +87,10 @@ export function initResumeGame(ele, gameinfo, result) {
       enableKeys: false,
       layout: {
         // you can use static or dynamic layout
-        top: ["InfoBox"],
+        // top: ["InfoBox"],
         bottom: ["Control"],
       },
+      update: update,
       // move: 1000
     });
   } else {
@@ -82,9 +100,10 @@ export function initResumeGame(ele, gameinfo, result) {
       enableKeys: false,
       layout: {
         // you can use static or dynamic layout
-        top: ["InfoBox"],
+        // top: ["InfoBox"],
         bottom: ["Control"],
       },
+      update: update,
       // move: 1000
     });
   }

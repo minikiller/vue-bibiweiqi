@@ -17,66 +17,32 @@
     <div>
       <b-card-group deck>
         <b-card header-tag="header" footer-tag="footer">
-          <!-- <b-card-title>{{ blackOne }}</b-card-title> -->
-          <!-- <template v-slot:header>
-            <h6 class="mb-0">
-              <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
-              {{ blackOne }}
-            </h6>
-            <div v-if="b1_turn" class="text-success">行棋</div>
-          </template>-->
           <b-card-text>
-            <b-row>
-              <b-col class="col-8">
-                <b-avatar variant="info" :src="blackOne.avatar"></b-avatar>
-                {{ blackOne.name }}
-                <b-img src="/static/black_64.png" fluid alt="Responsive image" width="20px"></b-img>
-                <br />
-                <div v-if="b1_turn">
-                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
-                </div>
-              </b-col>
-              <b-col>
-                <b-row>
-                  <b-col>用时：{{ b_playTime }}</b-col>
-                </b-row>
-                <b-row>
-                  <b-col>提子：{{ b_caps }}</b-col>
-                  <!-- <b-card-text>提子：</b-card-text> -->
-                </b-row>
-                <b-row>
-                  <b-col>读秒:</b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+            <info
+              :avatar="blackOne.avatar"
+              :name="blackOne.name"
+              :rank="blackOne.rank"
+              :turn="b1_turn"
+              :playtime="BL"
+              :caps="b_caps"
+              :imgSrc="b_img"
+              :win="b_win"
+            ></info>
           </b-card-text>
         </b-card>
 
         <b-card header-tag="header" footer-tag="footer">
           <b-card-text>
-            <b-row>
-              <b-col class="col-8">
-                <b-avatar variant="info" :src="whiteOne.avatar"></b-avatar>
-                {{ whiteOne.name }}
-                <b-img src="/static/white_64.png" fluid alt="Responsive image" width="20px"></b-img>
-                <br />
-                <div v-if="w1_turn">
-                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
-                </div>
-              </b-col>
-              <b-col>
-                <b-row>
-                  <b-col>用时：{{ w_playTime }}</b-col>
-                </b-row>
-                <b-row>
-                  <b-col>提子：{{ w_caps }}</b-col>
-                  <!-- <b-card-text>提子：</b-card-text> -->
-                </b-row>
-                <b-row>
-                  <b-col>读秒:</b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+            <info
+              :avatar="whiteOne.avatar"
+              :name="whiteOne.name"
+              :rank="whiteOne.rank"
+              :turn="w1_turn"
+              :playtime="WL"
+              :caps="w_caps"
+              :imgSrc="w_img"
+              :win="w_win"
+            ></info>
           </b-card-text>
         </b-card>
       </b-card-group>
@@ -85,57 +51,31 @@
       <b-card-group deck>
         <b-card header-tag="header" footer-tag="footer">
           <b-card-text>
-            <b-row>
-              <b-col class="col-8">
-                <b-avatar variant="info" :src="blackTwo.avatar"></b-avatar>
-                {{ blackTwo.name }}
-                <b-img src="/static/black_64.png" fluid alt="Responsive image" width="20px"></b-img>
-                <br />
-                <div v-if="b2_turn">
-                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
-                </div>
-              </b-col>
-              <b-col>
-                <b-row>
-                  <b-col>用时：{{ b_playTime }}</b-col>
-                </b-row>
-                <b-row>
-                  <b-col>提子：{{ b_caps }}</b-col>
-                  <!-- <b-card-text>提子：</b-card-text> -->
-                </b-row>
-                <b-row>
-                  <b-col>读秒:</b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+            <info
+              :avatar="blackTwo.avatar"
+              :name="blackTwo.name"
+              :rank="blackTwo.rank"
+              :turn="b2_turn"
+              :playtime="BL"
+              :caps="b_caps"
+              :imgSrc="b_img"
+              :win="b_win"
+            ></info>
           </b-card-text>
         </b-card>
 
         <b-card header-tag="header" footer-tag="footer">
           <b-card-text>
-            <b-row>
-              <b-col class="col-8">
-                <b-avatar variant="info" :src="whiteTwo.avatar"></b-avatar>
-                {{ whiteTwo.name }}
-                <b-img src="/static/white_64.png" fluid alt="Responsive image" width="20px"></b-img>
-                <br />
-                <div v-if="w2_turn">
-                  <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
-                </div>
-              </b-col>
-              <b-col>
-                <b-row>
-                  <b-col>用时：{{ w_playTime }}</b-col>
-                </b-row>
-                <b-row>
-                  <b-col>提子：{{ w_caps }}</b-col>
-                  <!-- <b-card-text>提子：</b-card-text> -->
-                </b-row>
-                <b-row>
-                  <b-col>读秒:</b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+            <info
+              :avatar="whiteTwo.avatar"
+              :name="whiteTwo.name"
+              :rank="whiteTwo.rank"
+              :turn="w2_turn"
+              :playtime="WL"
+              :caps="w_caps"
+              :imgSrc="w_img"
+              :win="w_win"
+            ></info>
           </b-card-text>
         </b-card>
       </b-card-group>
@@ -148,29 +88,19 @@ import { initGame, initResumeGame, initGameData } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
 import { vueBaberrage, MESSAGE_TYPE } from "vue-baberrage";
 import { EventBus } from "../index.js";
+import Info from "../component/Info";
 export default {
   name: "mygo",
   components: {
-    vueBaberrage
+    vueBaberrage,
+    Info
   },
   computed: {
     ...mapState({
       account: state => state.account,
       users: state => state.users.all,
       games: state => state.games
-    }),
-    b_playTime: function() {
-      let time = this.BL;
-      var min = Math.floor(time / 60);
-      var sec = Math.round(time) % 60;
-      return min + ":" + (sec < 10 ? "0" + sec : sec) + "";
-    },
-    w_playTime: function() {
-      let time = this.WL;
-      var min = Math.floor(time / 60);
-      var sec = Math.round(time) % 60;
-      return min + ":" + (sec < 10 ? "0" + sec : sec) + "";
-    }
+    })
   },
   props: {
     total_time: String,
@@ -193,20 +123,24 @@ export default {
       avatar: "http://sunlingfeng.0431zy.com/1.png",
       BL: "", //黑棋剩余时间
       WL: "", //白棋剩余时间
-      BN: "", //黑棋提子数
-      WN: "", //白棋提子数
       b1_turn: false,
       w1_turn: false,
       b2_turn: false,
       w2_turn: false,
-      w_caps: 0,
-      b_caps: 0 //提子
+      w_caps: 0, //白棋提子数
+      b_caps: 0, //黑棋提子数
+      b_img: "/static/black_64.png",
+      w_img: "/static/white_64.png",
+      b_win: false,
+      w_win: false
     };
   },
-  watch: {
-    BL: function(newValue, oldValue) {},
+  /* watch: {
+    BL: function(newValue, oldValue) {
+      // console.log(newValue + " is new");
+    },
     WL: function(newValue, oldValue) {}
-  },
+  }, */
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle"])
   },
@@ -260,6 +194,22 @@ export default {
     });
     EventBus.$on("b_timeout", value => {
       that.BL = value;
+    });
+    EventBus.$on("caps", value => {
+      that.b_caps = value.black;
+      that.w_caps = value.white;
+    });
+    EventBus.$on("gameove", msg => {
+      if (msg.result.indexOf('白') > -1) {
+        that.w_win = true;
+      } else if (msg.result.indexOf('黑') > -1) {
+        that.b_win = true;
+      }
+      that.b1_turn = false;
+      that.b2_turn = false;
+      that.w1_turn = false;
+      that.w2_turn = false;
+      console.log("go component game is over! result is " + msg);
     });
 
     EventBus.$on("myturn", value => {
