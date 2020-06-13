@@ -2,6 +2,8 @@
   <div>
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
+    <audio id="luozi" src="/static/voice/mian1.mp3" preload="auto"></audio>
+    <audio id="audioBegin" src="/static/voice/mian3.mp3" preload="auto"></audio>
     <div class="container">
       <vue-baberrage
         :isShow="barrageIsShow"
@@ -84,7 +86,12 @@
 </template>
 
 <script>
-import { initGame, initResumeGame, initGameData } from "../_helpers";
+import {
+  initGame,
+  initResumeGame,
+  initGameData,
+  setConfirm
+} from "../_helpers";
 import { mapState, mapMutations } from "vuex";
 import { vueBaberrage, MESSAGE_TYPE } from "vue-baberrage";
 import { EventBus } from "../index.js";
@@ -183,6 +190,9 @@ export default {
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
       document.getElementById("wgo-control").style.display = "";
+    },
+    prepare(msg) {
+      document.getElementById("audioBegin").play();
     }
   },
   mounted() {
@@ -195,14 +205,19 @@ export default {
     EventBus.$on("b_timeout", value => {
       that.BL = value;
     });
+    EventBus.$on("yourturn", () => {
+      document.getElementById("luozi").play();
+      setConfirm(false);
+    });
+
     EventBus.$on("caps", value => {
       that.b_caps = value.black;
       that.w_caps = value.white;
     });
     EventBus.$on("gameove", msg => {
-      if (msg.result.indexOf('白') > -1) {
+      if (msg.result.indexOf("白") > -1) {
         that.w_win = true;
-      } else if (msg.result.indexOf('黑') > -1) {
+      } else if (msg.result.indexOf("黑") > -1) {
         that.b_win = true;
       }
       that.b1_turn = false;

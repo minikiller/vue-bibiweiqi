@@ -17,7 +17,8 @@ import {
   showMarker,
   regretCurrentGame,
   getGameTurn,
-  getKifu
+  getKifu,
+  setConfirm
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -140,6 +141,13 @@ export default {
       else if (this.account.user.name == this.game.whiteone_id.name)
         result = "黑中盘胜";
       return result;
+    },
+    confirm() {
+      setConfirm(true);
+    },
+    cancel() {
+      setConfirm(false);
+      this.isTurn = false;
     },
     begin() {
       if (this.btnText == "开始") {
@@ -499,7 +507,8 @@ export default {
       kifu: "", //棋谱
       img: null,
       status: false,
-      show: false
+      show: false,
+      isTurn: false
     };
   },
   beforeDestroy() {
@@ -559,6 +568,11 @@ export default {
     EventBus.$on("yourturn", () => {
       this.success("轮到你骡子了！");
     });
+
+    EventBus.$on("confirmTurn", () => {
+      this.isTurn = true; //打开确认取消按钮
+    });
+
     EventBus.$on("move", game => {
       let that = this;
       this.$socket.emit(
@@ -568,6 +582,7 @@ export default {
           if (err) that.error("落子信息发送服务器不成功，请重新刷新再发送！");
           else if (response == "ok") {
             that.success("落子信息发送服务器成功!");
+            that.isTurn = false;
           }
         })
       );

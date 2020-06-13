@@ -8,6 +8,10 @@ var timer_loop = null; //定时器
 var _score_mode;
 var score_selected = false;
 var _marker, _isFirst;
+var bconfirm = false;
+var prepare_confirm = false;
+var prepare_x;
+var prepare_y;
 
 //////////////////////////////
 // game init
@@ -122,6 +126,7 @@ export function initResumeGame(ele, gameinfo, result) {
 
 // board mouseout callback for edit move
 var edit_board_mouse_out = function() {
+  if (prepare_confirm == true) return;
   if (this._last_mark) {
     myboard.removeObject(this._last_mark);
     delete this._last_mark;
@@ -132,6 +137,7 @@ var edit_board_mouse_out = function() {
 
 //board mouse move event
 var edit_board_mouse_move = function(x, y) {
+  if (prepare_confirm == true) return;
   if (myplayer.frozen || (this._lastX == x && this._lastY == y)) return;
 
   this._lastX = x;
@@ -158,12 +164,15 @@ var edit_board_mouse_move = function(x, y) {
 var play = function(x, y) {
   // ignore invalid move
   if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;
-  var con = confirm("确认落子吗?");
-  if (con == false) {
+  // var con = confirm("确认落子吗?");
+
+  var node;
+  if (bconfirm == false) {
+    prepare_confirm = true;
+    (prepare_x = x), (prepare_y = y);
+    EventBus.$emit("confirmTurn", "");
     return;
   }
-  var node;
-
   // create new node
   if (x == null) {
     node = new WGo.KNode({
@@ -321,6 +330,17 @@ export function game_over(result) {
   disable_board();
 
   return myplayer.kifu.toSgf();
+}
+
+export function setConfirm(value) {
+  if (value) {
+    bconfirm = value;
+    prepare_confirm = false;
+    play(prepare_x, prepare_y);
+  } else {
+    bconfirm = value;
+    prepare_confirm = false;
+  }
 }
 //显示坐标
 export function toggleCoordinates(value) {

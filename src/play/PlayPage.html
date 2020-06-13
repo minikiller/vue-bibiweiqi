@@ -51,6 +51,12 @@
             >
               结束
             </b-button>
+            <b-button v-if="isTurn" variant="primary" @click="confirm">
+              确认
+            </b-button>
+            <b-button v-if="isTurn" variant="primary" @click="cancel">
+              取消
+            </b-button>
           </div>
           <div>
             <my-go
