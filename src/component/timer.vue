@@ -1,8 +1,10 @@
 <template>
   <div>
-    <span @click="getCode">获取验证码</span>
-    <span @click="stopCode">stop</span>
-    <span v-show="!show" class="count">时间: 00:00:{{ count }} s</span>
+    <b-button @click="getCode">开始</b-button>
+    <b-button @click="stopCode">停止</b-button>
+    <br />
+    <span v-show="!show" class="count">时间: 00:00:{{ count }}</span>
+    <br />
     <span v-show="!show" class="count">读秒: 30秒 {{ numbers }}次</span>
     <audio id="audioMinute0" src="/static/voice/0.mp3" preload="auto"></audio>
     <audio id="audioMinute1" src="/static/voice/1.mp3" preload="auto"></audio>
@@ -42,7 +44,12 @@ export default {
       this.timer = null;
     },
     getCode() {
-      document.getElementById("audioMinuteBegin").play();
+      if (this.numbers == 1) {
+        //最后一次读秒
+        document.getElementById("audioMinuteEnd1").play();
+      } else {
+        document.getElementById("audioMinuteBegin").play();
+      }
       if (!this.timer) {
         this.count = this.time_count;
         this.show = false;
