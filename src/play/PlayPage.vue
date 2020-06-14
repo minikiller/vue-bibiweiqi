@@ -484,7 +484,8 @@ export default {
       // this.success(msg);
       gameResign(msg.result);
       this._finishGame(msg);
-    }
+    },
+    
   },
   props: ["game_id"],
   data() {

@@ -468,10 +468,19 @@ io.on("connection", function(socket) {
       gameId: data.gameId,
     }); */
   });
-
+  //用户掉线后重连
   socket.on("registerToRoom", function(gameId) {
     console.log("socket is join to room id " + gameId);
     socket.join(gameId);
+    if (activeGames[gameId] !== undefined) {
+      var game = activeGames[gameId];
+      var result = activeGames[gameId].result;
+      socket.emit("updateRoomGame", {
+        gameId: gameId,
+        game: game,
+        result: result,
+      });
+    }
   });
 
   socket.on("disconnect", function(msg) {

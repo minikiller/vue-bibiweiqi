@@ -191,6 +191,13 @@ export default {
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
       document.getElementById("wgo-control").style.display = "";
     },
+    //用户掉线后重连
+    updateRoomGame(msg) {
+      this.updateGame(msg.game);
+      initGameData(this.account.user.name, this.games.game);
+      initResumeGame(this.$refs.player, this.games.game, this.games.result);
+    },
+
     prepare(msg) {
       document.getElementById("audioBegin").play();
     }
