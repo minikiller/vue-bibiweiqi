@@ -20,6 +20,9 @@
           <b-nav-item href="/friend">
             <i class="fas fa-users"></i>我的棋友
           </b-nav-item>
+          <b-nav-item href="/timer">
+            <i class="fas fa-users"></i>读秒
+          </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-text>
