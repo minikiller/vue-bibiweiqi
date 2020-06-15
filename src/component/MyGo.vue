@@ -149,7 +149,8 @@ export default {
     WL: function(newValue, oldValue) {}
   }, */
   methods: {
-    ...mapMutations("games", ["updateGame", "updateNavTitle"])
+    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+    ...mapMutations("alert", ["success", "error", "clear"])
   },
   sockets: {
     get_message(data) {
@@ -213,7 +214,9 @@ export default {
       that.BL = value;
     });
     EventBus.$on("yourturn", () => {
-      document.getElementById("luozi").play();
+      this.success("轮到你骡子了！");
+      var audio = document.getElementById("luozi");
+      if (audio) audio.play();
       setConfirm(false);
     });
 

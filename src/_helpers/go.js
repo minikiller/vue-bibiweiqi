@@ -340,7 +340,7 @@ export function setConfirm(value) {
   } else {
     bconfirm = value;
     prepare_confirm = false;
-    myboard.removeObject(myboard._last_mark);
+    if (myboard._last_mark) myboard.removeObject(myboard._last_mark);
   }
 }
 //显示坐标

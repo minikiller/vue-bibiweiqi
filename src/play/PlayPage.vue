@@ -514,7 +514,7 @@ export default {
   },
   beforeDestroy() {
     console.log("destroy is called");
-    // this.$socket.removeListener("helloMsg", this.hello);
+    this.$socket.removeAllListeners();
   },
   created() {
     //数子结束，双方达成一致
@@ -522,6 +522,7 @@ export default {
   mounted() {
     // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
+    this.$socket.removeAllListeners();
     this.show = true;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
@@ -566,9 +567,9 @@ export default {
       return data;
     });
 
-    EventBus.$on("yourturn", () => {
+    /* EventBus.$on("yourturn", () => {
       this.success("轮到你骡子了！");
-    });
+    }); */
 
     EventBus.$on("confirmTurn", () => {
       this.isTurn = true; //打开确认取消按钮

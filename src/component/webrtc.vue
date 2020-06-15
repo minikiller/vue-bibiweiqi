@@ -71,7 +71,7 @@ export default {
     },
     enableVideo: {
       type: Boolean,
-      default: false
+      default: true
     },
     enableLogs: {
       type: Boolean,

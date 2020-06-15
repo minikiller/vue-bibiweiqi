@@ -5,7 +5,6 @@
         <div v-for="(data, index) in games" style="margin:0 auto;">
           <b-col l="4">
             <b-card
-              v-bind:title="data.name"
               img-src="/static/images.jpg"
               img-alt="Image"
               img-top
@@ -13,6 +12,7 @@
               style="max-width: 20rem;"
               class="mb-2"
             >
+              <b-card-title>{{data.name}}#{{data.id}}</b-card-title>
               <b-card-text>
                 <div v-if="account.user.name == data.blackone_id">
                   <b-avatar variant="dark" :src="data.avatar" size="sm" />
