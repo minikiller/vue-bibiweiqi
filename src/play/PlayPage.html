@@ -58,6 +58,10 @@
               取消
             </b-button>
           </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
           <div>
             <my-go
               v-if="game"
@@ -69,7 +73,10 @@
               :gameStatus="game.status"
             />
           </div>
-
+        </b-col>
+      </b-row>
+      <b-row class="ml-2 mr-2 mb-2">
+        <b-col>
           <div>
             <vue-webrtc
               ref="webrtc"
@@ -85,7 +92,7 @@
               @error="onError"
             />
           </div>
-          <div class="row">
+          <div class="row form-group">
             <div class="col-md-12 my-3">
               <b-button variant="primary" @click="onJoin">
                 <b-icon icon="camera-video"></b-icon>加入
@@ -110,6 +117,10 @@
             </div>
           </div>
           <!-- <my-video :gameId="game_id"></my-video> -->
+        </b-col>
+      </b-row>
+      <b-row class="ml-2 mr-2">
+        <b-col>
           <div>
             <chat v-if="game" :gameId="game_id" :gameInfo="game" />
             <b-list-group

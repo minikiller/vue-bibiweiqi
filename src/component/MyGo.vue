@@ -15,73 +15,79 @@
         :messageHeight="messageHeight"
       ></vue-baberrage>
     </div>
-    <div style="width: 100%; margin: 0" ref="player"></div>
-    <div>
-      <b-card-group deck>
-        <b-card header-tag="header" footer-tag="footer">
-          <b-card-text>
-            <info
-              :avatar="blackOne.avatar"
-              :name="blackOne.name"
-              :rank="blackOne.rank"
-              :turn="b1_turn"
-              :playtime="BL"
-              :caps="b_caps"
-              :imgSrc="b_img"
-              :win="b_win"
-            ></info>
-          </b-card-text>
-        </b-card>
+    <b-row class="ml-2 mr-2">
+      <b-col cols="12" sm="12" md="6" xg="8">
+        <div style="width: 100%; margin: 0" ref="player"></div>
+      </b-col>
+      <b-col cols="12" sm="12" md="6" xg="4">
+        <div>
+          <b-card-group deck>
+            <b-card header-tag="header" footer-tag="footer">
+              <b-card-text>
+                <info
+                  :avatar="blackOne.avatar"
+                  :name="blackOne.name"
+                  :rank="blackOne.rank"
+                  :turn="b1_turn"
+                  :playtime="BL"
+                  :caps="b_caps"
+                  :imgSrc="b_img"
+                  :win="b_win"
+                ></info>
+              </b-card-text>
+            </b-card>
 
-        <b-card header-tag="header" footer-tag="footer">
-          <b-card-text>
-            <info
-              :avatar="whiteOne.avatar"
-              :name="whiteOne.name"
-              :rank="whiteOne.rank"
-              :turn="w1_turn"
-              :playtime="WL"
-              :caps="w_caps"
-              :imgSrc="w_img"
-              :win="w_win"
-            ></info>
-          </b-card-text>
-        </b-card>
-      </b-card-group>
-    </div>
-    <div class="mt-3">
-      <b-card-group deck>
-        <b-card header-tag="header" footer-tag="footer">
-          <b-card-text>
-            <info
-              :avatar="blackTwo.avatar"
-              :name="blackTwo.name"
-              :rank="blackTwo.rank"
-              :turn="b2_turn"
-              :playtime="BL"
-              :caps="b_caps"
-              :imgSrc="b_img"
-              :win="b_win"
-            ></info>
-          </b-card-text>
-        </b-card>
+            <b-card header-tag="header" footer-tag="footer">
+              <b-card-text>
+                <info
+                  :avatar="whiteOne.avatar"
+                  :name="whiteOne.name"
+                  :rank="whiteOne.rank"
+                  :turn="w1_turn"
+                  :playtime="WL"
+                  :caps="w_caps"
+                  :imgSrc="w_img"
+                  :win="w_win"
+                ></info>
+              </b-card-text>
+            </b-card>
+          </b-card-group>
+        </div>
+        <div class="mt-3">
+          <b-card-group deck>
+            <b-card header-tag="header" footer-tag="footer">
+              <b-card-text>
+                <info
+                  :avatar="blackTwo.avatar"
+                  :name="blackTwo.name"
+                  :rank="blackTwo.rank"
+                  :turn="b2_turn"
+                  :playtime="BL"
+                  :caps="b_caps"
+                  :imgSrc="b_img"
+                  :win="b_win"
+                ></info>
+              </b-card-text>
+            </b-card>
 
-        <b-card header-tag="header" footer-tag="footer">
-          <b-card-text>
-            <info
-              :avatar="whiteTwo.avatar"
-              :name="whiteTwo.name"
-              :rank="whiteTwo.rank"
-              :turn="w2_turn"
-              :playtime="WL"
-              :caps="w_caps"
-              :imgSrc="w_img"
-              :win="w_win"
-            ></info>
-          </b-card-text>
-        </b-card>
-      </b-card-group>
-    </div>
+            <b-card header-tag="header" footer-tag="footer">
+              <b-card-text>
+                <info
+                  :avatar="whiteTwo.avatar"
+                  :name="whiteTwo.name"
+                  :rank="whiteTwo.rank"
+                  :turn="w2_turn"
+                  :playtime="WL"
+                  :caps="w_caps"
+                  :imgSrc="w_img"
+                  :win="w_win"
+                ></info>
+              </b-card-text>
+            </b-card>
+          </b-card-group>
+        </div>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
