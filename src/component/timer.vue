@@ -2,10 +2,13 @@
   <div>
     <b-button @click="getCode">开始</b-button>
     <b-button @click="stopCode">停止</b-button>
+    <b-button @click="load">load</b-button>
+    <b-button @click="play">play</b-button>
     <br />
     <span v-show="!show" class="count">时间: 00:00:{{ count }}</span>
     <br />
     <span v-show="!show" class="count">读秒: 30秒 {{ numbers }}次</span>
+    <audio id="audioOne"></audio>
     <audio id="audioMinute0" src="/static/voice/0.mp3" preload="auto"></audio>
     <audio id="audioMinute1" src="/static/voice/1.mp3" preload="auto"></audio>
     <audio id="audioMinute2" src="/static/voice/2.mp3" preload="auto"></audio>
@@ -25,6 +28,8 @@
 </template>
 
 <script>
+import { gameService } from "../_services";
+import config from "config";
 // 读秒组件效果演示
 export default {
   name: "timer",
@@ -42,6 +47,20 @@ export default {
       clearInterval(this.timer);
       this.count = this.time_count;
       this.timer = null;
+    },
+    load() {
+      let that = this;
+      gameService.createVoice().then(data => {
+        let url = `${config.apiUrl}` + "/" + data.url;
+        console.log(url);
+       let audio= document.getElementById("audioOne");
+        audio.src=url;
+        // .setSrc(url);
+        audio.load();
+      });
+    },
+    play() {
+      document.getElementById("audioOne").play();
     },
     getCode() {
       if (this.numbers == 1) {

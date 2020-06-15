@@ -9,6 +9,8 @@ export const gameService = {
   beginGame,
   completeGame,
   deleteById,
+  createVoice,
+  chatVoice,
 };
 
 function getAll() {
@@ -96,4 +98,40 @@ function saveKifu(_data) {
   };
   console.log(requestOptions["body"]);
   return fetch(`${config.apiUrl}/kifus/`, requestOptions).then(handleResponse);
+}
+
+function createVoice() {
+  let data = {
+    text: "该你下棋了",
+  };
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      ...authHeader(),
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(data),
+  };
+  console.log(requestOptions["body"]);
+  return fetch(`${config.apiUrl}/util/tts`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function chatVoice(value) {
+  let data = {
+    text: value,
+  };
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      ...authHeader(),
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(data),
+  };
+  console.log(requestOptions["body"]);
+  return fetch(`${config.apiUrl}/util/chat`, requestOptions).then(
+    handleResponse
+  );
 }

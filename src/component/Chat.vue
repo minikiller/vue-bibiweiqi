@@ -3,6 +3,8 @@
     <!-- <section id="chatroom" ref="chatroom">
       <section v-html="text"></section>
     </section>-->
+    <audio id="audioChat"></audio>
+
     <b-card class="mt-5" header="聊天记录">
       <pre class="m-3" v-html="text"></pre>
     </b-card>
@@ -18,6 +20,8 @@
 <script>
 import { initGame, beginGame } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
+import { gameService } from "../_services";
+import config from "config";
 
 export default {
   name: "chat",
@@ -91,16 +95,23 @@ export default {
     },
 
     get_message(data) {
-      if (data.gameId === this.gameId) {
-        console.log("i get it " + data);
-        this.text =
-          this.text +
-          "<div class='badge badge-info'>" +
-          data.username +
-          ":</div> " +
-          data.message +
-          "\n";
-      }
+      console.log("i get it " + data);
+      this.text =
+        this.text +
+        "<div class='badge badge-info'>" +
+        data.username +
+        ":</div> " +
+        data.message +
+        "\n";
+      gameService.chatVoice(data.message).then(data => {
+        let url = `${config.apiUrl}` + "/" + data.url;
+        console.log(url);
+        let audio = document.getElementById("audioChat");
+        audio.src = url;
+        // .setSrc(url);
+        audio.load();
+        audio.play();
+      });
     }
   }
 };
