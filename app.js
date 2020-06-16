@@ -1,5 +1,13 @@
 var express = require("express");
+const pino = require("pino");
+const expressPino = require("express-pino-logger");
+
+const logger = pino({ level: process.env.LOG_LEVEL || 'info'});
+const expressLogger = expressPino({ logger });
+
 var app = express();
+app.use(expressLogger);
+
 var fs = require("fs");
 app.use(express.static("dist"));
 var https = require("https");
@@ -22,7 +30,7 @@ var io = require("socket.io")(https, { pingInterval: 2000, pingTimeout: 5000 });
 var port = process.env.PORT || 3000;
 
 https.listen(port, function() {
-  console.log("listening on *:" + port);
+  logger.info('Server running on port %d', port);
 });
 
 const redis_client = require("redis").createClient();
@@ -87,19 +95,19 @@ redis_client.once("ready", () => {
   });
 });
 io.on("reconnect", function(socket) {
-  console.log("it is reconnect by it!");
+  logger.info("it is reconnect by it!");
 });
 
 io.on("connection", function(socket) {
-  console.log(getFormattedDate() + "new connection " + socket);
-  // console.log(inspect(socket))
+  logger.info(getFormattedDate() + "new connection " + socket);
+  // logger.info(inspect(socket))
   // if (socket.userId && users[socket.userId]) {
   //   socket.join(users[userId].gameId);
-  //   console.log("reconnect to room id is " + users[userId].gameId);
+  //   logger.info("reconnect to room id is " + users[userId].gameId);
   // }
   //用户进入对局室的处理过程
   socket.on("login", function(msg) {
-    console.log(getFormattedDate() + " login " + inspect(msg));
+    logger.info(getFormattedDate() + " login " + inspect(msg));
     doLogin(socket, msg);
   });
 
@@ -133,18 +141,18 @@ io.on("connection", function(socket) {
     }
 
     if (!users[userId]) {
-      console.log(getFormattedDate() + "creating new user " + userId);
+      logger.info(getFormattedDate() + "creating new user " + userId);
       users[userId] = { userId: socket.userId, games: gameId, prepared: false };
       redis_client.set("users", JSON.stringify(users));
     } else {
-      console.log("user found!");
+      logger.info("user found!");
       // Object.keys(users[userId].games).forEach(function(gameId) {
-      //   console.log(getFormattedDate() + "gameid - " + gameId);
+      //   logger.info(getFormattedDate() + "gameid - " + gameId);
       // });
       if (users[userId].games == gameId) {
-        console.log("user in same game room");
+        logger.info("user in same game room");
       } else {
-        console.log("user in new game room");
+        logger.info("user in new game room");
         users[userId].games = gameId;
       }
     }
@@ -152,7 +160,7 @@ io.on("connection", function(socket) {
     lobbyUsers[userId] = socket;
     socket.join(gameId, () => {}); //进入对局室
     io.in(gameId).clients((err, clients) => {
-      console.log("room has client is: " + clients); // an array containing socket ids in 'room3'
+      logger.info("room has client is: " + clients); // an array containing socket ids in 'room3'
     });
     // io.sockets.in(gameId).emit("joinlobby", userId);
     // 给房间内的所有人发送新人进入对局室消息，不包括sender本身
@@ -190,32 +198,32 @@ io.on("connection", function(socket) {
 
   //数子双方未达成一致
   socket.on("noagreeGame", function(msg) {
-    console.log("noagreeGame is received!");
+    logger.info("noagreeGame is received!");
     socket.broadcast.to(msg.gameId).emit("noagreeGame", msg);
   });
 
   //数子结束，双方达成一致
   socket.on("finishGame", function(msg) {
-    console.log("finish game is received!");
+    logger.info("finish game is received!");
     clearGame(msg);
     io.sockets.in(msg.gameId).emit("finishGame", msg);
   });
 
   //正在申请悔棋操作！
   socket.on("regretGame", function(msg) {
-    console.log("regret game is received!");
+    logger.info("regret game is received!");
     io.sockets.in(msg.gameId).emit("regretGame", msg);
   });
 
   //同意悔棋操作！
   socket.on("failRegretGame", function(msg) {
-    console.log("failRegretGame game is received!");
+    logger.info("failRegretGame game is received!");
     io.sockets.in(msg.gameId).emit("failRegretGame", msg);
   });
 
   //不同意悔棋操作！
   socket.on("successRegretGame", function(msg) {
-    console.log("successRegretGame game is received!");
+    logger.info("successRegretGame game is received!");
     io.sockets.in(msg.gameId).emit("successRegretGame", msg);
   });
 
@@ -328,8 +336,8 @@ io.on("connection", function(socket) {
     activeGames[msg.gameId].move = msg.move;
     redis_client.set("activeGames", JSON.stringify(activeGames));
     // allGames[msg.gameId].kifu = msg.kifu;
-    console.log(getFormattedDate() + "move data is " + msg.move);
-    console.log(getFormattedDate() + "kifu data is " + msg.kifu);
+    logger.info(getFormattedDate() + "move data is " + msg.move);
+    logger.info(getFormattedDate() + "kifu data is " + msg.kifu);
     callback("ok");
   });
 
@@ -359,9 +367,9 @@ io.on("connection", function(socket) {
 
   socket.on("logout", function(msg) {
     socket.leave(msg.gameId, () => {
-      console.log(socket.adapter.rooms);
+      logger.info(socket.adapter.rooms);
       io.in(msg.gameId).clients((err, clients) => {
-        console.log("leave room client is " + clients); // an array containing socket ids in 'room3'
+        logger.info("leave room client is " + clients); // an array containing socket ids in 'room3'
       });
       socket.broadcast.to(msg.gameId).emit("leavelobby", msg.userId);
       delete users[msg.userId];
@@ -371,7 +379,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("viewgame", function(msg) {
-    console.log(getFormattedDate() + "ready to view game: " + msg.gameId);
+    logger.info(getFormattedDate() + "ready to view game: " + msg.gameId);
 
     socket.gameId = msg.gameId;
     var game = activeGames[msg.gameId];
@@ -380,12 +388,12 @@ io.on("connection", function(socket) {
     } else if (game.users.white0 == 0) {
       game.users.white0 = socket.userId;
     }
-    console.log(getFormattedDate() + "begin to view game: " + msg.gameId);
+    logger.info(getFormattedDate() + "begin to view game: " + msg.gameId);
     lobbyUsers[msg.userId].emit("viewgame", { game: game });
   });
 
   /* socket.on("resumegame", function(gameId) {
-    console.log(getFormattedDate() + "ready to resume game: " + gameId);
+    logger.info(getFormattedDate() + "ready to resume game: " + gameId);
 
     socket.gameId = gameId;
     var game = activeGames[gameId];
@@ -393,7 +401,7 @@ io.on("connection", function(socket) {
     users[game.users.white].games[game.id] = game.id;
     users[game.users.black].games[game.id] = game.id;
 
-    console.log(getFormattedDate() + "resuming game: " + game.id);
+    logger.info(getFormattedDate() + "resuming game: " + game.id);
     if (lobbyUsers[game.users.white]) {
       lobbyUsers[game.users.white].emit("joingame", {
         game: game,
@@ -429,8 +437,8 @@ io.on("connection", function(socket) {
   }
 
   socket.on("resignGame", function(msg) {
-    console.log(getFormattedDate() + "resign: " + msg);
-    console.log(activeGames[msg.gameId]);
+    logger.info(getFormattedDate() + "resign: " + msg);
+    logger.info(activeGames[msg.gameId]);
     clearGame(msg);
 
     // socket.broadcast.emit("resign", msg);
@@ -440,10 +448,10 @@ io.on("connection", function(socket) {
   socket.on("hello", function(msg, callback) {
     // socket.broadcast.emit("resign", msg);
     io.in(msg.gameId).clients((err, clients) => {
-      console.log(clients); // an array containing socket ids in 'room3'
+      logger.info(clients); // an array containing socket ids in 'room3'
     });
     callback("test", "etste", "hlloe");
-    console.log(socket.adapter.rooms);
+    logger.info(socket.adapter.rooms);
     // socket.emit("helloMsg", msg);
     // socket.emit("hello_you", msg);
     // socket.emit("first", msg);
@@ -453,7 +461,7 @@ io.on("connection", function(socket) {
 
   //listen on new_message
   socket.on("new_message", function(msg) {
-    console.log(
+    logger.info(
       getFormattedDate() +
         "chat message received!" +
         msg.message +
@@ -470,7 +478,7 @@ io.on("connection", function(socket) {
   });
   //用户掉线后重连
   socket.on("registerToRoom", function(gameId) {
-    console.log("socket is join to room id " + gameId);
+    logger.info("socket is join to room id " + gameId);
     socket.join(gameId);
     if (activeGames[gameId] !== undefined) {
       var game = activeGames[gameId];
@@ -484,13 +492,13 @@ io.on("connection", function(socket) {
   });
 
   socket.on("disconnect", function(msg) {
-    console.log(msg);
+    logger.info(msg);
 
     if (socket && socket.userId && socket.gameId) {
-      console.log(
+      logger.info(
         getFormattedDate() + "user: " + socket.userId + " disconnected"
       );
-      console.log(
+      logger.info(
         getFormattedDate() + "game id: " + socket.gameId + " disconnected"
       );
     }
@@ -523,5 +531,5 @@ function getFormattedDate() {
 }
 
 // http.listen(port, function() {
-//     console.log('listening on *: ' + port);
+//     logger.info('listening on *: ' + port);
 // });

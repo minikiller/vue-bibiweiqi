@@ -58,7 +58,7 @@ function getAll() {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
+  return fetch(`${config.apiUrl}/users/`, requestOptions).then(handleResponse);
 }
 
 function getById(id) {

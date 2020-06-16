@@ -10,6 +10,12 @@ import FriendPage from "../friend/FriendPage";
 import ProfilePage from "../profile/ProfilePage";
 import Timer from "../component/timer";
 import NProgress from "nprogress";
+
+import AllArticle from '../article/all-article'
+import CreateArticle from '../article/create-article'
+import EditArticle from '../article/edit-article'
+import DeleteArticle from '../article/delete-article'
+
 import "nprogress/nprogress.css";
 
 const Router = require("vue-router");
@@ -31,6 +37,26 @@ export const router = new Router({
     { path: "/profile", component: ProfilePage },
     { path: "/friend", component: FriendPage },
     { path: "/timer", component: Timer },
+    {
+      path: '/all-article',
+      name: 'AllArticle',
+      component: AllArticle
+    },
+    {
+      path: '/create-article',
+      name: 'CreateArticle',
+      component: CreateArticle
+    },
+    {
+      path: '/edit-article',
+      name: 'EditArticle',
+      component: EditArticle
+    },
+    {
+      path: '/delete-article',
+      name: 'DeleteArticle',
+      component: DeleteArticle
+    },
 
     // otherwise redirect to home
     { path: "*", redirect: "/" },

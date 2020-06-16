@@ -23,6 +23,9 @@
           <b-nav-item href="/timer">
             <i class="fas fa-users"></i>读秒
           </b-nav-item>
+          <b-nav-item href="/all-article" v-if="account.user.isadmin">
+            <i class="fas fa-users"></i>用户维护
+          </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-text>
