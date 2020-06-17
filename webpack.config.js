@@ -3,6 +3,7 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
   .BundleAnalyzerPlugin; */
 const NODE_API_ENV = process.env.NODE_API_ENV || "https://localhost:5000";
 const NODE_SOCKET_ENV = process.env.NODE_SOCKET_ENV || "https://localhost:3000";
+const copyWebpackPlugin = require("copy-webpack-plugin");
 
 const path = require("path");
 // const utils = require("./utils");
@@ -60,6 +61,14 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+    }),
+    new copyWebpackPlugin({
+      patterns: [
+        {
+          from: __dirname + "/static",
+          to: __dirname + "/dist/static",
+        },
+      ],
     }),
     /* new BundleAnalyzerPlugin({
       analyzerMode: "disabled",
