@@ -51,12 +51,14 @@
             >
               结束
             </b-button>
-            <b-button v-if="isTurn" variant="primary" @click="confirm">
-              确认
-            </b-button>
-            <b-button v-if="isTurn" variant="primary" @click="cancel">
-              取消
-            </b-button>
+            <b-button-group  v-if="isTurn" class="mx-1">
+              <b-button variant="primary" @click="confirm">
+                确认
+              </b-button>
+              <b-button variant="danger" @click="cancel">
+                取消
+              </b-button>
+            </b-button-group>
           </div>
         </b-col>
       </b-row>

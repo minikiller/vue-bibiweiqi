@@ -11,6 +11,7 @@ export const gameService = {
   deleteById,
   createVoice,
   chatVoice,
+  shareKifu,
 };
 
 function getAll() {
@@ -83,6 +84,17 @@ function completeGame(id) {
   };
 
   return fetch(`${config.apiUrl}/games/complete/${id}`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function shareKifu(kifu_id) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+
+  return fetch(`${config.apiUrl}/kifus/share/${kifu_id}`, requestOptions).then(
     handleResponse
   );
 }
