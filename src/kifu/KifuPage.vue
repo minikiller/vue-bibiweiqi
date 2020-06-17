@@ -3,6 +3,11 @@
     <b-table striped hover :items="items" :fields="fields">
       <template v-slot:cell(actions)="row">
         <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
+        <router-link
+              :to="{ name: 'KifuView', params: { game: row.item } }"
+              class="btn btn-primary"
+              >打开</router-link
+            >
       </template>
     </b-table>
   </div>

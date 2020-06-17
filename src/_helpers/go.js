@@ -58,6 +58,29 @@ function update(e) {
     });
   }
 }
+export function gotoStep(value) {
+  myplayer.goTo(value);
+  console.log(myplayer.kifu.nodeCount);
+}
+export function getTotalStep(){
+  
+  return myplayer.kifu.nodeCount;
+}
+export function kifuViewGame(ele, kifu) {
+  myplayer = new WGo.BasicPlayer(ele, {
+    sgf: kifu.kifu_data,
+    enableWheel: false,
+    enableKeys: false,
+    layout: {
+      // you can use static or dynamic layout
+      // top: ["InfoBox"],
+      bottom: ["Control"],
+    },
+    // move: 1000
+  });
+  // myboard = myplayer.board;
+  // myplayer.last();
+}
 
 export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;

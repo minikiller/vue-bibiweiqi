@@ -5,16 +5,17 @@ import LoginPage from "../login/LoginPage";
 import RegisterPage from "../register/RegisterPage";
 import PlayPage from "../play/PlayPage";
 import KifuPage from "../kifu/KifuPage";
+import KifuViewPage from "../kifu/KifuViewPage";
 import GamePage from "../game/GamePage";
 import FriendPage from "../friend/FriendPage";
 import ProfilePage from "../profile/ProfilePage";
 import Timer from "../component/timer";
 import NProgress from "nprogress";
 
-import AllArticle from '../article/all-article'
-import CreateArticle from '../article/create-article'
-import EditArticle from '../article/edit-article'
-import DeleteArticle from '../article/delete-article'
+import AllArticle from "../article/all-article";
+import CreateArticle from "../article/create-article";
+import EditArticle from "../article/edit-article";
+import DeleteArticle from "../article/delete-article";
 
 import "nprogress/nprogress.css";
 
@@ -34,28 +35,29 @@ export const router = new Router({
     { path: "/play/:game_id", component: PlayPage, props: true },
     { path: "/game", component: GamePage },
     { path: "/kifu", component: KifuPage },
+    { path: "/kifu-view", name: "KifuView", component: KifuViewPage },
     { path: "/profile", component: ProfilePage },
     { path: "/friend", component: FriendPage },
     { path: "/timer", component: Timer },
     {
-      path: '/all-article',
-      name: 'AllArticle',
-      component: AllArticle
+      path: "/all-article",
+      name: "AllArticle",
+      component: AllArticle,
     },
     {
-      path: '/create-article',
-      name: 'CreateArticle',
-      component: CreateArticle
+      path: "/create-article",
+      name: "CreateArticle",
+      component: CreateArticle,
     },
     {
-      path: '/edit-article',
-      name: 'EditArticle',
-      component: EditArticle
+      path: "/edit-article",
+      name: "EditArticle",
+      component: EditArticle,
     },
     {
-      path: '/delete-article',
-      name: 'DeleteArticle',
-      component: DeleteArticle
+      path: "/delete-article",
+      name: "DeleteArticle",
+      component: DeleteArticle,
     },
 
     // otherwise redirect to home

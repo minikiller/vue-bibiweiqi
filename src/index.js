@@ -87,7 +87,7 @@ require("./wgo/sgfparser.js");
 require("./wgo/player.js");
 require("./wgo/basicplayer.js");
 require("./wgo/basicplayer.component.js");
-// require("./wgo/basicplayer.infobox.js");
+require("./wgo/basicplayer.infobox.js");
 require("./wgo/basicplayer.control.js");
 require("./wgo/player.marker.js");
 require("!./wgo/i18n.zh.js");
