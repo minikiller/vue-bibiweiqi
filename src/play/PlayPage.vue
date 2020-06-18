@@ -112,7 +112,8 @@ export default {
     test() {
       // this.$refs["modal"].show();
       // alert(testStore());
-      var timeoutCallback = require("timeout-callback");
+      alert(getKifu());
+      /*  var timeoutCallback = require("timeout-callback");
 
       this.$socket.emit(
         "hello",
@@ -123,7 +124,7 @@ export default {
         timeoutCallback(function(err, arg1, arg2) {
           console.log("this log is always displayed!");
         })
-      );
+      ); */
     },
     passed() {
       setPassedStatus();
@@ -484,8 +485,7 @@ export default {
       // this.success(msg);
       gameResign(msg.result);
       this._finishGame(msg);
-    },
-    
+    }
   },
   props: ["game_id"],
   data() {

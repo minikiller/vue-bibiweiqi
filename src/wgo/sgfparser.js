@@ -88,8 +88,8 @@ properties["PB"] = properties["PW"] = sgf_player_info.bind(this, "name", "PB");
 properties["BT"] = properties["WT"] = sgf_player_info.bind(this, "team", "BT");
 properties["TM"] =  function(kifu, node, value, ident) {
 	kifu.info[ident] = value[0];
-	node.BL = value[0];
-	node.WL = value[0];
+	// node.BL = value[0]; sunlf comment
+	// node.WL = value[0];
 }
 
 var reg_seq = /\(|\)|(;(\s*[A-Z]+(\s*((\[\])|(\[(.|\s)*?([^\\]\]))))+)*)/g;

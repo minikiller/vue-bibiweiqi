@@ -261,7 +261,7 @@
     if (this.size) root_props.SZ = this.size;
 
     // add missing info
-    if (!root_props.AP) root_props.AP = "WGo.js:2";
+    if (!root_props.AP) root_props.AP = "bibiweiqi:1";
     if (!root_props.FF) root_props.FF = "4";
     if (!root_props.GM) root_props.GM = "1";
     if (!root_props.CA) root_props.CA = "UTF-8";
