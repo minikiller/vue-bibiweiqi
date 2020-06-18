@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="form-group">
-            <b-form-select v-model="selected" :options="options">
+            <b-form-select v-model="user.rank" :options="options">
             </b-form-select>
           </div>
 
@@ -110,8 +110,9 @@ export default {
         password: "",
         email: "",
         mobile: "",
+        rank: null,
       },
-      selected: null,
+      
       options: [
         { value: null, text: "选择您的棋力水平" },
         { value: "1", text: "业余1段" },

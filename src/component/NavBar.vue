@@ -31,7 +31,7 @@
           <b-nav-text>
             <div v-if="account.user">
               <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
-              {{ account.user.name }}[6D]
+              {{ account.user.name }}[{{ account.user.rank }}]
             </div>
           </b-nav-text>
           <b-nav-item href="/profile">
