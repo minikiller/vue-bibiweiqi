@@ -150,7 +150,8 @@ export default {
       w_img: "/static/white_64.png",
       b_win: false,
       w_win: false,
-      move_url: null
+      move_url: null,
+      b_yourturn: false //用于恢复对局时候，如果落子为真，则播放语音
     };
   },
   /* watch: {
@@ -228,6 +229,11 @@ export default {
         audio.src = url;
         // .setSrc(url);
         audio.load();
+        let that=this;
+        audio.onloadeddata = function() {
+          if (that.b_yourturn == true) audio.play();
+          // alert("Browser has loaded the current frame");
+        };
       });
     }
 
@@ -239,6 +245,7 @@ export default {
     });
     EventBus.$on("yourturn", () => {
       this.success("轮到你骡子了！");
+      this.b_yourturn = true;
       var audio = document.getElementById("audioPlay");
       if (audio != null) audio.play();
       // var canPlay = true;
