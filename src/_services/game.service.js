@@ -9,7 +9,7 @@ export const gameService = {
   beginGame,
   completeGame,
   deleteById,
-  createVoice,
+  moveVoice,
   chatVoice,
   shareKifu,
 };
@@ -112,7 +112,7 @@ function saveKifu(_data) {
   return fetch(`${config.apiUrl}/kifus/`, requestOptions).then(handleResponse);
 }
 
-function createVoice() {
+function moveVoice() {
   let data = {
     text: "该你下棋了",
   };

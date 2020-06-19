@@ -62,8 +62,7 @@ export function gotoStep(value) {
   myplayer.goTo(value);
   console.log(myplayer.kifu.nodeCount);
 }
-export function getTotalStep(){
-  
+export function getTotalStep() {
   return myplayer.kifu.nodeCount;
 }
 export function kifuViewGame(ele, kifu) {
@@ -158,9 +157,29 @@ var edit_board_mouse_out = function() {
   }
 };
 
+var isPc = function() {
+  var userAgentInfo = navigator.userAgent;
+  var Agents = new Array(
+    "Android",
+    "iPhone",
+    "SymbianOS",
+    "Windows Phone",
+    "iPad",
+    "iPod"
+  );
+  var flag = true;
+  for (var v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+      flag = false;
+      break;
+    }
+  }
+  return flag;
+};
+
 //board mouse move event
 var edit_board_mouse_move = function(x, y) {
-  if (prepare_confirm == true) return;
+  if (prepare_confirm == true && isPc()) return;
   if (myplayer.frozen || (this._lastX == x && this._lastY == y)) return;
 
   this._lastX = x;

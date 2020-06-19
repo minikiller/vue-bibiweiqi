@@ -51,12 +51,12 @@
             >
               结束
             </b-button>
-            <b-button
+            <!-- <b-button
               variant="primary"
               @click="test"
             >
               test
-            </b-button>
+            </b-button> -->
             <b-button-group  v-if="isTurn" class="mx-1">
               <b-button variant="primary" @click="confirm">
                 确认
@@ -79,6 +79,7 @@
               :blackTwo="game.blacktwo_id"
               :whiteTwo="game.whitetwo_id"
               :gameStatus="game.status"
+              :isOpponent="isOpponent"
             />
           </div>
         </b-col>

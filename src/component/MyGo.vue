@@ -2,8 +2,8 @@
   <div>
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
-    <audio id="luozi" src="/static/voice/mian1.mp3" preload="auto"></audio>
-    <audio id="audioBegin" src="/static/voice/mian3.mp3" preload="auto"></audio>
+    <audio id="audioPlay"></audio>
+    <audio id="audioBegin"></audio>
     <div class="container">
       <vue-baberrage
         :isShow="barrageIsShow"
@@ -102,6 +102,9 @@ import { mapState, mapMutations } from "vuex";
 import { vueBaberrage, MESSAGE_TYPE } from "vue-baberrage";
 import { EventBus } from "../index.js";
 import Info from "../component/Info";
+import config from "config";
+import { gameService } from "../_services";
+
 export default {
   name: "mygo",
   components: {
@@ -121,7 +124,8 @@ export default {
     whiteOne: String,
     blackTwo: String,
     whiteTwo: String,
-    gameStatus: String
+    gameStatus: String,
+    isOpponent: Boolean //是否为对局者
   },
   data() {
     return {
@@ -145,7 +149,8 @@ export default {
       b_img: "/static/black_64.png",
       w_img: "/static/white_64.png",
       b_win: false,
-      w_win: false
+      w_win: false,
+      move_url: null
     };
   },
   /* watch: {
@@ -213,6 +218,19 @@ export default {
     let that = this;
     this.BL = this.total_time;
     this.WL = this.total_time;
+
+    if (this.isOpponent) {
+      gameService.moveVoice().then(data => {
+        let url = `${config.apiUrl}` + "/" + data.url;
+        console.log(url);
+        this.move_url = url;
+        let audio = document.getElementById("audioPlay");
+        audio.src = url;
+        // .setSrc(url);
+        audio.load();
+      });
+    }
+
     EventBus.$on("w_timeout", value => {
       that.WL = value;
     });
@@ -221,9 +239,17 @@ export default {
     });
     EventBus.$on("yourturn", () => {
       this.success("轮到你骡子了！");
-      var audio = document.getElementById("luozi");
-      if (audio) audio.play();
+      var audio = document.getElementById("audioPlay");
+      if (audio != null) audio.play();
+      // var canPlay = true;
+      /* while (canPlay) {
+        if (audio.src != "") {
+         
+          canPlay = false;
+        }
+      } */
       setConfirm(false);
+      console.log("轮到你骡子了！");
     });
 
     EventBus.$on("caps", value => {

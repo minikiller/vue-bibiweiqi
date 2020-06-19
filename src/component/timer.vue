@@ -50,7 +50,7 @@ export default {
     },
     load() {
       let that = this;
-      gameService.createVoice().then(data => {
+      gameService.moveVoice().then(data => {
         let url = `${config.apiUrl}` + "/" + data.url;
         console.log(url);
        let audio= document.getElementById("audioOne");

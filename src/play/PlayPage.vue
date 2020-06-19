@@ -112,7 +112,7 @@ export default {
     test() {
       // this.$refs["modal"].show();
       // alert(testStore());
-      alert(getKifu());
+      // alert(getKifu());
       /*  var timeoutCallback = require("timeout-callback");
 
       this.$socket.emit(
