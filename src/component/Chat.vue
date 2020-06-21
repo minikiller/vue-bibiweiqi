@@ -103,15 +103,17 @@ export default {
         ":</div> " +
         data.message +
         "\n";
-      gameService.chatVoice(data.message).then(data => {
-        let url = `${config.apiUrl}` + "/" + data.url;
-        console.log(url);
-        let audio = document.getElementById("audioChat");
-        audio.src = url;
-        // .setSrc(url);
-        audio.load();
-        audio.play();
-      });
+      gameService
+        .chatVoice({ msg: data.message, username: data.username })
+        .then(data => {
+          let url = `${config.apiUrl}` + "/" + data.url;
+          console.log(url);
+          let audio = document.getElementById("audioChat");
+          audio.src = url;
+          // .setSrc(url);
+          audio.load();
+          audio.play();
+        });
     }
   }
 };

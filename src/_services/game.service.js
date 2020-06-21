@@ -130,9 +130,10 @@ function moveVoice() {
   );
 }
 
-function chatVoice(value) {
+function chatVoice(message) {
   let data = {
-    text: value,
+    text: message.msg,
+    username: message.username,
   };
   const requestOptions = {
     method: "POST",

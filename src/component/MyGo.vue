@@ -16,10 +16,10 @@
       ></vue-baberrage>
     </div>
     <b-row class="ml-2 mr-2">
-      <b-col cols="12" sm="12" md="8" xg="8">
+      <b-col cols="12" sm="12" md="6" xg="8">
         <div style="width: 100%; margin: 0" ref="player"></div>
       </b-col>
-      <b-col cols="12" sm="12" md="4" xg="4">
+      <b-col cols="12" sm="12" md="6" xg="4">
         <div>
           <b-card-group deck>
             <b-card header-tag="header" footer-tag="footer">
@@ -244,7 +244,15 @@ export default {
       that.BL = value;
     });
     EventBus.$on("yourturn", () => {
-      this.success("轮到你骡子了！");
+      this.success("轮到你落子了！");
+      this.barrageList.push({
+        id: ++this.currentId,
+        avatar: this.avatar,
+        msg: "系统: 轮到你落子了！",
+        time: 5,
+        type: MESSAGE_TYPE.NORMAL,
+        barrageStyle: "red"
+      });
       this.b_yourturn = true;
       var audio = document.getElementById("audioPlay");
       if (audio != null) audio.play();

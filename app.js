@@ -2,7 +2,10 @@ var express = require("express");
 const pino = require("pino");
 const expressPino = require("express-pino-logger");
 
-const logger = pino({ level: process.env.LOG_LEVEL || 'info'});
+const logger = pino({
+  level: process.env.LOG_LEVEL || "info",
+  prettyPrint: { colorize: true },
+});
 const expressLogger = expressPino({ logger });
 
 var app = express();
@@ -30,7 +33,7 @@ var io = require("socket.io")(https, { pingInterval: 2000, pingTimeout: 5000 });
 var port = process.env.PORT || 3000;
 
 https.listen(port, function() {
-  logger.info('Server running on port %d', port);
+  logger.info("Server running on port %d", port);
 });
 
 const redis_client = require("redis").createClient();
