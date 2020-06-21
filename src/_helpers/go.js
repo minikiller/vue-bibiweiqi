@@ -180,6 +180,7 @@ var isPc = function() {
 //board mouse move event
 var edit_board_mouse_move = function(x, y) {
   if (prepare_confirm == true && isPc()) return;
+  // if (prepare_confirm == true) return;
   if (myplayer.frozen || (this._lastX == x && this._lastY == y)) return;
 
   this._lastX = x;
@@ -209,12 +210,7 @@ var play = function(x, y) {
   // var con = confirm("确认落子吗?");
 
   var node;
-  if (bconfirm == false) {
-    prepare_confirm = true;
-    (prepare_x = x), (prepare_y = y);
-    EventBus.$emit("confirmTurn", "");
-    return;
-  }
+
   // create new node
   if (x == null) {
     node = new WGo.KNode({
@@ -237,6 +233,17 @@ var play = function(x, y) {
       WL: white_time,
       _edited: true,
     });
+  }
+
+  if (bconfirm == false) {
+    prepare_confirm = true;
+    if (prepare_x == null && prepare_y == null)
+      (prepare_x = x), (prepare_y = y);
+    if (!isPc()) {
+      (prepare_x = x), (prepare_y = y);
+    }
+    EventBus.$emit("confirmTurn", "");
+    return;
   }
   let move = {
     x: x,
@@ -384,6 +391,8 @@ export function setConfirm(value) {
     prepare_confirm = false;
     if (myboard._last_mark) myboard.removeObject(myboard._last_mark);
   }
+  prepare_x = null;
+  prepare_y = null;
 }
 //显示坐标
 export function toggleCoordinates(value) {
