@@ -3,18 +3,20 @@
     <b-container fluid>
       <b-row class="mx-2">
         <b-col>
-          <image-input v-model="avatar">
-            <div slot="activator">
-              <b-avatar size="150px" v-if="!avatar" class="grey lighten-3 mb-3">
-                <span>Click to add avatar</span>
-              </b-avatar>
-              <b-avatar size="150px" v-else class="mb-3">
-                <img :src="avatar.imageURL" />
-              </b-avatar>
+          <div class="text-center">
+            <image-input v-model="avatar">
+              <div slot="activator">
+                <b-avatar size="150px" v-if="!avatar" class="grey lighten-3 mb-3">
+                  <span>Click to add avatar</span>
+                </b-avatar>
+                <b-avatar size="150px" v-else class="mb-3">
+                  <img :src="avatar.imageURL" />
+                </b-avatar>
+              </div>
+            </image-input>
+            <div v-if="avatar && saved == false" class="text-center">
+              <b-button class="primary" @click="uploadImage" :loading="saving">保存头像</b-button>
             </div>
-          </image-input>
-          <div v-if="avatar && saved == false">
-            <b-button class="primary" @click="uploadImage" :loading="saving">保存头像</b-button>
           </div>
         </b-col>
         <b-col>
@@ -38,8 +40,10 @@
                 placeholder="输入确认密码"
               ></b-form-input>
             </b-form-group>
-            <b-button type="submit" variant="primary">修改密码</b-button>
-            <b-button type="reset" variant="danger">重置</b-button>
+            <div class="text-right">
+              <b-button type="submit" variant="primary">修改密码</b-button>
+              <b-button type="reset" variant="danger">重置</b-button>
+            </div>
           </b-form>
         </b-col>
       </b-row>

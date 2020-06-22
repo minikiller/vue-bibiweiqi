@@ -27,12 +27,18 @@ if (process.env.NODE_ENV === "development") {
 
 export const router = new Router({
   mode: "history",
+  // base: '/dist',
   routes: [
     // { path: "/", component: Hello },
     { path: "/", component: Home },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
-    { path: "/play/:game_id", component: PlayPage, props: true },
+    {
+      path: "/play",
+      name: "PlayPage",
+      component: PlayPage,
+      props: true,
+    },
     { path: "/game", component: GamePage },
     { path: "/kifu", component: KifuPage },
     { path: "/kifu-view", name: "KifuView", component: KifuViewPage },
@@ -67,8 +73,9 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login", "/register"];
-  const authRequired = !publicPages.includes(to.path);
+  const publicPages = ["/login", "/register", "/play", "/kifu"];
+  var authRequired = !publicPages.includes(to.path);
+  // if (to.path.indexOf("play") > -1) authRequired = false;
   const loggedIn = sessionStorage.getItem("user");
 
   if (authRequired && !loggedIn) {

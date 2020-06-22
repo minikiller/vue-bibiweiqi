@@ -524,6 +524,7 @@ export default {
     // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
     // this.$socket.removeAllListeners();
+    this.game_id=this.$route.query.game_id
     this.show = true;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
@@ -563,7 +564,7 @@ export default {
           this.success("对局已经结束！");
         }
       }
-      this.updateNavTitle(this.game.name);
+      this.updateNavTitle(this.game.name + "#" + this.game_id);
       this.show = false;
       return data;
     });
