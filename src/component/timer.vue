@@ -2,8 +2,16 @@
   <div>
     <b-button @click="getCode">开始</b-button>
     <b-button @click="stopCode">停止</b-button>
-    <b-button @click="load">load</b-button>
-    <b-button @click="play">play</b-button>
+
+    <div v-if="isMobile">
+      <b-button @touchstart="load">load</b-button>
+      <b-button @touchstart="play">play</b-button>
+    </div>
+    <div v-else>
+      <b-button @click="load">load</b-button>
+      <b-button @click="play">play</b-button>
+    </div>
+
     <br />
     <span v-show="!show" class="count">时间: 00:00:{{ count }}</span>
     <br />
@@ -30,6 +38,7 @@
 <script>
 import { gameService } from "../_services";
 import config from "config";
+import { isPc } from "../_helpers";
 // 读秒组件效果演示
 export default {
   name: "timer",
@@ -39,8 +48,12 @@ export default {
       count: "",
       timer: null,
       numbers: 3,
-      time_count: 30
+      time_count: 30,
+      isMobile: false
     };
+  },
+  mounted() {
+    this.isMobile = !isPc();
   },
   methods: {
     stopCode() {
@@ -53,8 +66,8 @@ export default {
       gameService.moveVoice().then(data => {
         let url = `${config.apiUrl}` + "/" + data.url;
         console.log(url);
-       let audio= document.getElementById("audioOne");
-        audio.src=url;
+        let audio = document.getElementById("audioOne");
+        audio.src = url;
         // .setSrc(url);
         audio.load();
       });

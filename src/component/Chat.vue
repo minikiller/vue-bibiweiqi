@@ -11,14 +11,21 @@
 
     <section id="input_zone">
       <b-form-input placeholder="Enter your msg" v-model="msg"></b-form-input>
-      <b-button variant="primary" @click="send">
-        <i class="fas fa-user-friends"></i> 发送
-      </b-button>
+      <div v-if="isMobile">
+        <b-button variant="primary" @touchstart="send">
+          <i class="fas fa-user-friends"></i> 发送
+        </b-button>
+      </div>
+      <div v-else>
+        <b-button variant="primary" @click="send">
+          <i class="fas fa-user-friends"></i> 发送
+        </b-button>
+      </div>
     </section>
   </div>
 </template>
 <script>
-import { initGame, beginGame } from "../_helpers";
+import { initGame, beginGame, isPc } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
 import { gameService } from "../_services";
 import config from "config";
@@ -27,28 +34,30 @@ export default {
   name: "chat",
   props: {
     gameId: String,
-    gameInfo: null
+    gameInfo: null,
   },
   computed: {
     ...mapState({
-      account: state => state.account,
-      users: state => state.users.all
-    })
+      account: (state) => state.account,
+      users: (state) => state.users.all,
+    }),
   },
   mounted() {
     // this.$socket.emit(this.gameId); //进入gameId的房间
     //发送登陆消息给服务器
+    this.isMobile = !isPc();
     this.$socket.emit("login", {
       userId: this.account.user.name,
       gameId: this.gameId,
-      gameInfo: this.gameInfo
+      gameInfo: this.gameInfo,
     });
   },
   data() {
     return {
       msg: "",
       text: "",
-      _socket: null
+      _socket: null,
+      isMobile: false,
     };
   },
   methods: {
@@ -59,11 +68,11 @@ export default {
           message: this.msg,
           gameId: this.gameId,
           avatar: this.account.user.avatar,
-          username: this.account.user.name
+          username: this.account.user.name,
         });
         this.msg = "";
       }
-    }
+    },
   },
   sockets: {
     //通知新的用户进入房间
@@ -78,7 +87,7 @@ export default {
     },
     //初始化聊天室用户列表
     initGameUser(userlist) {
-      userlist.forEach(user => {
+      userlist.forEach((user) => {
         this.addUser(user);
       });
     },
@@ -105,7 +114,7 @@ export default {
         "\n";
       gameService
         .chatVoice({ msg: data.message, username: data.username })
-        .then(data => {
+        .then((data) => {
           let url = `${config.apiUrl}` + "/" + data.url;
           console.log(url);
           let audio = document.getElementById("audioChat");
@@ -114,7 +123,7 @@ export default {
           audio.load();
           audio.play();
         });
-    }
-  }
+    },
+  },
 };
 </script>
