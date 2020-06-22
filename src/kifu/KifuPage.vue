@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-responsive">
     <b-overlay :show="show" rounded="sm">
       <b-tabs content-class="mt-3" @activate-tab="activate_tab">
         <b-tab active>

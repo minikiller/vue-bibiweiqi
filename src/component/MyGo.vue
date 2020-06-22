@@ -4,6 +4,7 @@
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
     <audio id="audioPlay"></audio>
     <audio id="audioBegin"></audio>
+
     <div class="container">
       <vue-baberrage
         :isShow="barrageIsShow"
@@ -162,7 +163,23 @@ export default {
   }, */
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle"]),
-    ...mapMutations("alert", ["success", "error", "clear"])
+    ...mapMutations("alert", ["success", "error", "clear"]),
+    initVoice() {
+      gameService.moveVoice().then(data => {
+        let url = `${config.apiUrl}` + "/" + data.url;
+        console.log(url);
+        this.move_url = url;
+        let audio = document.getElementById("audioPlay");
+        audio.src = url;
+        // .setSrc(url);
+        audio.load();
+        let that = this;
+        audio.onloadeddata = function() {
+          if (that.b_yourturn == true) audio.play();
+          // alert("Browser has loaded the current frame");
+        };
+      });
+    }
   },
   sockets: {
     get_message(data) {
@@ -221,20 +238,7 @@ export default {
     this.WL = this.total_time;
 
     if (this.isOpponent) {
-      gameService.moveVoice().then(data => {
-        let url = `${config.apiUrl}` + "/" + data.url;
-        console.log(url);
-        this.move_url = url;
-        let audio = document.getElementById("audioPlay");
-        audio.src = url;
-        // .setSrc(url);
-        audio.load();
-        let that=this;
-        audio.onloadeddata = function() {
-          if (that.b_yourturn == true) audio.play();
-          // alert("Browser has loaded the current frame");
-        };
-      });
+      this.initVoice();
     }
 
     EventBus.$on("w_timeout", value => {
