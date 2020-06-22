@@ -9,6 +9,7 @@ export const userService = {
   getById,
   update,
   change_avatar,
+  changePassword,
   delete: _delete,
 };
 
@@ -25,7 +26,7 @@ function login(username, password) {
     }; */
 
   return fetch(`${config.apiUrl}/login`, requestOptions)
-    .then(handleResponse) 
+    .then(handleResponse)
     .then((user) => {
       // login successful if there's a jwt token in the response
       if (user.token) {
@@ -80,6 +81,18 @@ function update(user) {
   };
 
   return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function changePassword(password) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify({ password: password }),
+  };
+
+  return fetch(`${config.apiUrl}/users/changepassword`, requestOptions).then(
     handleResponse
   );
 }
