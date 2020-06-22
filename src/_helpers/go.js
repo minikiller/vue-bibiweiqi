@@ -157,7 +157,7 @@ var edit_board_mouse_out = function() {
   }
 };
 
-var isPc = function() {
+export function isPc() {
   var userAgentInfo = navigator.userAgent;
   var Agents = new Array(
     "Android",
