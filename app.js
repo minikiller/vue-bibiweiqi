@@ -1,15 +1,21 @@
 var express = require("express");
-const pino = require("pino");
+/* const pino = require("pino");
 const expressPino = require("express-pino-logger");
 
 const logger = pino({
   level: process.env.LOG_LEVEL || "info",
   prettyPrint: { colorize: true },
 });
-const expressLogger = expressPino({ logger });
+const expressLogger = expressPino({ logger }); */
+
+
+const log = require('./log');
+var logger = require('./log').logger;
 
 var app = express();
-app.use(expressLogger);
+log.use(app);
+// app.use(logger('dev'));
+// var logger = require('./log').logger;
 
 var fs = require("fs");
 app.use(express.static("dist"));
