@@ -50,7 +50,7 @@
 <script>
 import ImageInput from "../component/ImageInput.vue";
 import { userService, gameService } from "../_services";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "profile",
   data() {
@@ -105,9 +105,11 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      if (this.password != this.confirm_password)
+      if (this.password != this.confirm_password) {
         alert("两次输入的密码不一致！");
-      gameService.changePassword(this.password).then(data => {
+        return;
+      }
+      userService.changePassword(this.password).then(data => {
         this.success(data.message);
       });
       // alert(JSON.stringify(this.password));
