@@ -1,40 +1,59 @@
 <template>
   <div>
     <b-overlay :show="show" rounded="sm">
-      <b-tabs content-class="mt-3" @activate-tab="activate_tab" >
+      <b-tabs content-class="mt-3" @activate-tab="activate_tab">
         <b-tab active>
           <template v-slot:title>
             <i class="fas fa-user-lock"></i>个人棋谱
           </template>
-          <b-table striped hover :items="items" :fields="fields" fixed responsive>
-            <template v-slot:cell(actions)="row">
-              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
-              <router-link
-                :to="{ name: 'KifuView', params: { game: row.item } }"
-                class="btn-sm btn-primary"
-              >打开</router-link>
-              <b-button
-                size="sm"
-                v-if="row.item.is_share==false"
-                @click="shared(row.item, row.index, $event.target)"
-                class="mr-1"
-              >共享</b-button>
-            </template>
-          </b-table>
+          <div class="table-responsive">
+            <b-table :items="items" :fields="fields" table-class="text-nowrap" responsive>
+              <template v-slot:cell(actions)="row">
+                <b-button
+                  size="sm"
+                  @click="info(row.item, row.index, $event.target)"
+                  class="mr-1"
+                >下载</b-button>
+                <router-link
+                  :to="{ name: 'KifuView', params: { game: row.item } }"
+                  class="btn-sm btn-primary"
+                >打开</router-link>
+                <b-button
+                  size="sm"
+                  v-if="row.item.is_share==false"
+                  @click="shared(row.item, row.index, $event.target)"
+                  class="mr-1"
+                >共享</b-button>
+              </template>
+            </b-table>
+          </div>
         </b-tab>
         <b-tab>
           <template v-slot:title>
             <i class="fas fa-user-friends"></i> 共享棋谱
           </template>
-          <b-table striped hover :items="share_items" :fields="fields" fixed responsive>
-            <template v-slot:cell(actions)="row">
-              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
-              <router-link
-                :to="{ name: 'KifuView', params: { game: row.item } }"
-                class="btn-sm btn-primary"
-              >打开</router-link>
-            </template>
-          </b-table>
+          <div class="table-responsive">
+            <b-table
+              striped
+              hover
+              :items="share_items"
+              :fields="fields"
+              table-class="text-nowrap"
+              responsive
+            >
+              <template v-slot:cell(actions)="row">
+                <b-button
+                  size="sm"
+                  @click="info(row.item, row.index, $event.target)"
+                  class="mr-1"
+                >下载</b-button>
+                <router-link
+                  :to="{ name: 'KifuView', params: { game: row.item } }"
+                  class="btn-sm btn-primary"
+                >打开</router-link>
+              </template>
+            </b-table>
+          </div>
         </b-tab>
       </b-tabs>
     </b-overlay>
