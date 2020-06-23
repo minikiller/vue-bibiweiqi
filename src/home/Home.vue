@@ -52,8 +52,8 @@ export default {
       this.updateGame(msg.game);
       this.setResult(msg.result);
       this.$router.push({
-        path: `/play/${msg.gameId}`,
-        query: { type: "resume" }
+        path: `/play`,
+        query: { type: "resume", game_id: msg.gameId }
       });
     }
     // move() {
