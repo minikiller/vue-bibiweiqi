@@ -175,7 +175,7 @@ export function isPc() {
     }
   }
   return flag;
-};
+}
 
 //board mouse move event
 var edit_board_mouse_move = function(x, y) {
@@ -510,6 +510,7 @@ export function readyMove(msg) {
   white_time = msg.WL;
   move_play(myplayer, msg.move.x, msg.move.y);
   // if (!isView)
+  disable_board();
   enable_board();
 }
 
