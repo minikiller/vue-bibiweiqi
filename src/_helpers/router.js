@@ -10,6 +10,8 @@ import GamePage from "../game/GamePage";
 import FriendPage from "../friend/FriendPage";
 import ProfilePage from "../profile/ProfilePage";
 import Timer from "../component/timer";
+import NotFound from '../component/404.vue';
+import Page from '../component/Page.vue';
 import NProgress from "nprogress";
 
 import AllArticle from "../article/all-article";
@@ -44,6 +46,7 @@ export const router = new Router({
     { path: "/kifu-view", name: "KifuView", component: KifuViewPage },
     { path: "/profile", component: ProfilePage },
     { path: "/friend", component: FriendPage },
+    { path: "/page", component: Page },
     { path: "/timer", component: Timer },
     {
       path: "/all-article",
@@ -65,9 +68,9 @@ export const router = new Router({
       name: "DeleteArticle",
       component: DeleteArticle,
     },
-
+    { path: '*', component: NotFound }
     // otherwise redirect to home
-    { path: "*", redirect: "/" },
+    // { path: "*", redirect: "/" },
   ],
 });
 

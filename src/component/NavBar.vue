@@ -28,18 +28,26 @@
           </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-text>
-            <div v-if="account.user">
-              <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
-              {{ account.user.name }}[{{ account.user.rank }}]
-            </div>
-          </b-nav-text>
-          <b-nav-item href="/profile">
-            <i class="fas fa-user-cog"></i>个人信息
-          </b-nav-item>
-          <b-nav-item @click="logout">
-            <i class="fas fa-sign-out-alt"></i>退出
-          </b-nav-item>
+          <b-nav-form @submit.prevent="search">
+            <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="searchText"></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+          </b-nav-form>
+
+          <b-nav-item-dropdown right>
+            <!-- Using 'button-content' slot -->
+            <template v-slot:button-content>
+              <em>
+                <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
+                {{ account.user.name }}[{{ account.user.rank }}]
+              </em>
+            </template>
+            <b-dropdown-item href="/profile">
+              <i class="fas fa-user-cog"></i>个人信息
+            </b-dropdown-item>
+            <b-dropdown-item @click="logout">
+              <i class="fas fa-sign-out-alt"></i>退出
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
         </b-navbar-nav>
         <!--
               <template slot="button-content">
@@ -77,10 +85,15 @@ export default {
   },
   data() {
     return {
-      meal: ""
+      meal: "",
+      searchText: ""
     };
   },
   methods: {
+    search() {
+      console.log(this.searchText);
+      this.$store.dispatch("search", { text: this.searchText });
+    },
     getMeal() {
       //   ...
     },

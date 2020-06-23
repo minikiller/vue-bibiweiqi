@@ -2,7 +2,12 @@
   <b-container>
     <div v-if="games.length">
       <b-row>
-        <div v-for="(data, index) in games" style="margin:0 auto;">
+        <div
+          id="my-table"
+          v-for="(data, index) in displaygames"
+          v-bind:key="index"
+          style="margin:0 auto;"
+        >
           <b-col l="4">
             <b-card
               img-src="/static/images.jpg"
@@ -70,7 +75,7 @@
                 </b-button>
               </router-link>
               <b-button
-                v-if="account.user.user_id == data.user_id"
+                v-if="account.user.user_id == data.user_id||account.user.isadmin==true"
                 variant="primary"
                 @click="delGame(data.id)"
               >删除</b-button>
@@ -78,9 +83,22 @@
           </b-col>
         </div>
       </b-row>
+      <b-row align-v="center">
+        <b-col cols="4"></b-col>
+        <b-col cols="4">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="rows"
+            :per-page="perPage"
+            @input="paginate"
+          ></b-pagination>
+        </b-col>
+        <b-col cols="4"></b-col>
+        <!-- <p class="mt-3">Current Page: {{ currentPage }}</p> -->
+      </b-row>
     </div>
     <div v-else>
-      <h5>没有有效的预定对局😢</h5>
+      <h5>数据加载中</h5>
     </div>
   </b-container>
 </template>
@@ -92,7 +110,10 @@ export default {
   name: "card",
   data() {
     return {
-      games: []
+      games: [],
+      displaygames: [],
+      perPage: 3,
+      currentPage: 1
     };
   },
   mounted() {
@@ -103,6 +124,9 @@ export default {
     ...mapState({
       account: state => state.account
     }),
+    rows() {
+      return this.games.length;
+    },
     playTime: function() {
       return this.games.map(function(item) {
         let time = item.total_time;
@@ -114,9 +138,14 @@ export default {
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
+    paginate(currentpage) {
+      const starter = (currentpage - 1) * this.perPage;
+      this.displaygames = this.games.slice(starter, starter + this.perPage);
+    },
     getAllGames() {
       gameService.getAll().then(data => {
         this.games = data.games;
+        this.displaygames = this.games.slice(0, this.perPage);
         EventBus.$emit("loading", false);
         return data;
       });
