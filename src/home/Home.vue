@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div class="page" v-if="getSpinner">
+      <b-spinner class="spinner" :variant="'primary'" :key="'primary'"></b-spinner>
+    </div>
     <b-overlay :show="show" rounded="sm">
       <!-- <Navbar /> -->
       <Card />
@@ -9,7 +12,7 @@
 </template>
 <script>
 import Card from "../component/Card.vue";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 import { EventBus } from "../index.js";
 export default {
   name: "home",
@@ -32,7 +35,8 @@ export default {
     ...mapState({
       account: state => state.account,
       users: state => state.users.all
-    })
+    }),
+    ...mapGetters("room", ["getSpinner"])
   },
   sockets: {
     //查看socket是否渲染成功

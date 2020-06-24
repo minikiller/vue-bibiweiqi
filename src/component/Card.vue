@@ -104,7 +104,7 @@
 </template>
 <script>
 import { gameService } from "../_services";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 import { EventBus } from "../index.js";
 export default {
   name: "card",
@@ -124,6 +124,7 @@ export default {
     ...mapState({
       account: state => state.account
     }),
+    ...mapGetters("room", ["getRows", "getDisplayJobs"]),
     rows() {
       return this.games.length;
     },
@@ -139,9 +140,10 @@ export default {
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
     paginate(currentpage) {
-      const starter = (currentpage - 1) * this.perPage;
+      this.$store.room.dispatch("paginate",{currentPage,perPage:this.perPage})
+      /* const starter = (currentpage - 1) * this.perPage;
       this.displaygames = this.games.slice(starter, starter + this.perPage);
-    },
+ */    },
     getAllGames() {
       gameService.getAll().then(data => {
         this.games = data.games;

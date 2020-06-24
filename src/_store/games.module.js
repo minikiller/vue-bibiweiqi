@@ -8,6 +8,7 @@ const state = {
   turn: "black", //用于记录数子时候的顺序，默认是黑先开始数子，数值为black或white,每次轮换
   connected: false,
   roomId: "", //记录用户所在的房间号
+  displayGames: [],
 };
 
 const actions = {};
@@ -35,6 +36,7 @@ const mutations = {
   updateGame(state, game) {
     state.game = game;
   },
+  
   updateNavTitle(state, value) {
     state.navTitle = value;
   },

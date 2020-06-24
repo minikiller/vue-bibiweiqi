@@ -92,10 +92,7 @@ export default {
   methods: {
     search() {
       console.log(this.searchText);
-      this.$store.dispatch("search", { text: this.searchText });
-    },
-    getMeal() {
-      //   ...
+      this.$store.dispatch("room/search", { text: this.searchText });
     },
     logout() {
       userService.logout();
