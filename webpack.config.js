@@ -19,6 +19,7 @@ module.exports = {
   devtool: "source-map",
   module: {
     rules: [
+      
       {
         test: /\.vue?$/,
         exclude: /(node_modules)/,
@@ -38,6 +39,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: [ 'style-loader', 'css-loader', 'sass-loader' ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

@@ -1,62 +1,52 @@
 <template>
   <div>
-    <b-overlay :show="show" rounded="sm">
-      <b-tabs content-class="mt-3" @activate-tab="activate_tab">
-        <b-tab active>
-          <template v-slot:title>
-            <i class="fas fa-user-lock"></i>个人棋谱
-          </template>
-          <div class="table-responsive">
-            <b-table :items="items" :fields="fields" table-class="text-nowrap" responsive>
-              <template v-slot:cell(actions)="row">
-                <b-button
-                  size="sm"
-                  @click="info(row.item, row.index, $event.target)"
-                  class="mr-1"
-                >下载</b-button>
-                <router-link
-                  :to="{ name: 'KifuView', params: { game: row.item } }"
-                  class="btn-sm btn-primary"
-                >打开</router-link>
-                <b-button
-                  size="sm"
-                  v-if="row.item.is_share==false"
-                  @click="shared(row.item, row.index, $event.target)"
-                  class="mr-1"
-                >共享</b-button>
-              </template>
-            </b-table>
-          </div>
-        </b-tab>
-        <b-tab>
-          <template v-slot:title>
-            <i class="fas fa-user-friends"></i> 共享棋谱
-          </template>
-          <div class="table-responsive">
-            <b-table
-              striped
-              hover
-              :items="share_items"
-              :fields="fields"
-              table-class="text-nowrap"
-              responsive
-            >
-              <template v-slot:cell(actions)="row">
-                <b-button
-                  size="sm"
-                  @click="info(row.item, row.index, $event.target)"
-                  class="mr-1"
-                >下载</b-button>
-                <router-link
-                  :to="{ name: 'KifuView', params: { game: row.item } }"
-                  class="btn-sm btn-primary"
-                >打开</router-link>
-              </template>
-            </b-table>
-          </div>
-        </b-tab>
-      </b-tabs>
-    </b-overlay>
+    <b-tabs content-class="mt-3" @activate-tab="activate_tab">
+      <b-tab active>
+        <template v-slot:title>
+          <i class="fas fa-user-lock"></i>个人棋谱
+        </template>
+        <div class="table-responsive">
+          <b-table :items="items" :fields="fields" table-class="text-nowrap" responsive>
+            <template v-slot:cell(actions)="row">
+              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
+              <router-link
+                :to="{ name: 'KifuView', params: { game: row.item } }"
+                class="btn-sm btn-primary"
+              >打开</router-link>
+              <b-button
+                size="sm"
+                v-if="row.item.is_share==false"
+                @click="shared(row.item, row.index, $event.target)"
+                class="mr-1"
+              >共享</b-button>
+            </template>
+          </b-table>
+        </div>
+      </b-tab>
+      <b-tab>
+        <template v-slot:title>
+          <i class="fas fa-user-friends"></i> 共享棋谱
+        </template>
+        <div class="table-responsive">
+          <b-table
+            striped
+            hover
+            :items="share_items"
+            :fields="fields"
+            table-class="text-nowrap"
+            responsive
+          >
+            <template v-slot:cell(actions)="row">
+              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
+              <router-link
+                :to="{ name: 'KifuView', params: { game: row.item } }"
+                class="btn-sm btn-primary"
+              >打开</router-link>
+            </template>
+          </b-table>
+        </div>
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 <script>
@@ -107,6 +97,7 @@ export default {
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle"]),
     ...mapMutations("alert", ["success", "error", "clear"]),
+    ...mapMutations("room", ["SET_SPINNER"]),
     activate_tab(newTabIndex) {
       console.log("new tab index is " + newTabIndex);
       if (newTabIndex == 0) this.getall();
@@ -146,33 +137,41 @@ export default {
         this.success(data.message);
       });
     },
-    getall() {
-      this.show = true;
+    async fenchData() {
+      this.SET_SPINNER(true);
+      // this.$store.commit("room/SET_SPINNER", true);
       const requestOptions = {
         method: "GET",
         headers: authHeader()
       };
-      let _data = fetch(`${config.apiUrl}/kifus/`, requestOptions)
-        .then(handleResponse)
-        .then(data => {
-          this.items = data.kifus;
-          this.show = false;
-          return data;
-        });
+      return new Promise(resolve => {
+        setTimeout(async () => {
+          const res = await fetch(`${config.apiUrl}/kifus/`, requestOptions);
+          const val = await res.json();
+          resolve(val.kifus);
+          this.SET_SPINNER(false);
+        }, 1000);
+      });
+    },
+    async getall() {
+      const _data = await this.fenchData();
+      this.items = _data;
     },
     getShareAll() {
-      this.show = true;
+      this.SET_SPINNER(true);
       const requestOptions = {
         method: "GET",
         headers: authHeader()
       };
-      let _data = fetch(`${config.apiUrl}/kifus/share`, requestOptions)
-        .then(handleResponse)
-        .then(data => {
-          this.show = false;
-          this.share_items = data.kifus;
-          return data;
-        });
+      setTimeout(() => {
+        let _data = fetch(`${config.apiUrl}/kifus/share`, requestOptions)
+          .then(handleResponse)
+          .then(data => {
+            this.share_items = data.kifus;
+            this.SET_SPINNER(false);
+            return data;
+          });
+      }, 1000);
     }
   }
 };
