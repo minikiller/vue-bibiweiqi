@@ -6,7 +6,7 @@ const state = {
   games: [],
   displayGames: [],
   rows: 0,
-  showSpinner: true,
+  showSpinner: false,
 };
 const mutations = {
   SET_GAMES(state, games) {
