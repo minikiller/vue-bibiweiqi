@@ -463,7 +463,7 @@ export function gameResign(result) {
   return { result: result, kifu: kifu, game: game.id };
 }
 
-function getWhichTurn() {
+export function getWhichTurn() {
   var last_steps;
   if (myplayer.kifuReader) {
     last_steps = myplayer.kifuReader.path.m;
@@ -472,6 +472,7 @@ function getWhichTurn() {
   }
   var turn = last_steps % 4;
   EventBus.$emit("myturn", turn);
+  return turn;
 }
 //enable board so it can play
 export function enable_board() {

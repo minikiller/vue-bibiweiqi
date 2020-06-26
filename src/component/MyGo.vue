@@ -162,7 +162,7 @@ export default {
     WL: function(newValue, oldValue) {}
   }, */
   methods: {
-    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+    ...mapMutations("games", ["updateGame", "updateNavTitle", "setResult"]),
     ...mapMutations("alert", ["success", "error", "clear"]),
     initVoice() {
       gameService.moveVoice().then(data => {
@@ -224,6 +224,7 @@ export default {
     //用户掉线后重连
     updateRoomGame(msg) {
       this.updateGame(msg.game);
+      this.setResult(msg.result);
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
     },
@@ -287,7 +288,7 @@ export default {
       that.w2_turn = false;
       console.log("go component game is over! result is " + msg);
     });
-
+    //控制按钮的显示
     EventBus.$on("myturn", value => {
       if (value == 0) {
         that.b1_turn = true;

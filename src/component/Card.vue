@@ -132,7 +132,7 @@ export default {
     ...mapGetters("room", ["getRows", "getDisplayGames"]),
 
     playTime: function() {
-      return this.games.map(function(item) {
+      return this.getDisplayGames.map(function(item) {
         let time = item.total_time;
         var min = Math.floor(time / 60);
         var sec = Math.round(time) % 60;
@@ -153,14 +153,7 @@ export default {
       await this.$store.dispatch("room/fetchGames");
       console.log(this.getDisplayGames);
     },
-    getAllGames() {
-      gameService.getAll().then(data => {
-        this.games = data.games;
-        this.displaygames = this.games.slice(0, this.perPage);
-        EventBus.$emit("loading", false);
-        return data;
-      });
-    },
+    
     //正在进行的对局室不允许删除
 
     delGame(id) {

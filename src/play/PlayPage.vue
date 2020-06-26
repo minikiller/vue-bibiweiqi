@@ -18,7 +18,8 @@ import {
   regretCurrentGame,
   getGameTurn,
   getKifu,
-  setConfirm
+  setConfirm,
+  getWhichTurn
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -44,7 +45,7 @@ export default {
         this.$store.commit("alert/success", "连接服务器成功！");
         this.$socket.emit("registerToRoom", this.game_id);
       } else {
-        this.$store.commit("alert/error", "连接服务器失败，请重新登陆！");
+        this.$store.commit("alert/error", "连接服务器失败，重新登陆中...");
       }
     }
   },
@@ -149,6 +150,9 @@ export default {
     cancel() {
       setConfirm(false);
       this.isTurn = false;
+    },
+    refresh() {
+      this.$socket.emit("registerToRoom", this.game_id);
     },
     begin() {
       if (this.btnText == "开始") {
@@ -274,6 +278,19 @@ export default {
     //显示手数功能
     toggleMarker() {
       showMarker();
+    },
+    who() {
+      //显示该谁下棋了
+      var turn = getWhichTurn();
+      if (turn == 0) {
+        alert(this.game.blackone_id.name + " =》该他下棋了！");
+      } else if (turn == 1) {
+        alert(this.game.whiteone_id.name + " =》该他下棋了！");
+      } else if (turn == 2) {
+        alert(this.game.blacktwo_id.name + " =》该他下棋了！");
+      } else if (turn == 3) {
+        alert(this.game.whitetwo_id.name + " =》该他下棋了！");
+      }
     },
     //悔棋功能
     regret() {
@@ -524,7 +541,7 @@ export default {
     // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
     // this.$socket.removeAllListeners();
-    this.game_id=this.$route.query.game_id
+    this.game_id = this.$route.query.game_id;
     this.show = true;
     gameService.getById(this.game_id).then(data => {
       this.game = data;

@@ -4,30 +4,27 @@
       <b-row>
         <b-col sm="6">
           <div class="form-group">
-            <div v-if="isMobile">
-              <b-button
-                v-if="isOpponent"
-                aria-pressed="true"
-                variant="primary"
-                @touchstart="begin"
-                ref="btnResign"
-                :disabled="btnBeginDisable"
-              >
-                {{ btnText }}
-              </b-button>
-            </div>
-            <div v-else>
-              <b-button
-                v-if="isOpponent"
-                aria-pressed="true"
-                variant="primary"
-                @click="begin"
-                ref="btnResign"
-                :disabled="btnBeginDisable"
-              >
-                {{ btnText }}
-              </b-button>
-            </div>
+            <b-button
+              v-if="isOpponent&&isMobile"
+              aria-pressed="true"
+              variant="primary"
+              @touchstart="begin"
+              ref="btnResign"
+              :disabled="btnBeginDisable"
+            >
+              {{ btnText }}
+            </b-button>
+
+            <b-button
+              v-if="isOpponent && !isMobile"
+              aria-pressed="true"
+              variant="primary"
+              @click="begin"
+              ref="btnResign"
+              :disabled="btnBeginDisable"
+            >
+              {{ btnText }}
+            </b-button>
 
             <b-button variant="primary" v-if="canEnd" @click="getScore">
               {{ endText }}
@@ -58,13 +55,19 @@
             >
               悔棋
             </b-button>
+            <b-button variant="primary" v-if="canBegin" @click="who">
+              谁了
+            </b-button>
+            <b-button variant="primary" v-if="canBegin" @click="refresh">
+              刷新
+            </b-button>
             <b-button
               variant="primary"
               :disabled="btnQuitDisable"
               @click="exit"
               ref="quit"
             >
-              结束
+              退出
             </b-button>
             <!-- <b-button
               variant="primary"
@@ -86,7 +89,8 @@
       <b-row>
         <b-col>
           <div>
-            <my-go ref="mygo"
+            <my-go
+              ref="mygo"
               v-if="game"
               :total_time="game.total_time.toString()"
               :blackOne="game.blackone_id"
