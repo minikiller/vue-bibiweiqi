@@ -57,6 +57,7 @@ export default {
       "setResult",
       "setTurn"
     ]),
+    ...mapMutations("room", ["SET_SPINNER"]),
     setButtonStatus() {
       this.btnText = "认输";
       this.canBegin = true;
@@ -152,7 +153,14 @@ export default {
       this.isTurn = false;
     },
     refresh() {
-      this.$socket.emit("registerToRoom", this.game_id);
+      // alert(this.game_id);
+      // alert(this.$route.query.game_id);
+      this.SET_SPINNER(true);
+      // let that = this;
+      setTimeout(() => {
+        this.$socket.emit("registerToRoom", this.$route.query.game_id);
+        this.SET_SPINNER(false);
+      }, 1000);
     },
     begin() {
       if (this.btnText == "开始") {
@@ -527,7 +535,8 @@ export default {
       img: null,
       status: false,
       show: false,
-      isTurn: false
+      isTurn: false,
+      game_id: ""
     };
   },
   beforeDestroy() {
