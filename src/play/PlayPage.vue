@@ -167,7 +167,7 @@ export default {
     },
     begin() {
       if (this.btnText == "开始") {
-        this.$refs.mygo.initVoice();
+        // this.$refs.mygo.initVoice();
         console.log("game is begin,text is {}".format(this.btnText));
         this.btnText = "准备中";
         this.success("等待其他对局者进入对局！");
