@@ -43,7 +43,7 @@ export default {
       // Do whatever makes sense now
       if (newValue === true) {
         this.$store.commit("alert/success", "连接服务器成功！");
-        this.$socket.emit("registerToRoom", this.game_id);
+        this.$socket.emit("registerToRoom", this.$route.query.game_id);
       } else {
         this.$store.commit("alert/error", "连接服务器失败，重新登陆中...");
       }
@@ -590,7 +590,7 @@ export default {
           this.success("对局已经结束！");
         }
       }
-      this.updateNavTitle(this.game.name + "#" + this.game_id);
+      this.updateNavTitle(this.game.name + "#" + this.$route.query.game_id);
       this.show = false;
       return data;
     });
