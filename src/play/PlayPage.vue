@@ -43,7 +43,8 @@ export default {
       // Do whatever makes sense now
       if (newValue === true) {
         this.$store.commit("alert/success", "连接服务器成功！");
-        this.$socket.emit("registerToRoom", this.$route.query.game_id);
+        this.refresh();
+        // this.$socket.emit("registerToRoom", this.$route.query.game_id);
       } else {
         this.$store.commit("alert/error", "连接服务器失败，重新登陆中...");
       }
@@ -112,6 +113,7 @@ export default {
       // this.score_selected = !this.score_selected;
     },
     test() {
+      alert(this.game_id);
       // this.$refs["modal"].show();
       // alert(testStore());
       // alert(getKifu());
@@ -155,12 +157,13 @@ export default {
     refresh() {
       // alert(this.game_id);
       // alert(this.$route.query.game_id);
-      this.SET_SPINNER(true);
+      this.show = true;
       // let that = this;
       setTimeout(() => {
         this.$socket.emit("registerToRoom", this.$route.query.game_id);
-        this.SET_SPINNER(false);
+        this.show = false;
       }, 1000);
+      this.success("刷新成功！");
     },
     begin() {
       if (this.btnText == "开始") {
@@ -477,7 +480,6 @@ export default {
       console.log("game is over! result is " + msg.result);
     },
 
-    //test
     helloMsg(msg) {
       alert("game is helloMsg " + msg);
     },
@@ -513,7 +515,7 @@ export default {
       this._finishGame(msg);
     }
   },
-  props: ["game_id"],
+  // props: ["game_id"],
   data() {
     return {
       status: "not_accepted",
