@@ -2,7 +2,7 @@
   <div>
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
-    <audio id="audioPlay"></audio>
+    <audio id="audioPlay" src="/static/voice/turn.mp3" preload="auto"></audio>
     <audio id="audioBegin"></audio>
 
     <div class="container">
@@ -238,9 +238,9 @@ export default {
     this.BL = this.total_time;
     this.WL = this.total_time;
 
-    if (this.isOpponent) {
+    /* if (this.isOpponent) {
       this.initVoice();
-    }
+    } */
 
     EventBus.$on("w_timeout", value => {
       that.WL = value;
