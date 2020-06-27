@@ -37,6 +37,7 @@ export default {
     })
   },
   watch: {
+    //监听websocket的连接和断开事件，并在连接后进行重连
     "$store.state.games.connected"(newValue, oldValue) {
       console.log(`Updating from ${oldValue} to ${newValue}`);
 
@@ -58,7 +59,7 @@ export default {
       "setResult",
       "setTurn"
     ]),
-    ...mapMutations("room", ["SET_SPINNER"]),
+    //设置按钮的状态
     setButtonStatus() {
       this.btnText = "认输";
       this.canBegin = true;
@@ -130,6 +131,7 @@ export default {
         })
       ); */
     },
+    //进入数子状态
     passed() {
       setPassedStatus();
       this.setResult("passed");
@@ -154,6 +156,7 @@ export default {
       setConfirm(false);
       this.isTurn = false;
     },
+    //刷新，重新加载棋谱
     refresh() {
       // alert(this.game_id);
       // alert(this.$route.query.game_id);
@@ -165,6 +168,7 @@ export default {
       }, 1000);
       this.success("刷新成功！");
     },
+    //开始按钮，认输按钮
     begin() {
       if (this.btnText == "开始") {
         // this.$refs.mygo.initVoice();
@@ -204,6 +208,7 @@ export default {
           });
       }
     },
+    //退出当前对局室
     exit() {
       console.log(`${this.account.user.name} is me`);
       this.$socket.emit("logout", {
@@ -267,6 +272,7 @@ export default {
       // this.score_selected = false;
       this.canEnd = false;
       this.canBegin = false;
+      document.getElementById("wgo-control").style.display = "";
       if (this.isOpponent) {
         let save_data = {
           black_info:
@@ -290,8 +296,8 @@ export default {
     toggleMarker() {
       showMarker();
     },
+    //显示该谁下棋了
     who() {
-      //显示该谁下棋了
       var turn = getWhichTurn();
       if (turn == 0) {
         alert(this.game.blackone_id.name + " =》该他下棋了！");
@@ -400,6 +406,7 @@ export default {
     }
   },
   sockets: {
+    
     move(game) {
       readyMove(game);
       this.btnRegretDisable = true;

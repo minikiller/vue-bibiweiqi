@@ -27,6 +27,12 @@
         <div v-if="turn">
           <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
         </div>
+        <div v-if="offline">
+          <i class="far fa-times-circle"></i>
+        </div>
+        <div v-else>
+          <i class="far fa-check-circle"></i>
+        </div>
         <div v-if="win">
           <b-img src="/static/img/huosheng.png" fluid alt="Responsive image" width="59px"></b-img>
         </div>
@@ -48,7 +54,8 @@ export default {
     playtime: String,
     turn: Boolean,
     imgSrc: String,
-    win: Boolean
+    win: Boolean,
+    offline: Boolean
   },
   computed: {
     format_playTime: function() {
