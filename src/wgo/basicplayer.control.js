@@ -12,7 +12,7 @@ var prepare_dom = function(player) {
 
 	this.iconBar = document.createElement("div");
 	this.iconBar.setAttribute("id", "wgo-control");
-	this.iconBar.style.display = "none";
+	// this.iconBar.style.display = "none";
 	this.iconBar.className = "wgo-control-wrapper";
 	this.element.appendChild(this.iconBar);
 

@@ -6,7 +6,7 @@
     <audio id="audioChat"></audio>
 
     <b-card class="mt-5" header="聊天记录">
-      <pre class="m-3" v-html="text"></pre>
+      <pre class="m-3" style="height: 10pc; overflow-y: scroll;" v-html="text"></pre>
     </b-card>
 
     <section id="input_zone">
@@ -168,3 +168,9 @@ export default {
   }
 };
 </script>
+<style>
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}
+</style>

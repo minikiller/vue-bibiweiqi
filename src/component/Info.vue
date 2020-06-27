@@ -23,15 +23,17 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col>
-        <div v-if="turn">
-          <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
-        </div>
+      <b-col cols="2">
         <div v-if="offline">
           <i class="far fa-times-circle"></i>
         </div>
         <div v-else>
           <i class="far fa-check-circle"></i>
+        </div>
+      </b-col>
+      <b-col>
+        <div v-if="turn">
+          <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
         </div>
         <div v-if="win">
           <b-img src="/static/img/huosheng.png" fluid alt="Responsive image" width="59px"></b-img>
