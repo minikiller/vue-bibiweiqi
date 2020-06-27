@@ -2,7 +2,9 @@
   <b-container fluid>
     <b-row>
       <b-col class="col-8">
-        <b-avatar variant="info" :src="avatar"></b-avatar>
+        <b-avatar v-if="offline" variant="info" :src="offline_avatar"></b-avatar>
+        <b-avatar v-else variant="info" :src="avatar"></b-avatar>
+
         <b-img :src="imgSrc" fluid alt="Responsive image" width="20px"></b-img>
         {{ name }}
         <br />
@@ -22,15 +24,15 @@
         </b-row>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col cols="2">
+    <b-row class="mx-2">
+      <!-- <b-col cols="4">
         <div v-if="offline">
           <i class="far fa-times-circle"></i>
         </div>
         <div v-else>
           <i class="far fa-check-circle"></i>
         </div>
-      </b-col>
+      </b-col> -->
       <b-col>
         <div v-if="turn">
           <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
@@ -46,7 +48,9 @@
 export default {
   name: "info",
   data() {
-    return {};
+    return {
+      offline_avatar: "/static/img/offline.jpg"
+    };
   },
   props: {
     avatar: String,
