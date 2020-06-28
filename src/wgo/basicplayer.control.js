@@ -43,13 +43,17 @@ Control.prototype.updateDimensions = function() {
 var control = WGo.BasicPlayer.control = {};
 
 var butupd_first = function(e) {
-	if(!e.node.parent && !this.disabled) this.disable();
-	else if(e.node.parent && this.disabled) this.enable();
+	if (!e.node.parent && !this.disabled)
+		this.disable();
+	else if (e.node.parent && this.disabled)
+		this.enable();
 }
 
 var butupd_last = function(e) {
-	if(!e.node.children.length && !this.disabled) this.disable();
-	else if(e.node.children.length && this.disabled) this.enable();
+	if (!e.node.children.length && !this.disabled)
+		this.disable();
+	else if (e.node.children.length && this.disabled)
+		this.enable();
 }
 
 var but_frozen = function(e) {

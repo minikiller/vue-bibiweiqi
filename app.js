@@ -8,9 +8,8 @@ const logger = pino({
 });
 const expressLogger = expressPino({ logger }); */
 
-
-const log = require('./log');
-var logger = require('./log').logger;
+const log = require("./log");
+var logger = require("./log").logger;
 
 var app = express();
 log.use(app);
@@ -103,6 +102,7 @@ redis_client.once("ready", () => {
     }
   });
 });
+
 io.on("reconnect", function(socket) {
   logger.info("it is reconnect by it!");
 });
@@ -124,6 +124,7 @@ io.on("connection", function(socket) {
     let userId = msg.userId;
     let gameId = msg.gameId;
     socket.userId = msg.userId;
+    socket.gameId = msg.gameId;
     userStatus = {};
     userPassed = {};
     if (!gameInfos[gameId]) {
@@ -510,10 +511,12 @@ io.on("connection", function(socket) {
       logger.info(
         getFormattedDate() + "game id: " + socket.gameId + " disconnected"
       );
+
+      socket.broadcast.to(socket.gameId).emit("leavelobby", socket.userId);
     }
 
     delete lobbyUsers[socket.userId];
-
+    delete users[socket.userId];
     socket.broadcast.emit("logout", {
       userId: socket.userId,
       gameId: socket.gameId,

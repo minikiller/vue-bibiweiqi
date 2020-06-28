@@ -1,10 +1,10 @@
 <template>
   <b-container>
-    <div v-if="games.length">
+    <div v-if="getDisplayGames.length">
       <b-row>
         <div
           id="my-table"
-          v-for="(data, index) in displaygames"
+          v-for="(data, index) in getDisplayGames"
           v-bind:key="index"
           style="margin:0 auto;"
         >
@@ -88,7 +88,7 @@
         <b-col cols="4">
           <b-pagination
             v-model="currentPage"
-            :total-rows="rows"
+            :total-rows="getRows"
             :per-page="perPage"
             @input="paginate"
           ></b-pagination>
@@ -117,41 +117,43 @@ export default {
     };
   },
   mounted() {
-    this.getAllGames();
+    // this.getAllGames();
+    this.getRecords();
   },
   created() {},
   computed: {
     ...mapState({
       account: state => state.account
     }),
-    ...mapGetters("room", ["getRows", "getDisplayJobs"]),
-    rows() {
-      return this.games.length;
-    },
+    /* ...mapGetters({
+      getRows: "room/getRows",
+      getDisplayGames: "room/getDisplayGames"
+    }), */
+    ...mapGetters("room", ["getRows", "getDisplayGames"]),
+
     playTime: function() {
-      return this.games.map(function(item) {
+      return this.getDisplayGames.map(function(item) {
         let time = item.total_time;
         var min = Math.floor(time / 60);
         var sec = Math.round(time) % 60;
-        return min + "分钟:" + (sec < 10 ? "0" + sec : sec) + "秒";
+        return min + "分钟";
+        // return min + "分钟:" + (sec < 10 ? "0" + sec : sec) + "秒";
       });
     }
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
     paginate(currentpage) {
-      this.$store.room.dispatch("paginate",{currentPage,perPage:this.perPage})
-      /* const starter = (currentpage - 1) * this.perPage;
-      this.displaygames = this.games.slice(starter, starter + this.perPage);
- */    },
-    getAllGames() {
-      gameService.getAll().then(data => {
-        this.games = data.games;
-        this.displaygames = this.games.slice(0, this.perPage);
-        EventBus.$emit("loading", false);
-        return data;
+      this.$store.dispatch("room/paginate", {
+        currentPage: currentpage,
+        perPage: this.perPage
       });
     },
+    async getRecords() {
+      await this.$store.dispatch("room/fetchGames");
+      console.log(this.getDisplayGames);
+    },
+    
     //正在进行的对局室不允许删除
 
     delGame(id) {
@@ -171,7 +173,7 @@ export default {
           if (value) {
             // console.log(id);
             gameService.deleteById(id).then(data => {
-              this.getAllGames();
+              this.getRecords();
               this.success(data.message);
             });
           }

@@ -18,7 +18,8 @@ import {
   regretCurrentGame,
   getGameTurn,
   getKifu,
-  setConfirm
+  setConfirm,
+  getWhichTurn
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -36,15 +37,17 @@ export default {
     })
   },
   watch: {
+    //监听websocket的连接和断开事件，并在连接后进行重连
     "$store.state.games.connected"(newValue, oldValue) {
       console.log(`Updating from ${oldValue} to ${newValue}`);
 
       // Do whatever makes sense now
       if (newValue === true) {
         this.$store.commit("alert/success", "连接服务器成功！");
-        this.$socket.emit("registerToRoom", this.game_id);
+        this.refresh();
+        // this.$socket.emit("registerToRoom", this.$route.query.game_id);
       } else {
-        this.$store.commit("alert/error", "连接服务器失败，请重新登陆！");
+        this.$store.commit("alert/error", "连接服务器失败，重新登陆中...");
       }
     }
   },
@@ -56,6 +59,7 @@ export default {
       "setResult",
       "setTurn"
     ]),
+    //设置按钮的状态
     setButtonStatus() {
       this.btnText = "认输";
       this.canBegin = true;
@@ -110,6 +114,7 @@ export default {
       // this.score_selected = !this.score_selected;
     },
     test() {
+      alert(this.game_id);
       // this.$refs["modal"].show();
       // alert(testStore());
       // alert(getKifu());
@@ -126,6 +131,7 @@ export default {
         })
       ); */
     },
+    //进入数子状态
     passed() {
       setPassedStatus();
       this.setResult("passed");
@@ -150,9 +156,22 @@ export default {
       setConfirm(false);
       this.isTurn = false;
     },
+    //刷新，重新加载棋谱
+    refresh() {
+      // alert(this.game_id);
+      // alert(this.$route.query.game_id);
+      this.show = true;
+      // let that = this;
+      setTimeout(() => {
+        this.$socket.emit("registerToRoom", this.$route.query.game_id);
+        this.show = false;
+      }, 1000);
+      this.success("刷新成功！");
+    },
+    //开始按钮，认输按钮
     begin() {
       if (this.btnText == "开始") {
-        this.$refs.mygo.initVoice();
+        // this.$refs.mygo.initVoice();
         console.log("game is begin,text is {}".format(this.btnText));
         this.btnText = "准备中";
         this.success("等待其他对局者进入对局！");
@@ -189,6 +208,7 @@ export default {
           });
       }
     },
+    //退出当前对局室
     exit() {
       console.log(`${this.account.user.name} is me`);
       this.$socket.emit("logout", {
@@ -252,6 +272,7 @@ export default {
       // this.score_selected = false;
       this.canEnd = false;
       this.canBegin = false;
+      document.getElementById("wgo-control").style.display = "";
       if (this.isOpponent) {
         let save_data = {
           black_info:
@@ -274,6 +295,19 @@ export default {
     //显示手数功能
     toggleMarker() {
       showMarker();
+    },
+    //显示该谁下棋了
+    who() {
+      var turn = getWhichTurn();
+      if (turn == 0) {
+        alert(this.game.blackone_id.name + " =》该他下棋了！");
+      } else if (turn == 1) {
+        alert(this.game.whiteone_id.name + " =》该他下棋了！");
+      } else if (turn == 2) {
+        alert(this.game.blacktwo_id.name + " =》该他下棋了！");
+      } else if (turn == 3) {
+        alert(this.game.whitetwo_id.name + " =》该他下棋了！");
+      }
     },
     //悔棋功能
     regret() {
@@ -372,6 +406,7 @@ export default {
     }
   },
   sockets: {
+    
     move(game) {
       readyMove(game);
       this.btnRegretDisable = true;
@@ -452,7 +487,6 @@ export default {
       console.log("game is over! result is " + msg.result);
     },
 
-    //test
     helloMsg(msg) {
       alert("game is helloMsg " + msg);
     },
@@ -488,7 +522,7 @@ export default {
       this._finishGame(msg);
     }
   },
-  props: ["game_id"],
+  // props: ["game_id"],
   data() {
     return {
       status: "not_accepted",
@@ -510,7 +544,8 @@ export default {
       img: null,
       status: false,
       show: false,
-      isTurn: false
+      isTurn: false,
+      game_id: ""
     };
   },
   beforeDestroy() {
@@ -524,7 +559,7 @@ export default {
     // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
     // this.$socket.removeAllListeners();
-    this.game_id=this.$route.query.game_id
+    this.game_id = this.$route.query.game_id;
     this.show = true;
     gameService.getById(this.game_id).then(data => {
       this.game = data;
@@ -564,7 +599,7 @@ export default {
           this.success("对局已经结束！");
         }
       }
-      this.updateNavTitle(this.game.name + "#" + this.game_id);
+      this.updateNavTitle(this.game.name + "#" + this.$route.query.game_id);
       this.show = false;
       return data;
     });

@@ -33,10 +33,15 @@ const mutations = {
   deleteUser(state, userId) {
     if (state.onlineUsers.indexOf(userId) != -1) state.onlineUsers.pop(userId);
   },
+  clearUser(state) {
+    while (state.onlineUsers.length > 0) {
+      state.onlineUsers.pop();
+    }
+  },
   updateGame(state, game) {
     state.game = game;
   },
-  
+
   updateNavTitle(state, value) {
     state.navTitle = value;
   },

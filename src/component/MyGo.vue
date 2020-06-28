@@ -2,7 +2,7 @@
   <div>
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
-    <audio id="audioPlay"></audio>
+    <audio id="audioPlay" src="/static/voice/turn.mp3" preload="auto"></audio>
     <audio id="audioBegin"></audio>
 
     <div class="container">
@@ -34,6 +34,7 @@
                   :caps="b_caps"
                   :imgSrc="b_img"
                   :win="b_win"
+                  :offline="b1_offline"
                 ></info>
               </b-card-text>
             </b-card>
@@ -49,6 +50,7 @@
                   :caps="w_caps"
                   :imgSrc="w_img"
                   :win="w_win"
+                  :offline="w1_offline"
                 ></info>
               </b-card-text>
             </b-card>
@@ -67,6 +69,7 @@
                   :caps="b_caps"
                   :imgSrc="b_img"
                   :win="b_win"
+                  :offline="b2_offline"
                 ></info>
               </b-card-text>
             </b-card>
@@ -82,6 +85,7 @@
                   :caps="w_caps"
                   :imgSrc="w_img"
                   :win="w_win"
+                  :offline="w2_offline"
                 ></info>
               </b-card-text>
             </b-card>
@@ -145,6 +149,10 @@ export default {
       w1_turn: false,
       b2_turn: false,
       w2_turn: false,
+      b1_offline: true,
+      b2_offline: true,
+      w1_offline: true,
+      w2_offline: true,
       w_caps: 0, //白棋提子数
       b_caps: 0, //黑棋提子数
       b_img: "/static/black_64.png",
@@ -162,9 +170,10 @@ export default {
     WL: function(newValue, oldValue) {}
   }, */
   methods: {
-    ...mapMutations("games", ["updateGame", "updateNavTitle"]),
+    ...mapMutations("games", ["updateGame", "updateNavTitle", "setResult"]),
     ...mapMutations("alert", ["success", "error", "clear"]),
     initVoice() {
+      //调用语音服务
       gameService.moveVoice().then(data => {
         let url = `${config.apiUrl}` + "/" + data.url;
         console.log(url);
@@ -182,6 +191,16 @@ export default {
     }
   },
   sockets: {
+    initGameUser(userlist) {
+      this.b1_offline =
+        userlist.indexOf(this.blackOne.name) > -1 ? false : true;
+      this.b2_offline =
+        userlist.indexOf(this.blackTwo.name) > -1 ? false : true;
+      this.w1_offline =
+        userlist.indexOf(this.whiteOne.name) > -1 ? false : true;
+      this.w2_offline =
+        userlist.indexOf(this.whiteTwo.name) > -1 ? false : true;
+    },
     get_message(data) {
       this.barrageList.push({
         id: ++this.currentId,
@@ -201,16 +220,25 @@ export default {
         type: MESSAGE_TYPE.NORMAL,
         barrageStyle: "red"
       });
+      this.b1_offline = user == this.blackOne.name ? false : this.b1_offline;
+      this.b2_offline = user == this.blackTwo.name ? false : this.b2_offline;
+      this.w1_offline = user == this.whiteOne.name ? false : this.w1_offline;
+      this.w2_offline = user == this.whiteTwo.name ? false : this.w2_offline;
     },
-    leavelobby(data) {
+    leavelobby(user) {
       this.barrageList.push({
         id: ++this.currentId,
         avatar: this.avatar,
-        msg: "系统: " + data + "离开对局室",
+        msg: "系统: " + user + "离开对局室",
         time: 10,
         type: MESSAGE_TYPE.NORMAL,
         barrageStyle: "red"
       });
+      this.b1_offline = user == this.blackOne.name ? true : this.b1_offline;
+      this.b2_offline = user == this.blackTwo.name ? true : this.b2_offline;
+      this.w1_offline = user == this.whiteOne.name ? true : this.w1_offline;
+      this.w2_offline = user == this.whiteTwo.name ? true : this.w2_offline;
+
     },
     view(msg) {
       // this.success(msg);
@@ -224,6 +252,7 @@ export default {
     //用户掉线后重连
     updateRoomGame(msg) {
       this.updateGame(msg.game);
+      this.setResult(msg.result);
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
     },
@@ -237,9 +266,9 @@ export default {
     this.BL = this.total_time;
     this.WL = this.total_time;
 
-    if (this.isOpponent) {
+    /* if (this.isOpponent) {
       this.initVoice();
-    }
+    } */
 
     EventBus.$on("w_timeout", value => {
       that.WL = value;
@@ -287,7 +316,7 @@ export default {
       that.w2_turn = false;
       console.log("go component game is over! result is " + msg);
     });
-
+    //控制按钮的显示
     EventBus.$on("myturn", value => {
       if (value == 0) {
         that.b1_turn = true;

@@ -117,6 +117,12 @@ export function initResumeGame(ele, gameinfo, result) {
         bottom: ["Control"],
       },
       update: update,
+      frozen: function(e) {
+        console.log("> Player is now frozen.\n");
+      },
+      unfrozen: function(e) {
+        console.log("> Player is no longer frozen.\n");
+      },
       // move: 1000
     });
   } else {
@@ -193,6 +199,7 @@ var edit_board_mouse_move = function(x, y) {
   if (x != -1 && y != -1 && myplayer.kifuReader.game.isValid(x, y)) {
     this._last_mark = {
       type: "outline",
+      // type: "red_dot",
       x: x,
       y: y,
       c: myplayer.kifuReader.game.turn,
@@ -294,7 +301,7 @@ var read_time = function() {
       black_time -= 1;
       myplayer.kifuReader.node.BL = black_time;
       EventBus.$emit("b_timeout", black_time);
-      myplayer.update();
+      // myplayer.update();
       if (myplayer.kifuReader.node.BL == 0) {
         // game_over("白超时胜");
         EventBus.$emit("timeout", "白超时胜");
@@ -306,7 +313,7 @@ var read_time = function() {
       myplayer.kifuReader.node.WL = white_time;
       EventBus.$emit("w_timeout", white_time);
 
-      myplayer.update();
+      // myplayer.update();
       if (myplayer.kifuReader.node.WL == 0) {
         // game_over("黑超时胜");
         EventBus.$emit("timeout", "黑超时胜");
@@ -463,7 +470,7 @@ export function gameResign(result) {
   return { result: result, kifu: kifu, game: game.id };
 }
 
-function getWhichTurn() {
+export function getWhichTurn() {
   var last_steps;
   if (myplayer.kifuReader) {
     last_steps = myplayer.kifuReader.path.m;
@@ -472,6 +479,7 @@ function getWhichTurn() {
   }
   var turn = last_steps % 4;
   EventBus.$emit("myturn", turn);
+  return turn;
 }
 //enable board so it can play
 export function enable_board() {

@@ -1,47 +1,53 @@
 <template>
-  <b-jumbotron>
-    <b-container fluid>
-      <b-row>
-        <b-col>
-          <Navbar />
-          <notifications group="foo" position="top right" />
-          <!-- <div
+  <div id="app">
+    <b-jumbotron>
+      <b-container fluid>
+        <b-row>
+          <b-col>
+            <div class="page" v-if="getSpinner">
+              <b-spinner class="spinner" :variant="'primary'" :key="'primary'"></b-spinner>
+            </div>
+            <Navbar />
+            <notifications group="foo" position="top right" />
+            <!-- <div
             v-if="alert.message"
             :class="`alert ${alert.type}`"
             v-html="alert.message"
-          ></div> -->
-          <br/>
-          <router-view></router-view>
-        </b-col>
-      </b-row>
-    </b-container>
-  </b-jumbotron>
+            ></div>-->
+            <br />
+            <router-view></router-view>
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-jumbotron>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import Navbar from "../component/NavBar.vue";
 export default {
   name: "app",
   computed: {
+    ...mapGetters("room", ["getSpinner"]),
     ...mapState({
-      alert: (state) => state.alert,
-    }),
+      alert: state => state.alert
+    })
   },
   methods: {
     ...mapActions({
-      clearAlert: "alert/clear",
-    }),
+      clearAlert: "alert/clear"
+    })
   },
   watch: {
     $route(to, from) {
       // clear alert on location change
       this.clearAlert();
-    },
+    }
   },
   components: {
-    Navbar,
-  },
+    Navbar
+  }
 };
 </script>
 
@@ -55,5 +61,20 @@ export default {
 }
 .col {
   padding: 0rem 0rem;
+}
+</style>
+<style lang="scss">
+.page {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 25;
+  width: 100%;
+  height: 100%;
+}
+.spinner {
+  z-index: 26;
+  position: relative;
+  top: 50%;
 }
 </style>

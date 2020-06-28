@@ -1,20 +1,22 @@
-import { gameService } from "../_services";
-
+/**
+ * 用于存储对局室的列表信息的stores
+ */
+import { gameService } from "../_services"
 const state = {
-  jobs: [],
-  displayJobs: [],
+  games: [],
+  displayGames: [],
   rows: 0,
   showSpinner: false,
 };
 const mutations = {
-  SET_JOBS(state, jobs) {
-    state.jobs = jobs;
+  SET_GAMES(state, games) {
+    state.games = games;
   },
   SET_ROWS(state, rows) {
     state.rows = rows;
   },
-  SET_DISPLAY_JOBS(state, displayJobs) {
-    state.displayJobs = displayJobs;
+  SET_DISPLAY_GAMES(state, displayGames) {
+    state.displayGames = displayGames;
   },
   SET_SPINNER(state, spinner) {
     state.showSpinner = spinner;
@@ -31,28 +33,27 @@ const actions = {
 
     return new Promise((resolve) => {
       setTimeout(async () => {
-        const res = await gameService.getAll();
-        // const res = await fetch("jobs.json");
-        const val = await res.json();
+        const val = await gameService.getAll();
+        // const val = await res.json();
         resolve(val);
         commit("SET_SPINNER", false);
       }, 1000);
     });
   },
   updatePagination({ commit, dispatch }, { myJson, currentPage, perPage }) {
-    commit("SET_JOBS", myJson);
+    commit("SET_GAMES", myJson);
     commit("SET_ROWS", myJson.length);
     dispatch("paginate", { currentPage, perPage });
   },
-  async fetchJobs({ dispatch }) {
-    const myJson = await dispatch("fetchData");
+  async fetchGames({ dispatch }) {
+    const myJson = await dispatch("fetchData"); 
     dispatch("updatePagination", { myJson, currentPage: 1, perPage: 3 });
     return myJson;
   },
   async paginate({ commit, state }, { currentPage, perPage }) {
     const start = (currentPage - 1) * perPage;
-    const jobs = state.jobs.slice(start, start + 3);
-    commit("SET_DISPLAY_JOBS", jobs);
+    const game = state.games.slice(start, start + 3);
+    commit("SET_DISPLAY_GAMES", game);
   },
   async search({ dispatch }, { text }) {
     const myJson = await dispatch("fetchData");
@@ -68,14 +69,14 @@ const actions = {
   },
 };
 const getters = {
-  getJobs(state) {
-    return state.jobs;
+  getGames(state) {
+    return state.games;
   },
   getRows(state) {
     return state.rows;
   },
-  getDisplayJobs(state) {
-    return state.displayJobs;
+  getDisplayGames(state) {
+    return state.displayGames;
   },
   getSpinner(state) {
     return state.showSpinner;

@@ -14,13 +14,15 @@ export const gameService = {
   shareKifu,
 };
 
-function getAll() {
+async function getAll() {
   const requestOptions = {
     method: "GET",
     headers: authHeader(),
   };
+  const response = await fetch(`${config.apiUrl}/games/`, requestOptions);
+  const data = await response.json();
 
-  return fetch(`${config.apiUrl}/games/`, requestOptions).then(handleResponse);
+  return data.games;
 }
 
 function getById(id) {

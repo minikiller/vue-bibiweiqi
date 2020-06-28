@@ -1,13 +1,7 @@
 <template>
-  <div id="app">
-    <div class="page" v-if="getSpinner">
-      <b-spinner class="spinner" :variant="'primary'" :key="'primary'"></b-spinner>
-    </div>
-    <b-overlay :show="show" rounded="sm">
-      <!-- <Navbar /> -->
-      <Card />
-      <!-- <b-button @click="hello">hello</b-button> -->
-    </b-overlay>
+  <div >
+    <!-- <b-overlay v-if="getSpinner" rounded="sm"></b-overlay> -->
+    <Card />
   </div>
 </template>
 <script>
@@ -27,8 +21,7 @@ export default {
   },
   data() {
     return {
-      name: "我的对局室",
-      show: false
+      name: "我的对局室"
     };
   },
   computed: {
@@ -65,16 +58,15 @@ export default {
     // }
   },
   mounted() {
-    this.show = true;
     let that = this;
     this.updateNavTitle(this.name);
     this.$socket.emit("resume", {
       //检查是否有需要恢复的对局
       userId: this.account.user.name
     });
-    EventBus.$on("loading", value => {
-      that.show = value;
-    });
+    // EventBus.$on("loading", value => {
+    //   that.show = value;
+    // });
     this.$nextTick(function() {
       // put code here
       // that.show = false;

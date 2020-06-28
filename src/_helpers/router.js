@@ -10,8 +10,8 @@ import GamePage from "../game/GamePage";
 import FriendPage from "../friend/FriendPage";
 import ProfilePage from "../profile/ProfilePage";
 import Timer from "../component/timer";
-import NotFound from '../component/404.vue';
-import Page from '../component/Page.vue';
+import NotFound from "../component/404.vue";
+import Page from "../component/Page.vue";
 import NProgress from "nprogress";
 
 import AllArticle from "../article/all-article";
@@ -68,7 +68,7 @@ export const router = new Router({
       name: "DeleteArticle",
       component: DeleteArticle,
     },
-    { path: '*', component: NotFound }
+    { path: "*", component: NotFound },
     // otherwise redirect to home
     // { path: "*", redirect: "/" },
   ],
@@ -76,7 +76,7 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login", "/register", "/play", "/kifu"];
+  const publicPages = ["/login", "/register"];
   var authRequired = !publicPages.includes(to.path);
   // if (to.path.indexOf("play") > -1) authRequired = false;
   const loggedIn = sessionStorage.getItem("user");
