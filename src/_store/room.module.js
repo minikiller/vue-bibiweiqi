@@ -25,6 +25,12 @@ const mutations = {
 const actions = {
   async fetchData({ commit }) {
     commit("SET_SPINNER", true);
+
+    gameService.getAll().then((data)=>{
+      
+      commit("SET_SPINNER", false);
+    });
+
     return new Promise((resolve) => {
       setTimeout(async () => {
         const val = await gameService.getAll();
