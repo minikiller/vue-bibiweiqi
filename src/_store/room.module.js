@@ -1,3 +1,5 @@
+import { gameService } from "../_services";
+
 const state = {
   jobs: [],
   displayJobs: [],
@@ -21,9 +23,16 @@ const mutations = {
 const actions = {
   async fetchData({ commit }) {
     commit("SET_SPINNER", true);
+
+    gameService.getAll().then((data)=>{
+      
+      commit("SET_SPINNER", false);
+    });
+
     return new Promise((resolve) => {
       setTimeout(async () => {
-        const res = await fetch("jobs.json");
+        const res = await gameService.getAll();
+        // const res = await fetch("jobs.json");
         const val = await res.json();
         resolve(val);
         commit("SET_SPINNER", false);
