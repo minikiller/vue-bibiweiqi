@@ -403,10 +403,31 @@ export default {
     hello(msg) {
       alert(msg);
       // removeUser(msg);
+    },
+    checkTurn() {
+      var turn = getWhichTurn();
+      var result = true;
+      if (turn == 1) {
+        if (this.game.blackone_id.name != this.account.user.name)
+          result = false;
+      } else if (turn == 2) {
+        if (this.game.whiteone_id.name != this.account.user.name)
+          result = false;
+      } else if (turn == 3) {
+        if (this.game.blacktwo_id.name != this.account.user.name)
+          result = false;
+      } else if (turn == 0) {
+        if (this.game.whitetwo_id.name != this.account.user.name)
+          result = false;
+      }
+      if (result == false) {
+        this.isTurn = false;
+        this.error("数据发送失败，此时不该你落子！");
+      }
+      return result;
     }
   },
   sockets: {
-    
     move(game) {
       readyMove(game);
       this.btnRegretDisable = true;
@@ -544,7 +565,7 @@ export default {
       img: null,
       status: false,
       show: false,
-      isTurn: false,
+      isTurn: false, //落子确认按钮的开关
       game_id: ""
     };
   },
@@ -613,6 +634,11 @@ export default {
     });
 
     EventBus.$on("move", game => {
+      //确认发送落子数据之前，当前的用户和手数可以对应上
+      //如果turn==0，则用户必须是blackone，防止两个客户端同时发送数据给服务器
+      if (this.checkTurn() == false) {
+        return;
+      }
       let that = this;
       this.$socket.emit(
         "move",
