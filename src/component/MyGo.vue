@@ -364,8 +364,8 @@ export default {
 .container {
   display: inline-block;
   position: absolute;
-  z-index: 100;
+  z-index: 50;
   width: 100%;
-  height: 100vh;
+  height: 50vh;
 }
 </style>
