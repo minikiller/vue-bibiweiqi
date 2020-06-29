@@ -19,7 +19,9 @@ import {
   getGameTurn,
   getKifu,
   setConfirm,
-  getWhichTurn
+  getWhichTurn,
+  enable_try,
+  disable_try
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -72,6 +74,19 @@ export default {
         this.btnBeginDisable = true;
       }
       this.btnQuitDisable = true;
+    },
+    //开始试下
+    beginTry() {
+      if (this.bTry) {
+        enable_try();
+        this.bTry = false;
+        this.try_text = "结束试下";
+      } else {
+        disable_try();
+        this.bTry = true;
+        this.try_text = "开始试下";
+        this.refresh();
+      }
     },
     // 显示分数
     getScore() {
@@ -546,6 +561,8 @@ export default {
   // props: ["game_id"],
   data() {
     return {
+      bTry: true, //开始试下
+      try_text: "开始试下",
       status: "not_accepted",
       btnBeginDisable: false, //开始按钮的控制状态
       btnQuitDisable: false, //退出按钮的控制状态

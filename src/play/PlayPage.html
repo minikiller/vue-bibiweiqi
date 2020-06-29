@@ -50,6 +50,7 @@
             </b-button>
             <b-button
               variant="primary"
+              v-if="isOpponent"
               @click="regret"
               :disabled="btnRegretDisable"
             >
@@ -58,8 +59,15 @@
             <b-button variant="primary" v-if="canBegin" @click="who">
               谁了
             </b-button>
-            <b-button variant="primary" v-if="canBegin" @click="refresh">
+            <b-button variant="primary" @click="refresh">
               刷新
+            </b-button>
+            <b-button
+              variant="primary"
+              v-if="!isOpponent"
+              @click="beginTry"
+            >
+              {{try_text}}
             </b-button>
             <b-button
               variant="primary"

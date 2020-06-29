@@ -1,5 +1,6 @@
 let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
+var _ev_try_move, _ev_try_click, _ev_try_out;
 var black_time, white_time;
 // import { socket } from "./socket";
 import { EventBus } from "../index.js";
@@ -480,6 +481,103 @@ export function getWhichTurn() {
   var turn = last_steps % 4;
   EventBus.$emit("myturn", turn);
   return turn;
+}
+
+// board mouseout callback for edit move
+var try_board_mouse_out = function() {
+  if (this._last_mark) {
+    myboard.removeObject(this._last_mark);
+    delete this._last_mark;
+    delete this._lastX;
+    delete this._lastY;
+  }
+};
+
+//board mouse move event
+var try_board_mouse_move = function(x, y) {
+  // if (prepare_confirm == true) return;
+  if (myplayer.frozen || (this._lastX == x && this._lastY == y)) return;
+
+  this._lastX = x;
+  this._lastY = y;
+  // console.log("x value is " + x + ",y value is " + y)
+  if (this._last_mark) {
+    myboard.removeObject(this._last_mark);
+  }
+
+  if (x != -1 && y != -1 && myplayer.kifuReader.game.isValid(x, y)) {
+    this._last_mark = {
+      type: "outline",
+      // type: "red_dot",
+      x: x,
+      y: y,
+      c: myplayer.kifuReader.game.turn,
+    };
+    myboard.addObject(this._last_mark);
+  } else {
+    delete this._last_mark;
+  }
+};
+
+//play a move
+var try_play = function(x, y) {
+  // ignore invalid move
+  if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;
+  // var con = confirm("确认落子吗?");
+
+  var node;
+
+  // create new node
+  if (x == null) {
+    node = new WGo.KNode({
+      move: {
+        pass: true,
+        c: myplayer.kifuReader.game.turn,
+      },
+      BL: black_time,
+      WL: white_time,
+      _edited: true,
+    });
+  } else {
+    node = new WGo.KNode({
+      move: {
+        x: x,
+        y: y,
+        c: myplayer.kifuReader.game.turn,
+      },
+      BL: black_time,
+      WL: white_time,
+      _edited: true,
+    });
+  }
+
+  
+  let move = {
+    x: x,
+    y: y,
+    c: myplayer.kifuReader.game.turn,
+  };
+
+  // append new node to the current kifu
+  myplayer.kifuReader.node.appendChild(node);
+  // show next move
+  myplayer.next(myplayer.kifuReader.node.children.length - 1);
+  
+};
+
+export function enable_try() {
+  _ev_try_move = _ev_try_move || try_board_mouse_move.bind(myboard);
+  _ev_try_out = _ev_try_out || try_board_mouse_out.bind(myboard);
+  _ev_try_click = _ev_try_click || try_play.bind(myboard);
+  myboard.addEventListener("mousemove", _ev_try_move);
+  myboard.addEventListener("click", _ev_try_click);
+  myboard.addEventListener("mouseout", _ev_try_out);
+}
+
+export function disable_try() {
+  myboard.removeEventListener("click", _ev_try_click);
+  myboard.removeEventListener("mousemove", _ev_try_move);
+  myboard.removeEventListener("mouseout", _ev_try_out);
 }
 //enable board so it can play
 export function enable_board() {
