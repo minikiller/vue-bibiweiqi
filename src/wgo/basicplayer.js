@@ -243,14 +243,15 @@ BasicPlayer.prototype.updateDimensions = function() {
 	
 	var diff = bh - bw;
 	
-	if(diff > 0) {
+	/* if(diff > 0) {
 		this.dom.board.style.height = bh+"px";
+		// this.dom.board.style.paddingTop = (diff/2)+"px";
 		this.dom.board.style.paddingTop = (diff/2)+"px";
-	}
-	else {
+	} */
+	// else {
 		this.dom.board.style.height = "auto";
 		this.dom.board.style.paddingTop = "0";
-	}
+	// }
 	
 	this.regions.left.element.style.height = this.dom.center.offsetHeight+"px";
 	this.regions.right.element.style.height = this.dom.center.offsetHeight+"px";

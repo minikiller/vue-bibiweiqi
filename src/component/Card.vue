@@ -60,7 +60,7 @@
               </b-card-text>
               <b-card-text>对局时长:{{ playTime[index] }}</b-card-text>
               <!-- <b-card-text>{{ `预定时间:${data.create_date}` }}</b-card-text> -->
-              <!-- <b-card-text>{{ `创建时间:${data.dur_date}` }}</b-card-text> -->
+              <b-card-text>{{ `创建时间:${data.create_date}` }}</b-card-text>
               <b-card-text>
                 状态:
                 <b-badge v-if="data.status == '未开始'" variant="danger">{{ `${data.status}` }}</b-badge>
@@ -98,7 +98,7 @@
       </b-row>
     </div>
     <div v-else>
-      <h5>数据加载中</h5>
+      <h5>没有有效的对局信息</h5>
     </div>
   </b-container>
 </template>
@@ -153,7 +153,7 @@ export default {
       await this.$store.dispatch("room/fetchGames");
       console.log(this.getDisplayGames);
     },
-    
+
     //正在进行的对局室不允许删除
 
     delGame(id) {
