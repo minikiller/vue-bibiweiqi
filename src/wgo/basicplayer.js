@@ -226,8 +226,8 @@ BasicPlayer.prototype.updateDimensions = function() {
 		this.lastLayout = this.currentLayout;
 	}
 	
-	//var bw = this.width - this.regions.left.element.clientWidth - this.regions.right.element.clientWidth;
-	var bw = this.dom.board.clientWidth;
+	var bw = this.width - this.regions.left.element.clientWidth - this.regions.right.element.clientWidth;
+	// var bw = this.dom.board.clientWidth;
 	var bh = this.height || this.maxHeight;
 
 	if(bh) {
