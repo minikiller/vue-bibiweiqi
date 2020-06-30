@@ -476,9 +476,9 @@
               },
             },
           },
-          {
+          /* {
             constructor: control.MoveNumber,
-          },
+          }, */
           {
             constructor: control.Button,
             args: {

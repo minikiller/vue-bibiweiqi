@@ -238,12 +238,10 @@ export default {
       this.b2_offline = user == this.blackTwo.name ? true : this.b2_offline;
       this.w1_offline = user == this.whiteOne.name ? true : this.w1_offline;
       this.w2_offline = user == this.whiteTwo.name ? true : this.w2_offline;
-
     },
     view(msg) {
       // this.success(msg);
       this.updateGame(msg.game);
-
       //观战
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
@@ -255,6 +253,8 @@ export default {
       this.setResult(msg.result);
       initGameData(this.account.user.name, this.games.game);
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
+      if (!this.isOpponent)
+        document.getElementById("wgo-control").style.display = "";
     },
 
     prepare(msg) {
@@ -366,6 +366,6 @@ export default {
   position: absolute;
   z-index: 50;
   width: 100%;
-  height: 50vh;
+  height: 20vh;
 }
 </style>

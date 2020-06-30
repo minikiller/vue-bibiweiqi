@@ -80,11 +80,11 @@ export default {
       if (this.bTry) {
         enable_try();
         this.bTry = false;
-        this.try_text = "结束试下";
+        this.try_text = "结束";
       } else {
         disable_try();
         this.bTry = true;
-        this.try_text = "开始试下";
+        this.try_text = "试下";
         this.refresh();
       }
     },
@@ -562,7 +562,7 @@ export default {
   data() {
     return {
       bTry: true, //开始试下
-      try_text: "开始试下",
+      try_text: "试下",
       status: "not_accepted",
       btnBeginDisable: false, //开始按钮的控制状态
       btnQuitDisable: false, //退出按钮的控制状态
