@@ -54,6 +54,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("room", ["SET_SPINNER"]),
     ...mapMutations("alert", ["success", "error", "clear"]),
     ...mapMutations("games", [
       "updateGame",
@@ -175,11 +176,11 @@ export default {
     refresh() {
       // alert(this.game_id);
       // alert(this.$route.query.game_id);
-      this.show = true;
+      this.SET_SPINNER(true);
       // let that = this;
       setTimeout(() => {
         this.$socket.emit("registerToRoom", this.$route.query.game_id);
-        this.show = false;
+        this.SET_SPINNER(false);
       }, 1000);
       this.success("刷新成功！");
     },
@@ -598,7 +599,7 @@ export default {
     // this.$socket.on("helloMsg", this.hello);
     // this.$socket.removeAllListeners();
     this.game_id = this.$route.query.game_id;
-    this.show = true;
+    this.SET_SPINNER(true);
     gameService.getById(this.game_id).then(data => {
       this.game = data;
       this.gameUser.push(this.game.blackone_id.name);
@@ -612,6 +613,7 @@ export default {
       //如果是对局者，给出提示信息
       this.isOpponent =
         this.gameUser.indexOf(this.account.user.name) != -1 ? true : false;
+      this.SET_SPINNER(false);
       if (this.isOpponent) {
         console.log("it is openent in game");
 
@@ -638,7 +640,7 @@ export default {
         }
       }
       this.updateNavTitle(this.game.name + "#" + this.$route.query.game_id);
-      this.show = false;
+
       return data;
     });
 
