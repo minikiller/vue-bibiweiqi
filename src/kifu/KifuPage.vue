@@ -8,16 +8,18 @@
         <div class="table-responsive">
           <b-table :items="items" :fields="fields" table-class="text-nowrap" responsive>
             <template v-slot:cell(actions)="row">
-              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
-              <router-link
-                :to="{ name: 'KifuView', params: { game: row.item } }"
-                class="btn-sm btn-primary"
-              >打开</router-link>
               <b-button
-                size="sm"
+                @click="info(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >下载</b-button>
+              <b-button
+                @click="open(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >打开</b-button>
+              <b-button
                 v-if="row.item.is_share==false"
                 @click="shared(row.item, row.index, $event.target)"
-                class="mr-1"
+                class="btn-sm btn-primary"
               >共享</b-button>
             </template>
           </b-table>
@@ -37,11 +39,19 @@
             responsive
           >
             <template v-slot:cell(actions)="row">
-              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">下载</b-button>
-              <router-link
-                :to="{ name: 'KifuView', params: { game: row.item } }"
+              <b-button
+                @click="info(row.item, row.index, $event.target)"
                 class="btn-sm btn-primary"
-              >打开</router-link>
+              >下载</b-button>
+              <b-button
+                @click="open(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >打开</b-button>
+              <b-button
+                v-if="account.user.isadmin"
+                @click="analyse(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >分析</b-button>
             </template>
           </b-table>
         </div>
@@ -102,6 +112,13 @@ export default {
       console.log("new tab index is " + newTabIndex);
       if (newTabIndex == 0) this.getall();
       else this.getShareAll();
+    },
+    open(item) {
+      this.$router.push({ name: "KifuView", params: { game: item } });
+    },
+    //ai analyse
+    analyse(item) {
+      gameService.analyseKifu(item.id);
     },
     info(item, index, event) {
       console.log(item, index, event);

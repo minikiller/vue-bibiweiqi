@@ -12,6 +12,7 @@ export const gameService = {
   moveVoice,
   chatVoice,
   shareKifu,
+  analyseKifu,
 };
 
 async function getAll() {
@@ -100,7 +101,17 @@ function shareKifu(kifu_id) {
     handleResponse
   );
 }
+//ai analyse
+function analyseKifu(kifu_id) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
 
+  return fetch(`${config.apiUrl}/kifus/analyse/${kifu_id}`, requestOptions).then(
+    handleResponse
+  );
+}
 function saveKifu(_data) {
   const requestOptions = {
     method: "POST",
