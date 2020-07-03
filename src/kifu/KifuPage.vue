@@ -87,6 +87,9 @@ export default {
         {
           key: "result",
           label: "结果"
+        },{
+          key: "moves",
+          label: "手数"
         },
         {
           key: "create_date",
