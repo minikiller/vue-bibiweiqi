@@ -165,7 +165,11 @@ export default {
         result = "黑中盘胜";
       return result;
     },
-    
+    print() {
+      var data = getKifu();
+      alert(data);
+      console.log("kifu is " + data);
+    },
     //刷新，重新加载棋谱
     refresh() {
       // alert(this.game_id);

@@ -230,6 +230,7 @@ var play = function(x, y) {
       WL: white_time,
       _edited: true,
     });
+    return;
   } else {
     node = new WGo.KNode({
       move: {
@@ -341,6 +342,7 @@ var move_play = function(player, x, y) {
       WL: white_time,
       _edited: true,
     });
+    return;
   } else {
     node = new WGo.KNode({
       move: {
@@ -538,6 +540,7 @@ var try_play = function(x, y) {
       WL: white_time,
       _edited: true,
     });
+    return;
   } else {
     node = new WGo.KNode({
       move: {
@@ -551,7 +554,6 @@ var try_play = function(x, y) {
     });
   }
 
-  
   let move = {
     x: x,
     y: y,
@@ -562,7 +564,6 @@ var try_play = function(x, y) {
   myplayer.kifuReader.node.appendChild(node);
   // show next move
   myplayer.next(myplayer.kifuReader.node.children.length - 1);
-  
 };
 
 export function enable_try() {

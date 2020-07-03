@@ -61,6 +61,9 @@
           <b-button variant="primary" @click="refresh">
             刷新
           </b-button>
+          <b-button variant="primary" v-if="account.user.isadmin" @click="print">
+            debug
+          </b-button>
           <b-button variant="primary" v-if="!isOpponent" @click="beginTry">
             {{try_text}}
           </b-button>
