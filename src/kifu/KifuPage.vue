@@ -6,7 +6,7 @@
           <i class="fas fa-user-lock"></i>个人棋谱
         </template>
         <div class="table-responsive">
-          <b-table :items="items" :fields="fields" table-class="text-nowrap" responsive>
+          <b-table striped hover :items="items" :fields="fields" table-class="text-nowrap" responsive>
             <template v-slot:cell(actions)="row">
               <b-button
                 @click="info(row.item, row.index, $event.target)"
@@ -85,11 +85,12 @@ export default {
           label: "白方信息"
         },
         {
-          key: "result",
-          label: "结果"
-        },{
           key: "moves",
           label: "手数"
+        },
+        {
+          key: "result",
+          label: "结果"
         },
         {
           key: "create_date",
