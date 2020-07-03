@@ -165,13 +165,7 @@ export default {
         result = "黑中盘胜";
       return result;
     },
-    confirm() {
-      setConfirm(true);
-    },
-    cancel() {
-      setConfirm(false);
-      this.isTurn = false;
-    },
+    
     //刷新，重新加载棋谱
     refresh() {
       // alert(this.game_id);

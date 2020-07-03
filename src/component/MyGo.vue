@@ -19,6 +19,12 @@
     <b-row class="ml-2 mr-2">
       <b-col cols="12" sm="12" md="6" xg="8">
         <div style="width: 100%; margin: 0" ref="player"></div>
+        <div align="center">
+          <b-button-group v-if="isTurn" size="lg">
+            <b-button variant="primary" @click="confirm">确认</b-button>
+            <b-button variant="danger" @click="cancel">取消</b-button>
+          </b-button-group>
+        </div>
       </b-col>
       <b-col cols="12" sm="12" md="6" xg="4">
         <div>
@@ -130,7 +136,8 @@ export default {
     blackTwo: String,
     whiteTwo: String,
     gameStatus: String,
-    isOpponent: Boolean //是否为对局者
+    isOpponent: Boolean, //是否为对局者
+    isTurn: Boolean //是否为对局者
   },
   data() {
     return {
@@ -172,6 +179,13 @@ export default {
   methods: {
     ...mapMutations("games", ["updateGame", "updateNavTitle", "setResult"]),
     ...mapMutations("alert", ["success", "error", "clear"]),
+    confirm() {
+      setConfirm(true);
+    },
+    cancel() {
+      setConfirm(false);
+      this.isTurn = false;
+    },
     initVoice() {
       //调用语音服务
       gameService.moveVoice().then(data => {

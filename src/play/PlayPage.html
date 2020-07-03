@@ -1,141 +1,131 @@
 <div>
-    <b-container fluid>
-      <b-row>
-        <b-col sm="6">
-          <div class="form-group">
-            <b-button
-              v-if="isOpponent&&isMobile"
-              aria-pressed="true"
-              variant="primary"
-              @touchstart="begin"
-              ref="btnResign"
-              :disabled="btnBeginDisable"
-            >
-              {{ btnText }}
-            </b-button>
+  <b-container fluid>
+    <b-row>
+      <b-col sm="6">
+        <div class="form-group">
+          <b-button
+            v-if="isOpponent&&isMobile"
+            aria-pressed="true"
+            variant="primary"
+            @touchstart="begin"
+            ref="btnResign"
+            :disabled="btnBeginDisable"
+          >
+            {{ btnText }}
+          </b-button>
 
-            <b-button
-              v-if="isOpponent && !isMobile"
-              aria-pressed="true"
-              variant="primary"
-              @click="begin"
-              ref="btnResign"
-              :disabled="btnBeginDisable"
-            >
-              {{ btnText }}
-            </b-button>
+          <b-button
+            v-if="isOpponent && !isMobile"
+            aria-pressed="true"
+            variant="primary"
+            @click="begin"
+            ref="btnResign"
+            :disabled="btnBeginDisable"
+          >
+            {{ btnText }}
+          </b-button>
 
-            <b-button variant="primary" v-if="canEnd" @click="getScore">
-              {{ endText }}
-            </b-button>
-            <b-button
-              variant="primary"
-              :disabled="btnPassedDisable"
-              v-if="canBegin"
-              @click="passed"
-            >
-              数子
-            </b-button>
-            <b-button
-              variant="primary"
-              v-model="status"
-              value="true"
-              @click="toggleAll"
-            >
-              坐标
-            </b-button>
-            <b-button variant="primary" @click="toggleMarker">
-              手数
-            </b-button>
-            <b-button
-              variant="primary"
-              v-if="isOpponent"
-              @click="regret"
-              :disabled="btnRegretDisable"
-            >
-              悔棋
-            </b-button>
-            <b-button variant="primary" v-if="canBegin" @click="who">
-              谁了
-            </b-button>
-            <b-button variant="primary" @click="refresh">
-              刷新
-            </b-button>
-            <b-button
-              variant="primary"
-              v-if="!isOpponent"
-              @click="beginTry"
-            >
-              {{try_text}}
-            </b-button>
-            <b-button
-              variant="primary"
-              :disabled="btnQuitDisable"
-              @click="exit"
-              ref="quit"
-            >
-              退出
-            </b-button>
-            <!-- <b-button
+          <b-button variant="primary" v-if="canEnd" @click="getScore">
+            {{ endText }}
+          </b-button>
+          <b-button
+            variant="primary"
+            :disabled="btnPassedDisable"
+            v-if="canBegin"
+            @click="passed"
+          >
+            数子
+          </b-button>
+          <b-button
+            variant="primary"
+            v-model="status"
+            value="true"
+            @click="toggleAll"
+          >
+            坐标
+          </b-button>
+          <b-button variant="primary" @click="toggleMarker">
+            手数
+          </b-button>
+          <b-button
+            variant="primary"
+            v-if="isOpponent"
+            @click="regret"
+            :disabled="btnRegretDisable"
+          >
+            悔棋
+          </b-button>
+          <b-button variant="primary" v-if="canBegin" @click="who">
+            谁了
+          </b-button>
+          <b-button variant="primary" @click="refresh">
+            刷新
+          </b-button>
+          <b-button variant="primary" v-if="!isOpponent" @click="beginTry">
+            {{try_text}}
+          </b-button>
+          <b-button
+            variant="primary"
+            :disabled="btnQuitDisable"
+            @click="exit"
+            ref="quit"
+          >
+            退出
+          </b-button>
+          <!-- <b-button
               variant="primary"
               @click="test"
             >
               test
             </b-button> -->
-            <b-button-group v-if="isTurn" class="mx-1">
-              <b-button variant="primary" @click="confirm">
-                确认
-              </b-button>
-              <b-button variant="danger" @click="cancel">
-                取消
-              </b-button>
-            </b-button-group>
-          </div>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <div>
-            <my-go
-              ref="mygo"
-              v-if="game"
-              :total_time="game.total_time.toString()"
-              :blackOne="game.blackone_id"
-              :whiteOne="game.whiteone_id"
-              :blackTwo="game.blacktwo_id"
-              :whiteTwo="game.whitetwo_id"
-              :gameStatus="game.status"
-              :isOpponent="isOpponent"
-            />
-          </div>
-        </b-col>
-      </b-row>
-      <b-row class="ml-2 mr-2 mb-2">
-        <b-col>
-          <div>
-            <vue-webrtc
-              ref="webrtc"
-              width="100%"
-              :isOpponent="isOpponent"
-              :userId="account.user.name"
-              :roomId="game_id"
-              v-on:joined-room="logEvent"
-              v-on:left-room="logEvent"
-              v-on:open-room="logEvent"
-              v-on:share-started="logEvent"
-              v-on:share-stopped="logEvent"
-              @error="onError"
-            />
-          </div>
-          <div class="row form-group">
-            <div class="col-md-12 my-3">
-              <b-button variant="primary" @click="onJoin">
-                <b-icon icon="camera-video"></b-icon>加入
-              </b-button>
-              <b-button variant="primary" @click="onLeave">
-                <b-icon icon="camera-video-off"></b-icon>离开
-              </b-button>
-              <!-- <button
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <div>
+          <my-go
+            ref="mygo"
+            v-if="game"
+            :total_time="game.total_time.toString()"
+            :blackOne="game.blackone_id"
+            :whiteOne="game.whiteone_id"
+            :blackTwo="game.blacktwo_id"
+            :whiteTwo="game.whitetwo_id"
+            :gameStatus="game.status"
+            :isOpponent="isOpponent"
+            :isTurn="isTurn"
+          />
+        </div>
+        
+      </b-col>
+    </b-row>
+    <b-row class="ml-2 mr-2 mb-2">
+      <b-col>
+        <div>
+          <vue-webrtc
+            ref="webrtc"
+            width="100%"
+            :isOpponent="isOpponent"
+            :userId="account.user.name"
+            :roomId="game_id"
+            v-on:joined-room="logEvent"
+            v-on:left-room="logEvent"
+            v-on:open-room="logEvent"
+            v-on:share-started="logEvent"
+            v-on:share-stopped="logEvent"
+            @error="onError"
+          />
+        </div>
+        <div class="row form-group">
+          <div class="col-md-12 my-3">
+            <b-button variant="primary" @click="onJoin">
+              <b-icon icon="camera-video"></b-icon>加入
+            </b-button>
+            <b-button variant="primary" @click="onLeave">
+              <b-icon icon="camera-video-off"></b-icon>离开
+            </b-button>
+            <!-- <button
                   type="button"
                   class="btn btn-primary"
                   @click="onCapture"
@@ -149,26 +139,23 @@
                 >
                   Share Screen
                 </button> -->
-            </div>
           </div>
-          <!-- <my-video :gameId="game_id"></my-video> -->
-        </b-col>
-      </b-row>
-      <b-row class="ml-2 mr-2">
-        <b-col>
-          <div>
-            <chat v-if="game" :gameId="game_id" :gameInfo="game" />
-            <b-list-group
-              v-for="(user, index) in games.onlineUsers"
-              :key="index"
-            >
-              <b-list-group-item>
-                <b-avatar variant="info" :src="user.avatar"></b-avatar>
-                {{ user }}
-              </b-list-group-item>
-            </b-list-group>
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
+        </div>
+        <!-- <my-video :gameId="game_id"></my-video> -->
+      </b-col>
+    </b-row>
+    <b-row class="ml-2 mr-2">
+      <b-col>
+        <div>
+          <chat v-if="game" :gameId="game_id" :gameInfo="game" />
+          <b-list-group v-for="(user, index) in games.onlineUsers" :key="index">
+            <b-list-group-item>
+              <b-avatar variant="info" :src="user.avatar"></b-avatar>
+              {{ user }}
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </div>
