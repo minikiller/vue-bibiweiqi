@@ -32,7 +32,7 @@
             variant="primary"
             :disabled="btnPassedDisable"
             v-if="canBegin"
-            @click="passed"
+            @click="passed"v-b-popover.hover.top="'终局前进入数子状态!'"
           >
             数子
           </b-button>
@@ -40,11 +40,11 @@
             variant="primary"
             v-model="status"
             value="true"
-            @click="toggleAll"
+            @click="toggleAll" v-b-popover.hover.top="'切换棋盘的坐标!'"
           >
             坐标
           </b-button>
-          <b-button variant="primary" @click="toggleMarker">
+          <b-button variant="primary" @click="toggleMarker" v-b-popover.hover.top="'显示不同的手数!'">
             手数
           </b-button>
           <b-button
@@ -52,26 +52,27 @@
             v-if="isOpponent"
             @click="regret"
             :disabled="btnRegretDisable"
+            v-b-popover.hover.top="'可以申请悔棋哦!'"
           >
             悔棋
           </b-button>
-          <b-button variant="primary" v-if="canBegin" @click="who">
+          <b-button variant="primary" v-if="canBegin" @click="who" v-b-popover.hover.top="'想知道现在该谁落子了!'">
             谁了
           </b-button>
-          <b-button variant="primary" @click="refresh">
+          <b-button variant="primary" @click="refresh" v-b-popover.hover.top="'刷新获得最新的数据!'">
             刷新
           </b-button>
           <b-button variant="primary" v-if="account.user.isadmin" @click="print">
             debug
           </b-button>
-          <b-button variant="primary" v-if="!isOpponent" @click="beginTry">
+          <b-button variant="primary" v-if="!isOpponent" @click="beginTry" v-b-popover.hover.top="'试下几手'">
             {{try_text}}
           </b-button>
           <b-button
             variant="primary"
             :disabled="btnQuitDisable"
             @click="exit"
-            ref="quit"
+            ref="quit" v-b-popover.hover.top="'离开当前对局室!'"
           >
             退出
           </b-button>
