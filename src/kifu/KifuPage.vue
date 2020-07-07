@@ -52,6 +52,11 @@
                 @click="analyse(row.item, row.index, $event.target)"
                 class="btn-sm btn-primary"
               >分析</b-button>
+              <b-button
+                v-if="row.item.is_analyse"
+                @click="aiinfo(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >ai</b-button>
             </template>
           </b-table>
         </div>
@@ -75,6 +80,11 @@ export default {
       name: "我的棋谱",
       show: false,
       fields: [
+        {
+          key: "id",
+          label: "id"
+          // sortable: true,
+        },
         {
           key: "black_info",
           label: "黑方信息"
@@ -133,6 +143,34 @@ export default {
         headers: authHeader()
       };
       fetch(`${config.apiUrl}/kifus/${id}`, requestOptions)
+        .then(response => {
+          if (response.status === 200) {
+            filename = response.headers.get("x-suggested-filename");
+
+            return response.blob();
+          } else {
+            return;
+          }
+        })
+        .then(blob => {
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+          a.click();
+          a.remove(); //afterwards we remove the element again
+        });
+    },
+    aiinfo(item, index, event) {
+      console.log(item, index, event);
+      let id = item.id;
+      let filename;
+      const requestOptions = {
+        method: "GET",
+        headers: authHeader()
+      };
+      fetch(`${config.apiUrl}/kifus/ai/${id}`, requestOptions)
         .then(response => {
           if (response.status === 200) {
             filename = response.headers.get("x-suggested-filename");
