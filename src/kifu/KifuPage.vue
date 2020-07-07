@@ -6,7 +6,14 @@
           <i class="fas fa-user-lock"></i>个人棋谱
         </template>
         <div class="table-responsive">
-          <b-table striped hover :items="items" :fields="fields" table-class="text-nowrap" responsive>
+          <b-table
+            striped
+            hover
+            :items="items"
+            :fields="fields"
+            table-class="text-nowrap"
+            responsive
+          >
             <template v-slot:cell(actions)="row">
               <b-button
                 @click="info(row.item, row.index, $event.target)"
@@ -21,6 +28,11 @@
                 @click="shared(row.item, row.index, $event.target)"
                 class="btn-sm btn-primary"
               >共享</b-button>
+              <b-button
+                v-if="row.item.is_analyse"
+                @click="aiinfo(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >ai</b-button>
             </template>
           </b-table>
         </div>
@@ -82,7 +94,7 @@ export default {
       fields: [
         {
           key: "id",
-          label: "id"
+          label: "ID"
           // sortable: true,
         },
         {
