@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row align-h="center">
     <b-col sm="6">
       <b-card>
         <div>
@@ -42,7 +42,9 @@
               </div>
               <div class="form-group">
                 <!--<b-button block variant="success" :disabled="status.loggingIn">登录</b-button>-->
-                <b-button type="submit" block variant="success" :disabled="status.loggingIn">登录</b-button>
+                <b-button type="submit" block variant="success" :disabled="loggingIn">
+                  <b-spinner small v-if="loggingIn"></b-spinner>登录
+                </b-button>
               </div>
               <div>
                 <router-link to="/register" class="btn btn-link">
@@ -53,7 +55,7 @@
 
                 <!-- <b-button variant="outline-info" class="mb-2" @click="test">
                   <b-icon icon="person-plus-fill"></b-icon>test
-                </b-button> -->
+                </b-button>-->
               </div>
             </form>
           </div>
@@ -71,7 +73,8 @@ export default {
     return {
       username: "",
       password: "",
-      submitted: false
+      submitted: false,
+      loggingIn: false
     };
   },
   computed: {
@@ -88,7 +91,9 @@ export default {
       const { username, password } = this;
       if (username && password) {
         this.login({ username, password });
+        this.loggingIn = true;
       }
+      
     },
     test() {
       if ("vibrate" in window.navigator) {
