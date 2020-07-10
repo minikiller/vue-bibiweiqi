@@ -7,7 +7,14 @@
     </b-input-group>
     <!-- <div>{{ kifu.kifu_data }}</div> -->
     <div>step is {{ steps }}</div>
-
+    <b-button
+      variant="primary"
+      v-model="status"
+      value="true"
+      @click="toggleAll"
+      v-b-popover.hover.top="'切换棋盘的坐标!'"
+    >坐标</b-button>
+    <b-button variant="primary" @click="toggleMarker" v-b-popover.hover.top="'显示不同的手数!'">手数</b-button>
     <div style="width: 100%; margin: 0" ref="player" class="mt-3"></div>
     <!-- <my-go /> -->
   </div>
@@ -15,7 +22,13 @@
 
 <script>
 // import MyGo from "../component/MyGo";
-import { kifuViewGame, gotoStep, getTotalStep } from "../_helpers";
+import {
+  kifuViewGame,
+  gotoStep,
+  getTotalStep,
+  toggleCoordinates,
+  showMarker
+} from "../_helpers";
 export default {
   name: "KifuViewPage",
   data() {
@@ -33,6 +46,16 @@ export default {
     this.maxStep = getTotalStep();
     this.$refs.input.max = this.maxStep;
     this.$refs.input.min = 0;
+  },
+  methods: {
+    //坐标显示
+    toggleAll(checked) {
+      toggleCoordinates(checked);
+    },
+    //显示手数功能
+    toggleMarker() {
+      showMarker();
+    }
   },
   watch: {
     steps: {
