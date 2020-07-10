@@ -251,7 +251,7 @@ var play = function(x, y) {
     if (!isPc()) {
       (prepare_x = x), (prepare_y = y);
     }
-    EventBus.$emit("confirmTurn", "");
+    EventBus.$emit("confirmTurn", true);
     return;
   }
   let move = {

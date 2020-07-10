@@ -184,7 +184,9 @@ export default {
     },
     cancel() {
       setConfirm(false);
-      this.isTurn = false;
+      // alert(this.isTurn);
+      // this.isTurn = false;
+      EventBus.$emit("confirmTurn", false);
     },
     initVoice() {
       //调用语音服务

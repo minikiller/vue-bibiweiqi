@@ -646,8 +646,8 @@ export default {
       this.success("轮到你骡子了！");
     }); */
 
-    EventBus.$on("confirmTurn", () => {
-      this.isTurn = true; //打开确认取消按钮
+    EventBus.$on("confirmTurn", (value) => {
+      this.isTurn = value; //打开确认取消按钮
     });
 
     EventBus.$on("move", game => {
