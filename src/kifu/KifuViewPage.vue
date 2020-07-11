@@ -6,7 +6,7 @@
       <b-form-input type="range" min="0" :max="maxStep" v-model="steps" ref="input"></b-form-input>
     </b-input-group>
     <!-- <div>{{ kifu.kifu_data }}</div> -->
-    <div>step is {{ steps }}</div>
+    <div>当前手数： {{ steps }}</div>
     <b-button
       variant="primary"
       v-model="status"
@@ -29,6 +29,7 @@ import {
   toggleCoordinates,
   showMarker
 } from "../_helpers";
+import { EventBus } from "../index.js";
 export default {
   name: "KifuViewPage",
   data() {
@@ -46,6 +47,9 @@ export default {
     this.maxStep = getTotalStep();
     this.$refs.input.max = this.maxStep;
     this.$refs.input.min = 0;
+    EventBus.$on("go_move", msg => {
+      this.steps = msg;
+    });
   },
   methods: {
     //坐标显示

@@ -66,6 +66,13 @@ export function gotoStep(value) {
 export function getTotalStep() {
   return myplayer.kifu.nodeCount;
 }
+
+var butupd_last = function (e) {
+  EventBus.$emit("go_move", e.path.m);
+  // if (!e.node.children.length ) this.disable();
+  // else if (e.node.children.length) this.enable();
+};
+
 export function kifuViewGame(ele, kifu) {
   myplayer = new WGo.BasicPlayer(ele, {
     sgf: kifu.kifu_data,
@@ -76,6 +83,7 @@ export function kifuViewGame(ele, kifu) {
       // top: ["InfoBox"],
       bottom: ["Control"],
     },
+    update: butupd_last,
     // move: 1000
   });
   // myboard = myplayer.board;
