@@ -15,6 +15,7 @@
       v-b-popover.hover.top="'切换棋盘的坐标!'"
     >坐标</b-button>
     <b-button variant="primary" @click="toggleMarker" v-b-popover.hover.top="'显示不同的手数!'">手数</b-button>
+    <b-button variant="primary" @click="back" v-b-popover.hover.top="'返回上一级!'">返回</b-button>
     <div style="width: 100%; margin: 0" ref="player" class="mt-3"></div>
     <!-- <my-go /> -->
   </div>
@@ -59,6 +60,11 @@ export default {
     //显示手数功能
     toggleMarker() {
       showMarker();
+    },
+    back(){
+      this.$router.push({
+        path: `/kifu`,
+      });
     }
   },
   watch: {
