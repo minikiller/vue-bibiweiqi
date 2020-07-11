@@ -22,7 +22,7 @@
     >{{try_text}}</b-button>
     <b-button variant="primary" @click="toggleMarker" v-b-popover.hover.top="'显示不同的手数!'">手数</b-button>
     <b-button variant="primary" @click="back" v-b-popover.hover.top="'返回上一级!'">返回</b-button>
-    <div style="width: 100%; margin: 0" ref="player" class="mt-3"></div>
+    <div style="width: 90%; margin: 0" ref="player" class="mt-3"></div>
     <!-- <my-go /> -->
   </div>
 </template>

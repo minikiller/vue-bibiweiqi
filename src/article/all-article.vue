@@ -27,6 +27,8 @@
           <td>mobile</td>
           <td>rank</td>
           <td>Thumbnail</td>
+          <td>Win</td>
+          <td>Fail</td>
           <td>Admin</td>
           <td>Date Created</td>
           <td>Actions</td>
@@ -40,6 +42,8 @@
           <td>{{ article.mobile }}</td>
           <td>{{ article.rank }}</td>
           <td><img :src="article.avatar" width="50" height="50" /></td>
+          <td>{{ article.win }}</td>
+          <td>{{ article.fail }}</td>
           <td>{{ article.isadmin }}</td>
           <td>{{ article.create_date }}</td>
           <!-- <td>{{ article.date_created }}</td> -->
