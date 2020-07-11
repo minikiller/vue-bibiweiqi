@@ -13,6 +13,7 @@ export const gameService = {
   chatVoice,
   shareKifu,
   analyseKifu,
+  winrate,
 };
 
 async function getAll() {
@@ -101,6 +102,18 @@ function shareKifu(kifu_id) {
     handleResponse
   );
 }
+
+function winrate(kifu_id) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+
+  return fetch(
+    `${config.apiUrl}/kifus/winrate/${kifu_id}`,
+    requestOptions
+  ).then(handleResponse);
+}
 //ai analyse
 function analyseKifu(kifu_id) {
   const requestOptions = {
@@ -108,9 +121,10 @@ function analyseKifu(kifu_id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/kifus/analyse/${kifu_id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `${config.apiUrl}/kifus/analyse/${kifu_id}`,
+    requestOptions
+  ).then(handleResponse);
 }
 function saveKifu(_data) {
   const requestOptions = {

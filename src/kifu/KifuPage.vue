@@ -68,7 +68,12 @@
                 v-if="row.item.is_analyse"
                 @click="aiinfo(row.item, row.index, $event.target)"
                 class="btn-sm btn-primary"
-              >ai</b-button>
+              >AI棋谱</b-button>
+              <b-button
+                v-if="row.item.is_analyse"
+                @click="aiwinrate(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >AI胜率</b-button>
             </template>
           </b-table>
         </div>
@@ -173,6 +178,32 @@ export default {
           a.click();
           a.remove(); //afterwards we remove the element again
         });
+    },
+    aiwinrate(item, index, event) {
+      var that = this;
+      gameService.winrate(item.id).then(data => {
+        const h = that.$createElement;
+        const titleVNode = h("div", {
+          domProps: { innerHTML: "胜率分析折线图" }
+        });
+
+        const messageVNode = h("div", { class: ["foobar"] }, [
+          h("b-img", {
+            props: {
+              src: config.apiUrl + data.imgPath,
+              thumbnail: true,
+              center: true,
+              fluid: true
+              // rounded: "circle"
+            }
+          })
+        ]);
+        that.$bvModal.msgBoxOk([messageVNode], {
+          title: [titleVNode],
+          buttonSize: "sm",
+          centered: true,
+        });
+      });
     },
     aiinfo(item, index, event) {
       console.log(item, index, event);
