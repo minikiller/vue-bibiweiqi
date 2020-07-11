@@ -67,7 +67,7 @@ export function getTotalStep() {
   return myplayer.kifu.nodeCount;
 }
 
-var butupd_last = function (e) {
+var butupd_last = function(e) {
   EventBus.$emit("go_move", e.path.m);
   // if (!e.node.children.length ) this.disable();
   // else if (e.node.children.length) this.enable();
@@ -86,7 +86,7 @@ export function kifuViewGame(ele, kifu) {
     update: butupd_last,
     // move: 1000
   });
-  // myboard = myplayer.board;
+  myboard = myplayer.board;
   // myplayer.last();
 }
 

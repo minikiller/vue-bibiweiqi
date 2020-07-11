@@ -14,6 +14,12 @@
       @click="toggleAll"
       v-b-popover.hover.top="'切换棋盘的坐标!'"
     >坐标</b-button>
+    <b-button
+      variant="primary"
+      v-if="!isOpponent"
+      @click="beginTry"
+      v-b-popover.hover.top="'试下几手'"
+    >{{try_text}}</b-button>
     <b-button variant="primary" @click="toggleMarker" v-b-popover.hover.top="'显示不同的手数!'">手数</b-button>
     <b-button variant="primary" @click="back" v-b-popover.hover.top="'返回上一级!'">返回</b-button>
     <div style="width: 100%; margin: 0" ref="player" class="mt-3"></div>
@@ -28,16 +34,20 @@ import {
   gotoStep,
   getTotalStep,
   toggleCoordinates,
-  showMarker
+  showMarker,
+  enable_try,
+  disable_try
 } from "../_helpers";
 import { EventBus } from "../index.js";
 export default {
   name: "KifuViewPage",
   data() {
     return {
+      bTry: true,
       steps: 0,
       maxStep: 40,
       minStep: 0,
+      try_text: "试下",
       kifu: Object
     };
   },
@@ -53,6 +63,17 @@ export default {
     });
   },
   methods: {
+    beginTry() {
+      if (this.bTry) {
+        enable_try();
+        this.bTry = false;
+        this.try_text = "结束";
+      } else {
+        disable_try();
+        this.bTry = true;
+        this.try_text = "试下";
+      }
+    },
     //坐标显示
     toggleAll(checked) {
       toggleCoordinates(checked);
@@ -61,9 +82,9 @@ export default {
     toggleMarker() {
       showMarker();
     },
-    back(){
+    back() {
       this.$router.push({
-        path: `/kifu`,
+        path: `/kifu`
       });
     }
   },

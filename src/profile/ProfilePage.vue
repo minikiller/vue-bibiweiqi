@@ -21,6 +21,8 @@
         </b-col>
         <b-col>
           <b-form @submit="onSubmit" @reset="onReset">
+            胜局数:{{account.user.win}}
+            败局数:{{account.user.fail}}
             <b-form-group id="input-group-1" label="新的密码:" label-for="input-1">
               <b-form-input
                 id="input-1"
