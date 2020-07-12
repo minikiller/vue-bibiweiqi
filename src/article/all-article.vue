@@ -47,8 +47,8 @@
           </td>
           <td>{{ article.win }}</td>
           <td>{{ article.fail }}</td>
-          <td>{{ article.fail }}</td>
           <td>{{ percent[index] }}</td>
+          <td>{{ article.isadmin }}</td>
           <td>{{ article.create_date }}</td>
           <!-- <td>{{ article.date_created }}</td> -->
           <td>
