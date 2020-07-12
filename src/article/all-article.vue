@@ -3,9 +3,7 @@
     <h1>All Article</h1>
 
     <p>
-      <router-link :to="{ name: 'CreateArticle' }" class="btn btn-primary"
-        >Create Article</router-link
-      >
+      <router-link :to="{ name: 'CreateArticle' }" class="btn btn-primary">Create Article</router-link>
     </p>
 
     <div class="form-group">
@@ -22,6 +20,7 @@
     <table class="table table-hover" style="width: 100%;">
       <thead>
         <tr>
+          <!-- <td>PUBLIC_ID</td> -->
           <td>ID</td>
           <td>Name</td>
           <td>mobile</td>
@@ -29,6 +28,7 @@
           <td>Thumbnail</td>
           <td>Win</td>
           <td>Fail</td>
+          <td>Percent</td>
           <td>Admin</td>
           <td>Date Created</td>
           <td>Actions</td>
@@ -36,28 +36,30 @@
       </thead>
 
       <tbody>
-        <tr v-for="article in articles">
-          <td>{{ article.public_id }}</td>
+        <tr v-for="(article,index) in articles">
+          <!-- <td>{{ article.public_id }}</td> -->
+          <td>{{ article.id }}</td>
           <td>{{ article.name }}</td>
           <td>{{ article.mobile }}</td>
           <td>{{ article.rank }}</td>
-          <td><img :src="article.avatar" width="50" height="50" /></td>
+          <td>
+            <img :src="article.avatar" width="50" height="50" />
+          </td>
           <td>{{ article.win }}</td>
           <td>{{ article.fail }}</td>
-          <td>{{ article.isadmin }}</td>
+          <td>{{ article.fail }}</td>
+          <td>{{ percent[index] }}</td>
           <td>{{ article.create_date }}</td>
           <!-- <td>{{ article.date_created }}</td> -->
           <td>
             <router-link
               :to="{ name: 'EditArticle', params: { id: article.public_id } }"
               class="btn btn-primary"
-              >Edit</router-link
-            >
+            >Edit</router-link>
             <router-link
               :to="{ name: 'DeleteArticle', params: { id: article.public_id } }"
               class="btn btn-danger"
-              >Delete</router-link
-            >
+            >Delete</router-link>
           </td>
         </tr>
       </tbody>
@@ -74,16 +76,31 @@ export default {
     return {
       articles: [],
       originalArticles: [],
-      articleSearch: "",
+      articleSearch: ""
     };
   },
   created: function() {
     this.fetchArticleData();
   },
+  computed: {
+    percent: function() {
+      return this.articles.map(function(item) {
+        var point = item.win / (item.win + item.fail);
+        var str = Number(point * 100).toFixed(2);
+        str += "%";
+        return str;
+      });
+    }
+  },
   methods: {
+    toPercent: function(point) {
+      var str = Number(point * 100).toFixed(2);
+      str += "%";
+      return str;
+    },
     fetchArticleData: function() {
       userService.getAll().then(
-        (response) => {
+        response => {
           this.articles = response;
           this.originalArticles = this.articles;
           /* for (var i = 0; i < this.articles.length; i++) {
@@ -95,7 +112,7 @@ export default {
             ).toString();
           } */
         },
-        (response) => {}
+        response => {}
       );
     },
     searchArticles: function() {
@@ -111,8 +128,8 @@ export default {
         }
       }
       this.articles = searchedArticles;
-    },
-  },
+    }
+  }
 };
 </script>
 
