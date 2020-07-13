@@ -31,7 +31,8 @@ var https = require("https").Server(
 var inspect = require("util").inspect;
 
 // var io = require('socket.io')(http);
-var io = require("socket.io")(https, { pingInterval: 2000, pingTimeout: 5000 });
+// var io = require("socket.io")(https, { pingInterval: 5000, pingTimeout: 5000 });
+var io = require("socket.io")(https);
 // io.set('heartbeat timeout', 5000);
 // io.set('heartbeat interval', 2000);
 
@@ -50,7 +51,7 @@ var activeUsers = {}; //正在进行对局的用户字典
 var gameInfos = {}; //存储对局室的信息
 var gameStatus = {}; //game对局者是否准备的信息
 var gamePassed = {}; //game对局者是否终局的信息
-
+var hbeat = {};
 app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
   // res.sendFile(__dirname + "/public/index.html");
@@ -118,6 +119,19 @@ io.on("connection", function(socket) {
   socket.on("login", function(msg) {
     logger.info(getFormattedDate() + " login " + inspect(msg));
     doLogin(socket, msg);
+  });
+
+  socket.conn.on("packet", (packet) => {
+    if (packet.type === "ping") {
+      logger.info(`Received ping from client ${socket.userId}`);
+      logger.info(`Received ping from client ${socket.gameId}`);
+    }
+  });
+
+  socket.conn.on("packetCreate", (packet) => {
+    if (packet.type === "pong") {
+      logger.info(`Sending pong to client. ${socket.userId}`);
+    }
   });
 
   function doLogin(socket, msg) {
@@ -355,6 +369,8 @@ io.on("connection", function(socket) {
   socket.on("resume", function(msg) {
     if (activeUsers[msg.userId] !== undefined) {
       var gameId = activeUsers[msg.userId];
+      socket.userId = msg.userId;
+      socket.gameId = msg.gameId;
       var game = activeGames[gameId];
       var result = activeGames[gameId].result;
       socket.join(gameId, () => {});
@@ -487,14 +503,15 @@ io.on("connection", function(socket) {
     }); */
   });
   //用户掉线后重连
-  socket.on("registerToRoom", function(gameId) {
-    logger.info("socket is join to room id " + gameId);
-    socket.join(gameId);
-    if (activeGames[gameId] !== undefined) {
-      var game = activeGames[gameId];
-      var result = activeGames[gameId].result;
+  socket.on("registerToRoom", function(msg) {
+    logger.info("socket is join to room id " + msg.gameId);
+    doLogin(socket, msg)
+    // socket.join(msg.gameId);
+    if (activeGames[msg.gameId] !== undefined) {
+      var game = activeGames[msg.gameId];
+      var result = activeGames[msg.gameId].result;
       socket.emit("updateRoomGame", {
-        gameId: gameId,
+        gameId: msg.gameId,
         game: game,
         result: result,
       });
@@ -521,6 +538,28 @@ io.on("connection", function(socket) {
       userId: socket.userId,
       gameId: socket.gameId,
     });
+  });
+
+  socket.on("heartbeat", function() {
+    console.log("heartbeat called!");
+    hbeat[socket.id] = Date.now();
+    setTimeout(function() {
+      var now = Date.now();
+      if (now - hbeat[socket.id] > 5000) {
+        console.log("this socket id will be closed " + socket.id);
+        if (addedUser) {
+          --onlineUsers;
+          removeFromLobby(socket.id);
+          try {
+            // this is the most important part
+            io.sockets.connected[socket.id].disconnect();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+      now = null;
+    }, 6000);
   });
 });
 

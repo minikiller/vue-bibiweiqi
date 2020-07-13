@@ -177,7 +177,10 @@ export default {
       this.SET_SPINNER(true);
       // let that = this;
       setTimeout(() => {
-        this.$socket.emit("registerToRoom", this.$route.query.game_id);
+        this.$socket.emit("registerToRoom", {
+          gameId: this.$route.query.game_id,
+          userId: this.account.user.name
+        });
         this.SET_SPINNER(false);
       }, 1000);
       this.success("刷新成功！");
@@ -646,7 +649,7 @@ export default {
       this.success("轮到你骡子了！");
     }); */
 
-    EventBus.$on("confirmTurn", (value) => {
+    EventBus.$on("confirmTurn", value => {
       this.isTurn = value; //打开确认取消按钮
     });
 
