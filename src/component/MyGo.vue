@@ -3,7 +3,7 @@
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
     <audio id="audioPlay" src="/static/voice/turn.mp3" preload="auto"></audio>
-    <audio id="audioBegin"></audio>
+    <audio id="audioBegin" src="/static/voice/begin.mp3" preload="auto"></audio>
 
     <div class="container">
       <vue-baberrage
@@ -41,6 +41,7 @@
                   :imgSrc="b_img"
                   :win="b_win"
                   :offline="b1_offline"
+                  :prepared="b1_prepared"
                 ></info>
               </b-card-text>
             </b-card>
@@ -57,6 +58,7 @@
                   :imgSrc="w_img"
                   :win="w_win"
                   :offline="w1_offline"
+                  :prepared="w1_prepared"
                 ></info>
               </b-card-text>
             </b-card>
@@ -76,6 +78,7 @@
                   :imgSrc="b_img"
                   :win="b_win"
                   :offline="b2_offline"
+                  :prepared="b2_prepared"
                 ></info>
               </b-card-text>
             </b-card>
@@ -92,6 +95,7 @@
                   :imgSrc="w_img"
                   :win="w_win"
                   :offline="w2_offline"
+                  :prepared="w2_prepared"
                 ></info>
               </b-card-text>
             </b-card>
@@ -160,6 +164,10 @@ export default {
       b2_offline: true,
       w1_offline: true,
       w2_offline: true,
+      b1_prepared: false,
+      b2_prepared: false,
+      w1_prepared: false,
+      w2_prepared: false,
       w_caps: 0, //白棋提子数
       b_caps: 0, //黑棋提子数
       b_img: "/static/black_64.png",
@@ -272,8 +280,15 @@ export default {
       if (!this.isOpponent)
         document.getElementById("wgo-control").style.display = "";
     },
-
+    //设置对局准备状态
     prepare(msg) {
+      this.b1_prepared=msg[this.blackOne.name];
+      this.b2_prepared=msg[this.blackTwo.name];
+      this.w1_prepared=msg[this.whiteOne.name];
+      this.w2_prepared=msg[this.whiteTwo.name];
+    },
+    //对局开始
+    beginGame(msg) {
       document.getElementById("audioBegin").play();
     }
   },

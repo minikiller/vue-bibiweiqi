@@ -1,90 +1,134 @@
 <div>
   <b-container fluid>
-    <b-row>
-      <b-col sm="6">
-        <div class="form-group">
-          <b-button
-            v-if="isOpponent&&isMobile"
-            aria-pressed="true"
-            variant="primary"
-            @touchstart="begin"
-            ref="btnResign"
-            :disabled="btnBeginDisable"
-          >
-            {{ btnText }}
-          </b-button>
+    <b-navbar v-if="account.user" toggleable="lg" type="dark" variant="info">
+      <b-container>
+        <b-navbar-brand href="#">
+          <b-img
+            src="/static/img/logo.png"
+            fluid
+            alt="Responsive image"
+            width="50px"
+          ></b-img>
+          {{ games.navTitle }}
+        </b-navbar-brand>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav>
+            <b-nav-form>
+              <b-button
+                size="sm"
+                v-if="isOpponent&&isMobile"
+                aria-pressed="true"
+                variant="primary"
+                @touchstart="begin"
+                ref="btnResign"
+                :disabled="btnBeginDisable"
+              >
+                {{ btnText }}
+              </b-button>
 
-          <b-button
-            v-if="isOpponent && !isMobile"
-            aria-pressed="true"
-            variant="primary"
-            @click="begin"
-            ref="btnResign"
-            :disabled="btnBeginDisable"
-          >
-            {{ btnText }}
-          </b-button>
+              <b-button
+                v-if="isOpponent && !isMobile"
+                aria-pressed="true"
+                variant="primary"
+                @click="begin"
+                ref="btnResign"
+                :disabled="btnBeginDisable"
+              >
+                {{ btnText }}
+              </b-button>
 
-          <b-button variant="primary" v-if="canEnd" @click="getScore">
-            {{ endText }}
-          </b-button>
-          <b-button
-            variant="primary"
-            :disabled="btnPassedDisable"
-            v-if="canBegin"
-            @click="passed"v-b-popover.hover.top="'终局前进入数子状态!'"
-          >
-            数子
-          </b-button>
-          <b-button
-            variant="primary"
-            v-model="status"
-            value="true"
-            @click="toggleAll" v-b-popover.hover.top="'切换棋盘的坐标!'"
-          >
-            坐标
-          </b-button>
-          <b-button variant="primary" @click="toggleMarker" v-b-popover.hover.top="'显示不同的手数!'">
-            手数
-          </b-button>
-          <b-button
-            variant="primary"
-            v-if="isOpponent"
-            @click="regret"
-            :disabled="btnRegretDisable"
-            v-b-popover.hover.top="'可以申请悔棋哦!'"
-          >
-            悔棋
-          </b-button>
-          <b-button variant="primary" v-if="canBegin" @click="who" v-b-popover.hover.top="'想知道现在该谁落子了!'">
-            谁了
-          </b-button>
-          <b-button variant="primary" @click="refresh" v-b-popover.hover.top="'刷新获得最新的数据!'">
-            刷新
-          </b-button>
-          <b-button variant="primary" v-if="account.user.isadmin" @click="print">
-            debug
-          </b-button>
-          <b-button variant="primary" v-if="!isOpponent" @click="beginTry" v-b-popover.hover.top="'试下几手'">
-            {{try_text}}
-          </b-button>
-          <b-button
-            variant="primary"
-            :disabled="btnQuitDisable"
-            @click="exit"
-            ref="quit" v-b-popover.hover.top="'离开当前对局室!'"
-          >
-            退出
-          </b-button>
-          <!-- <b-button
-              variant="primary"
-              @click="test"
-            >
-              test
-            </b-button> -->
-        </div>
-      </b-col>
-    </b-row>
+              <b-button variant="primary" v-if="canEnd" @click="getScore">
+                {{ endText }}
+              </b-button>
+              <b-button
+                variant="primary"
+                :disabled="btnPassedDisable"
+                v-if="canBegin"
+                @click="passed"
+                v-b-popover.hover.top="'终局前进入数子状态!'"
+              >
+                数子
+              </b-button>
+              <b-button
+                variant="primary"
+                v-model="status"
+                value="true"
+                @click="toggleAll"
+                v-b-popover.hover.top="'切换棋盘的坐标!'"
+              >
+                坐标
+              </b-button>
+              <b-button
+                variant="primary"
+                @click="toggleMarker"
+                v-b-popover.hover.top="'显示不同的手数!'"
+              >
+                手数
+              </b-button>
+              <b-button
+                variant="primary"
+                v-if="isOpponent"
+                @click="regret"
+                :disabled="btnRegretDisable"
+                v-b-popover.hover.top="'可以申请悔棋哦!'"
+              >
+                悔棋
+              </b-button>
+              <b-button
+                variant="primary"
+                v-if="canBegin"
+                @click="who"
+                v-b-popover.hover.top="'想知道现在该谁落子了!'"
+              >
+                谁了
+              </b-button>
+              <b-button
+                variant="primary"
+                @click="refresh"
+                v-b-popover.hover.top="'刷新获得最新的数据!'"
+              >
+                刷新
+              </b-button>
+              <b-button
+                variant="primary"
+                v-if="account.user.isadmin"
+                @click="print"
+              >
+                debug
+              </b-button>
+              <b-button
+                variant="primary"
+                v-if="!isOpponent"
+                @click="beginTry"
+                v-b-popover.hover.top="'试下几手'"
+              >
+                {{try_text}}
+              </b-button>
+              <b-button
+                variant="primary"
+                :disabled="btnQuitDisable"
+                @click="exit"
+                ref="quit"
+                v-b-popover.hover.top="'离开当前对局室!'"
+              >
+                退出
+              </b-button>
+            </b-nav-form>
+            <b-navbar-nav right>
+              <b-nav-item href="#"><em>
+                <b-avatar
+                  variant="info"
+                  :src="account.user.avatar"
+                ></b-avatar>
+                {{ account.user.name }}[{{ account.user.rank }}]
+              </em></b-nav-item>
+            </b-navbar-nav>  
+            
+          </b-navbar-nav>
+        </b-collapse>
+      </b-container>
+    </b-navbar>
     <b-row>
       <b-col>
         <div>
@@ -101,7 +145,6 @@
             :isTurn="isTurn"
           />
         </div>
-        
       </b-col>
     </b-row>
     <b-row class="ml-2 mr-2 mb-2">

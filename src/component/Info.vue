@@ -25,14 +25,14 @@
       </b-col>
     </b-row>
     <b-row class="mx-2">
-      <!-- <b-col cols="4">
-        <div v-if="offline">
-          <i class="far fa-times-circle"></i>
-        </div>
-        <div v-else>
+      <b-col cols="4">
+        <div v-if="prepared">
           <i class="far fa-check-circle"></i>
         </div>
-      </b-col> -->
+        <div v-else>
+          <i class="far fa-times-circle"></i>
+        </div>
+      </b-col>
       <b-col>
         <div v-if="turn">
           <b-img src="/static/img/xingqi.png" fluid alt="Responsive image" width="59px"></b-img>
@@ -61,7 +61,8 @@ export default {
     turn: Boolean,
     imgSrc: String,
     win: Boolean,
-    offline: Boolean
+    offline: Boolean,
+    prepared: Boolean
   },
   computed: {
     format_playTime: function() {

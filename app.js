@@ -119,6 +119,7 @@ io.on("connection", function(socket) {
   socket.on("login", function(msg) {
     logger.info(getFormattedDate() + " login " + inspect(msg));
     doLogin(socket, msg);
+    io.sockets.in(msg.gameId).emit("prepare", gameStatus[msg.gameId]);
   });
 
   socket.conn.on("packet", (packet) => {
@@ -286,8 +287,9 @@ io.on("connection", function(socket) {
   socket.on("prepareGame", function(msg) {
     // users[msg.userId].prepared = true;
     gameStatus[msg.gameId][msg.userId] = true;
-    io.sockets.in(msg.gameId).emit("prepare", getUserStatus(msg.gameId));
-
+    // io.sockets.in(msg.gameId).emit("prepare", getUserStatus(msg.gameId));
+    io.sockets.in(msg.gameId).emit("prepare", gameStatus[msg.gameId]);
+    
     if (checkGameStatus(msg.gameId)) {
       //进入对局状态
       var game = {

@@ -60,7 +60,8 @@ export default {
       "updateGame",
       "updateNavTitle",
       "setResult",
-      "setTurn","updateShowNav"
+      "setTurn",
+      "updateShowNav"
     ]),
     //设置按钮的状态
     setButtonStatus() {
@@ -232,7 +233,7 @@ export default {
         userId: this.account.user.name,
         gameId: this.game_id
       });
-      
+
       this.$router.push({ path: "/" });
     },
 
@@ -325,6 +326,17 @@ export default {
         alert(this.game.blacktwo_id.name + " =》该他下棋了！");
       } else if (turn == 3) {
         alert(this.game.whitetwo_id.name + " =》该他下棋了！");
+      }
+    },
+    setNav(turn) {
+      if (turn == 0) {
+        this.updateNavTitle(this.game.blackone_id.name + ":该你落子");
+      } else if (turn == 1) {
+        this.updateNavTitle(this.game.whiteone_id.name + ":该你落子");
+      } else if (turn == 2) {
+        this.updateNavTitle(this.game.blacktwo_id.name + ":该你落子");
+      } else if (turn == 3) {
+        this.updateNavTitle(this.game.whitetwo_id.name + ":该你落子");
       }
     },
     //悔棋功能
@@ -453,7 +465,7 @@ export default {
     },
     //棋手对局进入准备状态
     prepare(msg) {
-      this.success(msg);
+      // this.success(msg);
     },
 
     //棋局正式开始
@@ -642,6 +654,7 @@ export default {
           this.success("对局已经结束！");
         }
       }
+
       this.updateNavTitle(this.game.name + "#" + this.$route.query.game_id);
 
       return data;
@@ -650,7 +663,10 @@ export default {
     /* EventBus.$on("yourturn", () => {
       this.success("轮到你骡子了！");
     }); */
-
+    EventBus.$on("myturn", value => {
+      // alert("get ");
+      this.setNav(value);
+    });
     EventBus.$on("confirmTurn", value => {
       this.isTurn = value; //打开确认取消按钮
     });
