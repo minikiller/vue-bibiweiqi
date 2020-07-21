@@ -40,6 +40,7 @@
                 </b-input-group>
                 <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
               </div>
+              <b-form-checkbox v-model="remember" name="checkbox-1" switch>记住密码</b-form-checkbox>
               <div class="form-group">
                 <!--<b-button block variant="success" :disabled="status.loggingIn">登录</b-button>-->
                 <b-button type="submit" block variant="success" :disabled="loggingIn">
@@ -67,12 +68,15 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+const Base64 = require("js-base64").Base64;
 
 export default {
+   
   data() {
     return {
       username: "",
       password: "",
+      remember: false,
       submitted: false,
       loggingIn: false
     };
@@ -82,6 +86,15 @@ export default {
   },
   created() {
     // reset login status
+    // 在页面加载时从cookie获取登录信息
+    let account = this.getCookie("account");
+    let password = Base64.decode(this.getCookie("password"));
+    // 如果存在赋值给表单，并且将记住密码勾选
+    if (account) {
+      this.username = account;
+      this.password = password;
+      this.remember = true;
+    }
     this.logout();
   },
   methods: {
@@ -92,8 +105,8 @@ export default {
       if (username && password) {
         this.login({ username, password });
         this.loggingIn = true;
+        this.setUserInfo();
       }
-      
     },
     test() {
       if ("vibrate" in window.navigator) {
@@ -102,6 +115,43 @@ export default {
       } else {
         console.log("浏览器不支持震动");
       }
+    },
+    // 储存表单信息
+    setUserInfo: function() {
+      // 判断用户是否勾选记住密码，如果勾选，向cookie中储存登录信息，
+      // 如果没有勾选，储存的信息为空
+      if (this.remember) {
+        this.setCookie("account", this.username);
+        // base64加密密码
+        let passWord = Base64.encode(this.password);
+        this.setCookie("password", passWord);
+      } else {
+        this.setCookie("account", "");
+        this.setCookie("password", "");
+      }
+    },
+    // 获取cookie
+    getCookie: function(key) {
+      if (document.cookie.length > 0) {
+        var start = document.cookie.indexOf(key + "=");
+        if (start !== -1) {
+          start = start + key.length + 1;
+          var end = document.cookie.indexOf(";", start);
+          if (end === -1) end = document.cookie.length;
+          return unescape(document.cookie.substring(start, end));
+        }
+      }
+      return "";
+    },
+    // 保存cookie
+    setCookie: function(cName, value, expiredays) {
+      var exdate = new Date();
+      exdate.setDate(exdate.getDate() + expiredays);
+      document.cookie =
+        cName +
+        "=" +
+        decodeURIComponent(value) +
+        (expiredays == null ? "" : ";expires=" + exdate.toGMTString());
     }
   }
 };
