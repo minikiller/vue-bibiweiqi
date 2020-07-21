@@ -7,7 +7,7 @@
             <div class="page" v-if="getSpinner">
               <b-spinner class="spinner" :variant="'primary'" :key="'primary'"></b-spinner>
             </div>
-            <Navbar />
+            <Navbar v-if="games.showNav"/>
             <notifications group="foo" position="top right" />
             <!-- <div
             v-if="alert.message"
@@ -31,7 +31,8 @@ export default {
   computed: {
     ...mapGetters("room", ["getSpinner"]),
     ...mapState({
-      alert: state => state.alert
+      alert: state => state.alert,
+      games: state => state.games
     })
   },
   methods: {

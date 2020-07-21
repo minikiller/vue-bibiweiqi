@@ -119,6 +119,7 @@ export default {
   mounted() {
     // this.getAllGames();
     this.getRecords();
+    this.updateShowNav(true);
   },
   created() {},
   computed: {
@@ -143,6 +144,9 @@ export default {
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
+    ...mapMutations("games", [
+      "updateShowNav"
+    ]),
     paginate(currentpage) {
       this.$store.dispatch("room/paginate", {
         currentPage: currentpage,

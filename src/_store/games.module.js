@@ -9,6 +9,7 @@ const state = {
   connected: false,
   roomId: "", //记录用户所在的房间号
   displayGames: [],
+  showNav: true //控制navBar的显示
 };
 
 const actions = {};
@@ -45,6 +46,11 @@ const mutations = {
   updateNavTitle(state, value) {
     state.navTitle = value;
   },
+
+  updateShowNav(state, value) {
+    state.showNav = value;
+  },
+
   setResult(state, value) {
     state.result = value;
   },

@@ -3,7 +3,7 @@ import Vue from 'vue'
 const state = {
   message: null,
 };
-const time_out = 10000;
+const time_out = 1000;
 const actions = {
   success({ commit }, message) {
     commit("success", message);
@@ -34,8 +34,8 @@ const mutations = {
       type: 'success',
       title: '消息提醒',
       text: message,
-      duration: 5000,
-      speed: 1000
+      duration: time_out,
+      // speed: 1000
     })
   },
   error(state, message) {
@@ -46,6 +46,7 @@ const mutations = {
       title: '消息提醒',
       text: message,
       duration: time_out,
+      // speed: 1000
     })
   },
   clear(state) {

@@ -60,7 +60,7 @@ export default {
       "updateGame",
       "updateNavTitle",
       "setResult",
-      "setTurn"
+      "setTurn","updateShowNav"
     ]),
     //设置按钮的状态
     setButtonStatus() {
@@ -232,6 +232,7 @@ export default {
         userId: this.account.user.name,
         gameId: this.game_id
       });
+      
       this.$router.push({ path: "/" });
     },
 
@@ -599,6 +600,7 @@ export default {
     // this.$socket.open();
     // this.$socket.on("helloMsg", this.hello);
     // this.$socket.removeAllListeners();
+    this.updateShowNav(false);
     this.game_id = this.$route.query.game_id;
     this.SET_SPINNER(true);
     gameService.getById(this.game_id).then(data => {
