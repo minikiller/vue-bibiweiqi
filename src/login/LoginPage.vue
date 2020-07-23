@@ -71,7 +71,6 @@ import { mapState, mapActions } from "vuex";
 const Base64 = require("js-base64").Base64;
 
 export default {
-   
   data() {
     return {
       username: "",
@@ -151,7 +150,8 @@ export default {
         cName +
         "=" +
         decodeURIComponent(value) +
-        (expiredays == null ? "" : ";expires=" + exdate.toGMTString());
+        (expiredays == null ? "" : ";expires=" + exdate.toGMTString()) +
+        "; path=/";
     }
   }
 };
