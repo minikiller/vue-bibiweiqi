@@ -74,6 +74,11 @@
                 @click="aiwinrate(row.item, row.index, $event.target)"
                 class="btn-sm btn-primary"
               >AI胜率</b-button>
+              <b-button
+                v-if="row.item.is_analyse"
+                @click="drops(row.item, row.index, $event.target)"
+                class="btn-sm btn-primary"
+              >AI败招</b-button>
             </template>
           </b-table>
         </div>
@@ -89,8 +94,8 @@ import { mapState, mapMutations } from "vuex";
 export default {
   computed: {
     ...mapState({
-      account: state => state.account
-    })
+      account: (state) => state.account,
+    }),
   },
   data() {
     return {
@@ -99,35 +104,35 @@ export default {
       fields: [
         {
           key: "id",
-          label: "ID"
+          label: "ID",
           // sortable: true,
         },
         {
           key: "black_info",
-          label: "黑方信息"
+          label: "黑方信息",
           // sortable: true,
         },
         {
           key: "white_info",
-          label: "白方信息"
+          label: "白方信息",
         },
         {
           key: "moves",
-          label: "手数"
+          label: "手数",
         },
         {
           key: "result",
-          label: "结果"
+          label: "结果",
         },
         {
           key: "create_date",
           label: "创建时间",
-          class: "my-class"
+          class: "my-class",
         },
-        { key: "actions", label: "Actions" }
+        { key: "actions", label: "Actions" },
       ],
       items: [],
-      share_items: []
+      share_items: [],
     };
   },
   mounted() {
@@ -157,10 +162,10 @@ export default {
       let filename;
       const requestOptions = {
         method: "GET",
-        headers: authHeader()
+        headers: authHeader(),
       };
       fetch(`${config.apiUrl}/kifus/${id}`, requestOptions)
-        .then(response => {
+        .then((response) => {
           if (response.status === 200) {
             filename = response.headers.get("x-suggested-filename");
 
@@ -169,7 +174,7 @@ export default {
             return;
           }
         })
-        .then(blob => {
+        .then((blob) => {
           var url = window.URL.createObjectURL(blob);
           var a = document.createElement("a");
           a.href = url;
@@ -179,12 +184,16 @@ export default {
           a.remove(); //afterwards we remove the element again
         });
     },
+    drops(item, index, event) {
+      if (item.drops_data) alert(item.drops_data);
+      else alert("没有找到数据！");
+    },
     aiwinrate(item, index, event) {
       var that = this;
-      gameService.winrate(item.id).then(data => {
+      gameService.winrate(item.id).then((data) => {
         const h = that.$createElement;
         const titleVNode = h("div", {
-          domProps: { innerHTML: "胜率分析折线图" }
+          domProps: { innerHTML: "胜率分析折线图" },
         });
 
         const messageVNode = h("div", { class: ["foobar"] }, [
@@ -193,10 +202,10 @@ export default {
               src: config.apiUrl + data.imgPath,
               thumbnail: true,
               center: true,
-              fluid: true
+              fluid: true,
               // rounded: "circle"
-            }
-          })
+            },
+          }),
         ]);
         that.$bvModal.msgBoxOk([messageVNode], {
           title: [titleVNode],
@@ -211,10 +220,10 @@ export default {
       let filename;
       const requestOptions = {
         method: "GET",
-        headers: authHeader()
+        headers: authHeader(),
       };
       fetch(`${config.apiUrl}/kifus/ai/${id}`, requestOptions)
-        .then(response => {
+        .then((response) => {
           if (response.status === 200) {
             filename = response.headers.get("x-suggested-filename");
 
@@ -223,7 +232,7 @@ export default {
             return;
           }
         })
-        .then(blob => {
+        .then((blob) => {
           var url = window.URL.createObjectURL(blob);
           var a = document.createElement("a");
           a.href = url;
@@ -235,7 +244,7 @@ export default {
     },
     shared(item, index, event) {
       let id = item.id;
-      gameService.shareKifu(id).then(data => {
+      gameService.shareKifu(id).then((data) => {
         this.success(data.message);
       });
     },
@@ -244,9 +253,9 @@ export default {
       // this.$store.commit("room/SET_SPINNER", true);
       const requestOptions = {
         method: "GET",
-        headers: authHeader()
+        headers: authHeader(),
       };
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(async () => {
           const res = await fetch(`${config.apiUrl}/kifus/`, requestOptions);
           const val = await res.json();
@@ -263,19 +272,19 @@ export default {
       this.SET_SPINNER(true);
       const requestOptions = {
         method: "GET",
-        headers: authHeader()
+        headers: authHeader(),
       };
       setTimeout(() => {
         let _data = fetch(`${config.apiUrl}/kifus/share`, requestOptions)
           .then(handleResponse)
-          .then(data => {
+          .then((data) => {
             this.share_items = data.kifus;
             this.SET_SPINNER(false);
             return data;
           });
       }, 1000);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
