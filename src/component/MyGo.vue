@@ -236,28 +236,28 @@ export default {
       });
     },
     joinlobby(user) {
-      this.barrageList.push({
+      /* this.barrageList.push({
         id: ++this.currentId,
         avatar: this.avatar,
         msg: "系统: " + user + "进入对局室",
         time: 10,
         type: MESSAGE_TYPE.NORMAL,
         barrageStyle: "red"
-      });
+      }); */
       this.b1_offline = user == this.blackOne.name ? false : this.b1_offline;
       this.b2_offline = user == this.blackTwo.name ? false : this.b2_offline;
       this.w1_offline = user == this.whiteOne.name ? false : this.w1_offline;
       this.w2_offline = user == this.whiteTwo.name ? false : this.w2_offline;
     },
     leavelobby(user) {
-      this.barrageList.push({
-        id: ++this.currentId,
-        avatar: this.avatar,
-        msg: "系统: " + user + "离开对局室",
-        time: 10,
-        type: MESSAGE_TYPE.NORMAL,
-        barrageStyle: "red"
-      });
+      /* // this.barrageList.push({
+      //   id: ++this.currentId,
+      //   avatar: this.avatar,
+      //   msg: "系统: " + user + "离开对局室",
+      //   time: 10,
+      //   type: MESSAGE_TYPE.NORMAL,
+      //   barrageStyle: "red"
+      // }); */
       this.b1_offline = user == this.blackOne.name ? true : this.b1_offline;
       this.b2_offline = user == this.blackTwo.name ? true : this.b2_offline;
       this.w1_offline = user == this.whiteOne.name ? true : this.w1_offline;
