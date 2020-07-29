@@ -51,6 +51,7 @@
             responsive
           >
             <template v-slot:cell(actions)="row">
+              <<<<<<< HEAD
               <b-dropdown id="dropdown-aria" text="Action" variant="primary" class="m-2">
                 <b-dropdown-item-button @click="info(row.item, row.index, $event.target)">下载</b-dropdown-item-button>
                 <b-dropdown-item-button @click="open(row.item, row.index, $event.target)">打开</b-dropdown-item-button>
@@ -66,6 +67,10 @@
                   v-if="row.item.is_analyse"
                   @click="aiwinrate(row.item, row.index, $event.target)"
                 >AI胜率</b-dropdown-item-button>
+                <b-dropdown-item-button
+                  v-if="row.item.is_analyse"
+                  @click="drops(row.item, row.index, $event.target)"
+                >AI败招</b-dropdown-item-button>
               </b-dropdown>
             </template>
           </b-table>
@@ -171,6 +176,10 @@ export default {
           a.click();
           a.remove(); //afterwards we remove the element again
         });
+    },
+    drops(item, index, event) {
+      if (item.drops_data) alert(item.drops_data);
+      else alert("没有找到数据！");
     },
     aiwinrate(item, index, event) {
       var that = this;
