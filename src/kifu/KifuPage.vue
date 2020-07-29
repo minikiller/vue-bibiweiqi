@@ -51,29 +51,22 @@
             responsive
           >
             <template v-slot:cell(actions)="row">
-              <b-button
-                @click="info(row.item, row.index, $event.target)"
-                class="btn-sm btn-primary"
-              >下载</b-button>
-              <b-button
-                @click="open(row.item, row.index, $event.target)"
-                class="btn-sm btn-primary"
-              >打开</b-button>
-              <b-button
-                v-if="account.user.isadmin"
-                @click="analyse(row.item, row.index, $event.target)"
-                class="btn-sm btn-primary"
-              >分析</b-button>
-              <b-button
-                v-if="row.item.is_analyse"
-                @click="aiinfo(row.item, row.index, $event.target)"
-                class="btn-sm btn-primary"
-              >AI棋谱</b-button>
-              <b-button
-                v-if="row.item.is_analyse"
-                @click="aiwinrate(row.item, row.index, $event.target)"
-                class="btn-sm btn-primary"
-              >AI胜率</b-button>
+              <b-dropdown id="dropdown-aria" text="Action" variant="primary" class="m-2">
+                <b-dropdown-item-button @click="info(row.item, row.index, $event.target)">下载</b-dropdown-item-button>
+                <b-dropdown-item-button @click="open(row.item, row.index, $event.target)">打开</b-dropdown-item-button>
+                <b-dropdown-item-button
+                  v-if="account.user.isadmin"
+                  @click="analyse(row.item, row.index, $event.target)"
+                >分析</b-dropdown-item-button>
+                <b-dropdown-item-button
+                  v-if="row.item.is_analyse"
+                  @click="aiinfo(row.item, row.index, $event.target)"
+                >AI棋谱</b-dropdown-item-button>
+                <b-dropdown-item-button
+                  v-if="row.item.is_analyse"
+                  @click="aiwinrate(row.item, row.index, $event.target)"
+                >AI胜率</b-dropdown-item-button>
+              </b-dropdown>
             </template>
           </b-table>
         </div>
@@ -201,7 +194,7 @@ export default {
         that.$bvModal.msgBoxOk([messageVNode], {
           title: [titleVNode],
           buttonSize: "sm",
-          centered: true,
+          centered: true
         });
       });
     },
