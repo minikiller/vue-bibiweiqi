@@ -148,12 +148,14 @@ io.on("connection", function(socket) {
     }
 
     if (!gameStatus[gameId]) {
-      userStatus[msg.gameInfo.blackone_id.name] = false;
-      userStatus[msg.gameInfo.blacktwo_id.name] = false;
-      userStatus[msg.gameInfo.whiteone_id.name] = false;
-      userStatus[msg.gameInfo.whitetwo_id.name] = false;
-      gameStatus[gameId] = userStatus;
-      redis_client.set("gameStatus", JSON.stringify(gameStatus));
+      if (msg.gameInfo) {
+        userStatus[msg.gameInfo.blackone_id.name] = false;
+        userStatus[msg.gameInfo.blacktwo_id.name] = false;
+        userStatus[msg.gameInfo.whiteone_id.name] = false;
+        userStatus[msg.gameInfo.whitetwo_id.name] = false;
+        gameStatus[gameId] = userStatus;
+        redis_client.set("gameStatus", JSON.stringify(gameStatus));
+      }
     }
 
     if (!gamePassed[gameId]) {
@@ -289,7 +291,7 @@ io.on("connection", function(socket) {
     gameStatus[msg.gameId][msg.userId] = true;
     // io.sockets.in(msg.gameId).emit("prepare", getUserStatus(msg.gameId));
     io.sockets.in(msg.gameId).emit("prepare", gameStatus[msg.gameId]);
-    
+
     if (checkGameStatus(msg.gameId)) {
       //进入对局状态
       var game = {
@@ -507,7 +509,7 @@ io.on("connection", function(socket) {
   //用户掉线后重连
   socket.on("registerToRoom", function(msg) {
     logger.info("socket is join to room id " + msg.gameId);
-    doLogin(socket, msg)
+    doLogin(socket, msg);
     // socket.join(msg.gameId);
     if (activeGames[msg.gameId] !== undefined) {
       var game = activeGames[msg.gameId];
