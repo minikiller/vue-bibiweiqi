@@ -51,7 +51,6 @@
             responsive
           >
             <template v-slot:cell(actions)="row">
-              <<<<<<< HEAD
               <b-dropdown id="dropdown-aria" text="Action" variant="primary" class="m-2">
                 <b-dropdown-item-button @click="info(row.item, row.index, $event.target)">下载</b-dropdown-item-button>
                 <b-dropdown-item-button @click="open(row.item, row.index, $event.target)">打开</b-dropdown-item-button>
