@@ -36,6 +36,19 @@
             </template>
           </b-table>
         </div>
+        <b-row align-v="center">
+          <b-col cols="4"></b-col>
+          <b-col cols="4">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              @input="paginate"
+            ></b-pagination>
+          </b-col>
+          <b-col cols="4"></b-col>
+          <!-- <p class="mt-3">Current Page: {{ currentPage }}</p> -->
+        </b-row>
       </b-tab>
       <b-tab>
         <template v-slot:title>
@@ -74,6 +87,19 @@
             </template>
           </b-table>
         </div>
+        <b-row align-v="center">
+          <b-col cols="4"></b-col>
+          <b-col cols="4">
+            <b-pagination
+              v-model="share_currentPage"
+              :total-rows="share_totalRows"
+              :per-page="perPage"
+              @input="shared_paginate"
+            ></b-pagination>
+          </b-col>
+          <b-col cols="4"></b-col>
+          <!-- <p class="mt-3">Current Page: {{ currentPage }}</p> -->
+        </b-row>
       </b-tab>
     </b-tabs>
   </div>
@@ -93,6 +119,11 @@ export default {
     return {
       name: "我的棋谱",
       show: false,
+      perPage: 10,
+      currentPage: 1,
+      totalRows: 0,
+      share_currentPage: 1,
+      share_totalRows: 0,
       fields: [
         {
           key: "id",
@@ -249,9 +280,13 @@ export default {
       };
       return new Promise(resolve => {
         setTimeout(async () => {
-          const res = await fetch(`${config.apiUrl}/kifus/`, requestOptions);
+          const res = await fetch(
+            `${config.apiUrl}/kifus/page?page=${this.currentPage}&per_page=${this.perPage}`,
+            requestOptions
+          );
           const val = await res.json();
-          resolve(val.kifus);
+          resolve(val.data);
+          this.totalRows = val.total;
           this.SET_SPINNER(false);
         }, 1000);
       });
@@ -267,15 +302,25 @@ export default {
         headers: authHeader()
       };
       setTimeout(() => {
-        let _data = fetch(`${config.apiUrl}/kifus/share`, requestOptions)
+        let _data = fetch(
+          `${config.apiUrl}/kifus/share/page?page=${this.share_currentPage}&per_page=${this.perPage}`,
+          requestOptions
+        )
           .then(handleResponse)
           .then(data => {
-            this.share_items = data.kifus;
+            this.share_items = data.data;
+            this.share_totalRows = data.total;
             this.SET_SPINNER(false);
             return data;
           });
       }, 1000);
-    }
+    },
+    paginate(currentpage) {
+      this.getall();
+    },
+    shared_paginate(currentpage){
+      this.getShareAll();
+    },
   }
 };
 </script>
