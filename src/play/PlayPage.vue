@@ -8,6 +8,7 @@ import { mapState, mapMutations } from "vuex";
 import { EventBus } from "../index.js";
 import {
   enable_board,
+  disable_board,
   initGameData,
   showScore,
   setPassedStatus,
@@ -22,6 +23,8 @@ import {
   getWhichTurn,
   enable_try,
   disable_try,
+  play,
+  clear_time,
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -153,6 +156,7 @@ export default {
       setPassedStatus();
       this.setResult("passed");
       this.btnPassedDisable = true;
+      play(null, null); //passed a step
       this.$socket.emit("passedGame", {
         userId: this.account.user.name,
         gameId: this.game_id,
@@ -283,6 +287,7 @@ export default {
     },
     //对局结束，保存棋谱
     _finishGame(msg) {
+      clear_time();
       this.error("对局结束： " + msg.result);
       EventBus.$emit("gameove", msg);
       console.log("game is over,result is {}".format(msg.result));
@@ -484,6 +489,8 @@ export default {
     endGame(msg) {
       console.log("begin to end game");
       this.success(msg);
+      clear_time();
+      disable_board();
       if (this.account.user.name == this.game.blackone_id.name) {
         this.canEnd = true; //启用数目按钮
         this.endText = "开始数目";
@@ -592,6 +599,7 @@ export default {
       userStatus: {}, //对局用户的准备状态
       currentUsers: [], //进入对局室的所有人
       canBegin: false, //是否可以开始新对局
+      canPassed: false, //是否可以点击终局按钮
       canEnd: false, //是否可以开始数目
       endText: "开始数目",
       kifu: "", //棋谱
@@ -668,6 +676,11 @@ export default {
       // alert("get ");
       this.setNav(value);
     });
+    EventBus.$on("yourturn", (value) => {
+      // alert("get ");
+      this.canPassed = true;
+    });
+
     EventBus.$on("confirmTurn", (value) => {
       this.isTurn = value; //打开确认取消按钮
     });
@@ -691,6 +704,7 @@ export default {
         })
       );
       this.btnRegretDisable = false;
+      this.canPassed = false;
       this.updateGame(game);
     });
     EventBus.$on("showScore", (msg) => {
