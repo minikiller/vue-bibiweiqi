@@ -353,6 +353,7 @@ export default {
           fetch(`${config.apiUrl}/kifus/upload`, {
             method: "POST",
             body: formData,
+            headers: authHeader(),
           }).then(handleResponse).then((res) => {
              this.success(res.message)
           });
