@@ -3,7 +3,7 @@ import Vue from 'vue'
 const state = {
   message: null,
 };
-const time_out = 1000;
+const time_out = 3000;
 const actions = {
   success({ commit }, message) {
     commit("success", message);

@@ -220,7 +220,7 @@ var edit_board_mouse_move = function(x, y) {
 };
 
 //play a move
-var play = function(x, y) {
+export function play(x, y) {
   // ignore invalid move
   if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;
   // var con = confirm("确认落子吗?");
@@ -228,7 +228,7 @@ var play = function(x, y) {
   var node;
 
   // create new node
-  if (x == null) {
+  if (x == null && y == null) {
     node = new WGo.KNode({
       move: {
         pass: true,
@@ -238,7 +238,7 @@ var play = function(x, y) {
       WL: white_time,
       _edited: true,
     });
-    return;
+    // return;
   } else {
     node = new WGo.KNode({
       move: {
@@ -284,7 +284,7 @@ var play = function(x, y) {
     WL: white_time,
   };
   EventBus.$emit("move", data);
-};
+}
 
 function add_event() {
   _ev_move = _ev_move || edit_board_mouse_move.bind(myboard);
@@ -296,12 +296,17 @@ function add_event() {
   EventBus.$emit("yourturn", "");
 }
 
-var disable_board = function() {
+export function disable_board() {
+  // clear_time();
   getWhichTurn();
   myboard.removeEventListener("click", _ev_click);
   myboard.removeEventListener("mousemove", _ev_move);
   myboard.removeEventListener("mouseout", _ev_out);
-};
+}
+
+export function clear_time() {
+  clearTimeout(timer_loop);
+}
 
 var read_time = function() {
   // console.log("your turn value is " + turn);
@@ -350,7 +355,7 @@ var move_play = function(player, x, y) {
       WL: white_time,
       _edited: true,
     });
-    return;
+    // return;
   } else {
     node = new WGo.KNode({
       move: {
@@ -362,14 +367,13 @@ var move_play = function(player, x, y) {
       WL: white_time,
       _edited: true,
     });
-
-    // append new node to the current kifu
-    player.kifuReader.node.appendChild(node);
-
-    // show next move
-    player.next(player.kifuReader.node.children.length - 1);
-    read_time();
   }
+  // append new node to the current kifu
+  player.kifuReader.node.appendChild(node);
+
+  // show next move
+  player.next(player.kifuReader.node.children.length - 1);
+  read_time();
 };
 //获得现在是黑骡子，还是白骡子
 export function getGameTurn() {
@@ -503,7 +507,7 @@ var try_board_mouse_out = function() {
   }
 };
 
-//board mouse move event
+//board mouse move event,试下
 var try_board_mouse_move = function(x, y) {
   // if (prepare_confirm == true) return;
   if (myplayer.frozen || (this._lastX == x && this._lastY == y)) return;
@@ -529,7 +533,7 @@ var try_board_mouse_move = function(x, y) {
   }
 };
 
-//play a move
+//play a move，试下
 var try_play = function(x, y) {
   // ignore invalid move
   if (myplayer.frozen || !myplayer.kifuReader.game.isValid(x, y)) return;

@@ -44,7 +44,7 @@
               <b-button
                 variant="primary"
                 :disabled="btnPassedDisable"
-                v-if="canBegin"
+                v-if="canBegin&&canPassed"
                 @click="passed"
                 v-b-popover.hover.top="'终局前进入数子状态!'"
               >
@@ -99,7 +99,7 @@
               </b-button>
               <b-button
                 variant="primary"
-                v-if="!isOpponent"
+                v-if="!isOpponent||status==='结束'"
                 @click="beginTry"
                 v-b-popover.hover.top="'试下几手'"
               >
@@ -116,15 +116,16 @@
               </b-button>
             </b-nav-form>
             <b-navbar-nav right>
-              <b-nav-item href="#"><em>
-                <b-avatar
-                  variant="info"
-                  :src="account.user.avatar"
-                ></b-avatar>
-                {{ account.user.name }}[{{ account.user.rank }}]
-              </em></b-nav-item>
-            </b-navbar-nav>  
-            
+              <b-nav-item href="#"
+                ><em>
+                  <b-avatar
+                    variant="info"
+                    :src="account.user.avatar"
+                  ></b-avatar>
+                  {{ account.user.name }}[{{ account.user.rank }}]
+                </em></b-nav-item
+              >
+            </b-navbar-nav>
           </b-navbar-nav>
         </b-collapse>
       </b-container>
