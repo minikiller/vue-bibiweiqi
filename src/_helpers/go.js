@@ -28,6 +28,9 @@ export function initGame(ele, gameinfo) {
       "(;SZ[19]TM[" +
       gameinfo.total_time +
       "]KM[7.5]" +
+      "DT[" +
+      getTime() +
+      "]" +
       "PB[" +
       gameinfo.blackOne +
       "&" +
@@ -90,6 +93,13 @@ export function kifuViewGame(ele, kifu) {
   // myplayer.last();
 }
 
+function getTime() {
+  var date = new Date();
+  var str =
+    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+  return str;
+}
+
 export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
   if (gameinfo.BL == "" && gameinfo.WL == "") {
@@ -109,6 +119,9 @@ export function initResumeGame(ele, gameinfo, result) {
         "(;SZ[19]TM[" +
         gameinfo.total_time +
         "]KM[7.5]" +
+        "DT[" +
+        getTime() +
+        "]" +
         "PB[" +
         gameinfo.users.black1 +
         "&" +
