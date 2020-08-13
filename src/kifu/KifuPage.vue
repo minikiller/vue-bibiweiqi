@@ -331,8 +331,6 @@ export default {
     shared_paginate(currentpage) {
       this.getShareAll();
     },
-<<<<<<< HEAD
-=======
     //upload a kifu to analyse
     uploader() {
       this.$refs.file.click();
@@ -365,7 +363,6 @@ export default {
         }
       }
     },
->>>>>>> fadd287e742594284b810482be0501311feda524
   },
 };
 </script>
