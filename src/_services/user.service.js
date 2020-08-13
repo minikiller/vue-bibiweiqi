@@ -10,6 +10,7 @@ export const userService = {
   update,
   change_avatar,
   changePassword,
+  changeBackground,
   delete: _delete,
 };
 
@@ -89,7 +90,7 @@ function changePassword(password) {
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify({ "password": password }),
+    body: JSON.stringify({ password: password }),
   };
 
   return fetch(`${config.apiUrl}/users/changepassword`, requestOptions).then(
@@ -118,6 +119,18 @@ function _delete(id) {
   };
 
   return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function changeBackground(background) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify({ background: background }),
+  };
+
+  return fetch(`${config.apiUrl}/users/background`, requestOptions).then(
     handleResponse
   );
 }

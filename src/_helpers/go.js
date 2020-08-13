@@ -13,10 +13,14 @@ var bconfirm = false;
 var prepare_confirm = false;
 var prepare_x;
 var prepare_y;
+var board_background;
 
 //////////////////////////////
 // game init
 //////////////////////////////
+const user = JSON.parse(sessionStorage.getItem("user"));
+board_background = "/static/" + user.background;
+
 export function initGame(ele, gameinfo) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.total_time;
@@ -46,6 +50,9 @@ export function initGame(ele, gameinfo) {
       // you can use static or dynamic layout
       // top: ["InfoBox"],
       bottom: ["Control"],
+    },
+    board: {
+      background: board_background,
     },
     update: update,
     // move: 1000
@@ -85,6 +92,9 @@ export function kifuViewGame(ele, kifu) {
       // you can use static or dynamic layout
       // top: ["InfoBox"],
       bottom: ["Control"],
+    },
+    board: {
+      background: board_background,
     },
     update: butupd_last,
     // move: 1000
@@ -138,6 +148,9 @@ export function initResumeGame(ele, gameinfo, result) {
         // top: ["InfoBox"],
         bottom: ["Control"],
       },
+      board: {
+        background: board_background,
+      },
       update: update,
       frozen: function(e) {
         console.log("> Player is now frozen.\n");
@@ -156,6 +169,9 @@ export function initResumeGame(ele, gameinfo, result) {
         // you can use static or dynamic layout
         // top: ["InfoBox"],
         bottom: ["Control"],
+      },
+      board: {
+        background: board_background,
       },
       update: update,
       // move: 1000

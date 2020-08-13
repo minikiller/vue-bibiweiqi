@@ -113,7 +113,7 @@ export default {
       games: [],
       displaygames: [],
       perPage: 3,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   mounted() {
@@ -124,7 +124,7 @@ export default {
   created() {},
   computed: {
     ...mapState({
-      account: state => state.account
+      account: (state) => state.account,
     }),
     /* ...mapGetters({
       getRows: "room/getRows",
@@ -132,25 +132,23 @@ export default {
     }), */
     ...mapGetters("room", ["getRows", "getDisplayGames"]),
 
-    playTime: function() {
-      return this.getDisplayGames.map(function(item) {
+    playTime: function () {
+      return this.getDisplayGames.map(function (item) {
         let time = item.total_time;
         var min = Math.floor(time / 60);
         var sec = Math.round(time) % 60;
         return min + "分钟";
         // return min + "分钟:" + (sec < 10 ? "0" + sec : sec) + "秒";
       });
-    }
+    },
   },
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
-    ...mapMutations("games", [
-      "updateShowNav"
-    ]),
+    ...mapMutations("games", ["updateShowNav"]),
     paginate(currentpage) {
       this.$store.dispatch("room/paginate", {
         currentPage: currentpage,
-        perPage: this.perPage
+        perPage: this.perPage,
       });
     },
     async getRecords() {
@@ -171,21 +169,21 @@ export default {
           cancelTitle: "NO",
           footerClass: "p-2",
           hideHeaderClose: false,
-          centered: true
+          centered: true,
         })
-        .then(value => {
+        .then((value) => {
           if (value) {
             // console.log(id);
-            gameService.deleteById(id).then(data => {
+            gameService.deleteById(id).then((data) => {
               this.getRecords();
               this.success(data.message);
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // An error occurred
         });
-    }
-  }
+    },
+  },
 };
 </script>
