@@ -1,5 +1,13 @@
 <template>
   <div>
+    <b-button @click="uploader">上传棋谱</b-button>
+    <input
+      type="file"
+      ref="file"
+      @change="onFileChange(
+          $event.target.name, $event.target.files)"
+      style="display:none"
+    />
     <b-tabs content-class="mt-3" @activate-tab="activate_tab">
       <b-tab active>
         <template v-slot:title>
@@ -323,6 +331,41 @@ export default {
     shared_paginate(currentpage) {
       this.getShareAll();
     },
+<<<<<<< HEAD
+=======
+    //upload a kifu to analyse
+    uploader() {
+      this.$refs.file.click();
+    },
+
+    onFileChange(fieldName, file) {
+      const { maxSize } = this;
+      let imageFile = file[0];
+      if (file.length > 0) {
+        let size = imageFile.size / maxSize / maxSize;
+        var allowedExtensions = /(\.sgf)$/i;
+
+        if (!allowedExtensions.exec(imageFile.name)) {
+          // check whether the upload is an image
+          this.error("请选择一个图像文件！");
+        } else if (size > 1) {
+          // check whether the size is greater than the size limit
+          this.error("请选择一个文件小于1MB的图像文件！");
+        } else {
+          let formData = new FormData();
+          formData.append("file", imageFile);
+          fetch(`${config.apiUrl}/kifus/upload`, {
+            method: "POST",
+            body: formData,
+            headers: authHeader(),
+          }).then(handleResponse).then((res) => {
+             this.success(res.message)
+          });
+
+        }
+      }
+    },
+>>>>>>> fadd287e742594284b810482be0501311feda524
   },
 };
 </script>
