@@ -149,6 +149,7 @@ export default {
   methods: {
     ...mapMutations("alert", ["success", "error", "clear"]),
     ...mapMutations("account", ["changeBackground"]),
+    ...mapMutations("games", ["updateNavTitle"]),
 
     uploadImage() {
       this.saving = true;
@@ -195,6 +196,7 @@ export default {
   },
   mounted() {
     this.init();
+    this.updateNavTitle("个人信息");
     this.background = this.account.user.background;
   },
 };
