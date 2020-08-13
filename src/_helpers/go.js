@@ -19,7 +19,9 @@ var board_background;
 // game init
 //////////////////////////////
 const user = JSON.parse(sessionStorage.getItem("user"));
-board_background = "/static/" + user.background;
+if (user) {
+  board_background = "/static/" + user.background;
+}
 
 export function initGame(ele, gameinfo) {
   if (myplayer != null) myplayer = null;
