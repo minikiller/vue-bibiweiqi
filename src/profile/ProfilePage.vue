@@ -61,8 +61,8 @@
           </template>
           <b-form-group label="选择棋盘背景色">
             <b-container fluid class="p-4 bg-dark">
-              <b-row class="mb-3"> 
-                <b-col cols="12" sm="12" md="6" xg="4">
+              <b-row class="mb-3">
+                <b-col sm="6" md="4" xg="4">
                   <b-form-radio v-model="background" name="background" value="wood_1024.jpg">
                     <b-img thumbnail fluid src="/static/wood_1024.jpg" alt="Image 1"></b-img>
                   </b-form-radio>
@@ -72,33 +72,33 @@
                     <b-img thumbnail fluid src="/static/wood2.jpg" alt="Image 2"></b-img>
                   </b-form-radio>
                 </b-col>-->
-                <b-col cols="12" sm="12" md="6" xg="4">
+                <b-col sm="6" md="4" xg="4">
                   <b-form-radio v-model="background" name="background" value="wood3.jpg">
                     <b-img thumbnail fluid src="/static/wood3.jpg" alt="Image 3"></b-img>
                   </b-form-radio>
                 </b-col>
-                <b-col cols="12" sm="12" md="6" xg="4">
+                <b-col sm="6" md="4" xg="4">
                   <b-form-radio v-model="background" name="background" value="wood4.jpg">
                     <b-img thumbnail fluid src="/static/wood4.jpg" alt="Image 3"></b-img>
                   </b-form-radio>
                 </b-col>
-                <b-col cols="12" sm="12" md="6" xg="4">
+                <b-col sm="6" md="4" xg="4">
                   <b-form-radio v-model="background" name="background" value="wood5.jpg">
                     <b-img thumbnail fluid src="/static/wood5.jpg" alt="Image 3"></b-img>
                   </b-form-radio>
                 </b-col>
-                <b-col cols="12" sm="12" md="6" xg="4">
+                <b-col sm="6" md="4" xg="4">
                   <b-form-radio v-model="background" name="background" value="wood6.jpg">
                     <b-img thumbnail fluid src="/static/wood6.jpg" alt="Image 3"></b-img>
                   </b-form-radio>
                 </b-col>
-                <b-col cols="12" sm="12" md="6" xg="4">
+                <b-col sm="6" md="4" xg="4">
                   <b-form-radio v-model="background" name="background" value="wood7.jpg">
                     <b-img thumbnail fluid src="/static/wood7.jpg" alt="Image 3"></b-img>
                   </b-form-radio>
                 </b-col>
               </b-row>
-              <b-row cols="12" sm="12" md="6" xg="4">
+              <b-row sm="6" md="4" xg="4">
                 <b-col>
                   <b-button variant="primary" @click="submitBackground">提交</b-button>
                 </b-col>
