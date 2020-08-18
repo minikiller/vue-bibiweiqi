@@ -26,6 +26,17 @@ async function getAll() {
 
   return data.games;
 }
+//我的棋谱
+async function getMyAll() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+  const response = await fetch(`${config.apiUrl}/games/mygames/`, requestOptions);
+  const data = await response.json();
+
+  return data.games;
+}
 
 function getById(id) {
   const requestOptions = {
