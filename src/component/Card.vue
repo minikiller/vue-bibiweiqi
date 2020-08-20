@@ -1,5 +1,5 @@
 <template>
-  <b-container  fluid class="p-4 bg-dark">
+  <b-container fluid class="p-4 bg-dark">
     <b-tabs content-class="mt-3" @activate-tab="activate_tab">
       <b-tab active>
         <template v-slot:title>
@@ -85,8 +85,9 @@
             </div>
           </b-row>
           <b-row align-v="center">
-            <b-col cols="4"></b-col>
-            <b-col cols="4">
+            <!-- <b-col cols="4"></b-col> -->
+            <b-col></b-col>
+            <b-col>
               <b-pagination
                 v-model="currentPage"
                 :total-rows="getRows"
@@ -94,7 +95,8 @@
                 @input="paginate"
               ></b-pagination>
             </b-col>
-            <b-col cols="4"></b-col>
+            <b-col></b-col>
+            <!-- <b-col cols="4"></b-col> -->
             <!-- <p class="mt-3">Current Page: {{ currentPage }}</p> -->
           </b-row>
         </div>
