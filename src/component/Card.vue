@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container  fluid class="p-4 bg-dark">
     <b-tabs content-class="mt-3" @activate-tab="activate_tab">
       <b-tab active>
         <template v-slot:title>
@@ -13,7 +13,7 @@
               v-bind:key="index"
               style="margin:0 auto;"
             >
-              <b-col l="4">
+              <b-col>
                 <b-card tag="article" style="max-width: 20rem;" class="mb-2">
                   <b-card-title>{{data.name}}#{{data.id}}</b-card-title>
                   <b-card-text>
@@ -107,14 +107,14 @@
           <i class="fas fa-user-lock"></i> 我的对局
         </template>
         <div v-if="filtergame.length">
-          <b-row>
+          <b-row class="mb-3">
             <div
               id="my-table"
               v-for="(data, index) in filtergame"
               v-bind:key="index"
               style="margin:0 auto;"
             >
-              <b-col l="4">
+              <b-col>
                 <b-card tag="article" style="max-width: 20rem;" class="mb-2">
                   <b-card-title>{{data.name}}#{{data.id}}</b-card-title>
                   <b-card-text>
@@ -275,7 +275,7 @@
         <div v-else>
           <h5>没有有效的对局信息</h5>
         </div>
-      </b-tab> -->
+      </b-tab>-->
     </b-tabs>
   </b-container>
 </template>
