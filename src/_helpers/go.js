@@ -710,3 +710,25 @@ export function showScore() {
     return _score_mode.start();
   }
 }
+
+export function showViewScore(value) {
+  if (value) {
+    myplayer.setFrozen(false);
+    _score_mode.end();
+    // delete _score_mode;
+    myplayer.notification();
+    myplayer.help();
+    return "";
+  } else {
+    myplayer.setFrozen(true);
+    showScoreResult("<p>" + WGo.t("help_score") + "</p>");
+    _score_mode = new WGo.ScoreMode(
+      myplayer.kifuReader.game.position,
+      myplayer.board,
+      myplayer.kifu.info.KM || 7.5,
+      // myplayer.notification
+      showScoreResult
+    );
+    return _score_mode.start();
+  }
+}
