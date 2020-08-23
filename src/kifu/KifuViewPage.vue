@@ -2,11 +2,7 @@
   <div>
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
-    <b-input-group prepend="0" :append="maxStep" class="mt-3">
-      <b-form-input type="range" min="0" :max="maxStep" v-model="steps" ref="input"></b-form-input>
-    </b-input-group>
-    <!-- <div>{{ kifu.kifu_data }}</div> -->
-    <div>当前手数： {{ steps }}</div>
+
     <b-button
       variant="primary"
       v-model="status"
@@ -24,8 +20,37 @@
     <b-button variant="primary" @click="score" v-b-popover.hover.top="'形式判断!'">{{ endText }}</b-button>
 
     <b-button variant="primary" @click="back" v-b-popover.hover.top="'返回上一级!'">返回</b-button>
-    <p v-html="result"></p>
-    <div style="width: 90%; margin: 0" ref="player" class="mt-3"></div>
+    <b-row align-v="center">
+      <b-col sm="12" md="6">
+        <b-input-group prepend="0" :append="maxStep" class="mt-3">
+          <b-form-input type="range" min="0" :max="maxStep" v-model="steps" ref="input"></b-form-input>
+        </b-input-group>
+        <!-- <div>{{ kifu.kifu_data }}</div> -->
+        <div>当前手数： {{ steps }}</div>
+        <div style="width: 100%; margin: 0" ref="player" class="mt-3"></div>
+      </b-col>
+      <b-col sm="12" md="6">
+        <b-card
+          tag="article"
+          style="max-width: 20rem;"
+          class="mb-2"
+          border-variant="danger"
+          header="对局信息"
+          header-border-variant="danger"
+          header-text-variant="danger"
+          align="center"
+        >
+          <b-card-text>
+            <p>黑方:{{kifu.black_info}}</p>
+            <p>白方:{{kifu.white_info}}</p>
+            <p>结果:{{kifu.result}}</p>
+            <p>时间:{{kifu.create_date}}</p>
+            <p v-html="result"></p>
+          </b-card-text>
+        </b-card>
+      </b-col>
+    </b-row>
+
     <!-- <my-go /> -->
   </div>
 </template>
@@ -61,11 +86,18 @@ export default {
   },
   mounted() {
     this.kifu = this.$route.params.game;
-    kifuViewGame(this.$refs.player, this.kifu);
-    document.getElementById("wgo-control").style.display = "";
-    this.maxStep = getTotalStep();
-    this.$refs.input.max = this.maxStep;
-    this.$refs.input.min = 0;
+    if (this.kifu) {
+      kifuViewGame(this.$refs.player, this.kifu);
+      document.getElementById("wgo-control").style.display = "";
+      this.maxStep = getTotalStep();
+      this.$refs.input.max = this.maxStep;
+      this.$refs.input.min = 0;
+    } else {
+      //如果没有棋谱数据，返回棋谱列表
+      this.$router.push({
+        path: `/kifu`,
+      });
+    }
     EventBus.$on("go_move", (msg) => {
       this.steps = msg;
     });
