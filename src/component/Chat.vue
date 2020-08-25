@@ -34,13 +34,13 @@ export default {
   name: "chat",
   props: {
     gameId: String,
-    gameInfo: null
+    gameInfo: null,
   },
   computed: {
     ...mapState({
-      account: state => state.account,
-      users: state => state.users.all
-    })
+      account: (state) => state.account,
+      users: (state) => state.users.all,
+    }),
   },
   mounted() {
     // this.$socket.emit(this.gameId); //进入gameId的房间
@@ -49,7 +49,7 @@ export default {
     this.$socket.emit("login", {
       userId: this.account.user.name,
       gameId: this.gameId,
-      gameInfo: this.gameInfo
+      gameInfo: this.gameInfo,
     });
   },
   data() {
@@ -57,7 +57,7 @@ export default {
       msg: "",
       text: "",
       _socket: null,
-      isMobile: false
+      isMobile: false,
     };
   },
   methods: {
@@ -68,7 +68,7 @@ export default {
           message: this.msg,
           gameId: this.gameId,
           avatar: this.account.user.avatar,
-          username: this.account.user.name
+          username: this.account.user.name,
         });
         this.msg = "";
       }
@@ -103,26 +103,26 @@ export default {
         time = hour + ":" + minu + ":" + sec;
       }
       return time;
-    }
+    },
   },
   sockets: {
     //通知新的用户进入房间
     joinlobby(user) {
       this.addUser(user);
       this.text =
-        this.text +
         "<br><div class='badge badge-danger'>" +
         "系统:</div>" +
         "[" +
         this.getCurrentDate(3) +
         "]" +
         user +
-        "进入对局室</br>";
+        "进入对局室</br>" +
+        this.text;
     },
     //初始化聊天室用户列表
     initGameUser(userlist) {
       this.clearUser();
-      userlist.forEach(user => {
+      userlist.forEach((user) => {
         this.addUser(user);
       });
     },
@@ -131,20 +131,19 @@ export default {
       console.log("user id is leave room" + userId);
       this.deleteUser(userId);
       this.text =
-        this.text +
         "<br><div class='badge badge-danger'>" +
         "系统:</div>" +
         "[" +
         this.getCurrentDate(3) +
         "]" +
         userId +
-        "离开对局室</br>";
+        "离开对局室</br>" +
+        this.text;
     },
 
     get_message(data) {
       console.log("i get it " + data);
       this.text =
-        this.text +
         "<div class='badge badge-info'>" +
         data.username +
         ":</div> " +
@@ -152,10 +151,11 @@ export default {
         this.getCurrentDate(3) +
         "]" +
         data.message +
-        "\n";
+        "\n" +
+        this.text;
       gameService
         .chatVoice({ msg: data.message, username: data.username })
-        .then(data => {
+        .then((data) => {
           let url = `${config.apiUrl}` + "/" + data.url;
           console.log(url);
           let audio = document.getElementById("audioChat");
@@ -164,8 +164,8 @@ export default {
           audio.load();
           audio.play();
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
