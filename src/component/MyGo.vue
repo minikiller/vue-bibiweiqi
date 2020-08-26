@@ -42,6 +42,7 @@
                   :win="b_win"
                   :offline="b1_offline"
                   :prepared="b1_prepared"
+                  :numbers="b_number"
                 ></info>
               </b-card-text>
             </b-card>
@@ -59,6 +60,7 @@
                   :win="w_win"
                   :offline="w1_offline"
                   :prepared="w1_prepared"
+                  :numbers="w_number"
                 ></info>
               </b-card-text>
             </b-card>
@@ -79,6 +81,7 @@
                   :win="b_win"
                   :offline="b2_offline"
                   :prepared="b2_prepared"
+                  :numbers="b_number"
                 ></info>
               </b-card-text>
             </b-card>
@@ -96,6 +99,7 @@
                   :win="w_win"
                   :offline="w2_offline"
                   :prepared="w2_prepared"
+                  :numbers="w_number"
                 ></info>
               </b-card-text>
             </b-card>
@@ -111,7 +115,7 @@ import {
   initGame,
   initResumeGame,
   initGameData,
-  setConfirm
+  setConfirm,
 } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
 import { vueBaberrage, MESSAGE_TYPE } from "vue-baberrage";
@@ -124,14 +128,14 @@ export default {
   name: "mygo",
   components: {
     vueBaberrage,
-    Info
+    Info,
   },
   computed: {
     ...mapState({
-      account: state => state.account,
-      users: state => state.users.all,
-      games: state => state.games
-    })
+      account: (state) => state.account,
+      users: (state) => state.users.all,
+      games: (state) => state.games,
+    }),
   },
   props: {
     total_time: String,
@@ -141,7 +145,7 @@ export default {
     whiteTwo: String,
     gameStatus: String,
     isOpponent: Boolean, //是否为对局者
-    isTurn: Boolean //是否为对局者
+    isTurn: Boolean, //是否为对局者
   },
   data() {
     return {
@@ -174,8 +178,10 @@ export default {
       w_img: "/static/white_64.png",
       b_win: false,
       w_win: false,
+      b_number: 3, //默认黑的读秒次数
+      w_number: 3, //默认白的读秒次数
       move_url: null,
-      b_yourturn: false //用于恢复对局时候，如果落子为真，则播放语音
+      b_yourturn: false, //用于恢复对局时候，如果落子为真，则播放语音
     };
   },
   /* watch: {
@@ -198,7 +204,7 @@ export default {
     },
     initVoice() {
       //调用语音服务
-      gameService.moveVoice().then(data => {
+      gameService.moveVoice().then((data) => {
         let url = `${config.apiUrl}` + "/" + data.url;
         console.log(url);
         this.move_url = url;
@@ -207,12 +213,12 @@ export default {
         // .setSrc(url);
         audio.load();
         let that = this;
-        audio.onloadeddata = function() {
+        audio.onloadeddata = function () {
           if (that.b_yourturn == true) audio.play();
           // alert("Browser has loaded the current frame");
         };
       });
-    }
+    },
   },
   sockets: {
     initGameUser(userlist) {
@@ -232,7 +238,7 @@ export default {
         msg: data.username + " => " + data.message,
         time: 10,
         type: MESSAGE_TYPE.NORMAL,
-        barrageStyle: "normal"
+        barrageStyle: "normal",
       });
     },
     joinlobby(user) {
@@ -282,15 +288,15 @@ export default {
     },
     //设置对局准备状态
     prepare(msg) {
-      this.b1_prepared=msg[this.blackOne.name];
-      this.b2_prepared=msg[this.blackTwo.name];
-      this.w1_prepared=msg[this.whiteOne.name];
-      this.w2_prepared=msg[this.whiteTwo.name];
+      this.b1_prepared = msg[this.blackOne.name];
+      this.b2_prepared = msg[this.blackTwo.name];
+      this.w1_prepared = msg[this.whiteOne.name];
+      this.w2_prepared = msg[this.whiteTwo.name];
     },
     //对局开始
     beginGame(msg) {
       document.getElementById("audioBegin").play();
-    }
+    },
   },
   mounted() {
     let that = this;
@@ -301,10 +307,10 @@ export default {
       this.initVoice();
     } */
 
-    EventBus.$on("w_timeout", value => {
+    EventBus.$on("w_timeout", (value) => {
       that.WL = value;
     });
-    EventBus.$on("b_timeout", value => {
+    EventBus.$on("b_timeout", (value) => {
       that.BL = value;
     });
     EventBus.$on("yourturn", () => {
@@ -315,7 +321,7 @@ export default {
         msg: "系统: 轮到你落子了！",
         time: 5,
         type: MESSAGE_TYPE.NORMAL,
-        barrageStyle: "red"
+        barrageStyle: "red",
       });
       this.b_yourturn = true;
       var audio = document.getElementById("audioPlay");
@@ -331,11 +337,11 @@ export default {
       console.log("轮到你骡子了！");
     });
 
-    EventBus.$on("caps", value => {
+    EventBus.$on("caps", (value) => {
       that.b_caps = value.black;
       that.w_caps = value.white;
     });
-    EventBus.$on("gameove", msg => {
+    EventBus.$on("gameove", (msg) => {
       if (msg.result.indexOf("白") > -1) {
         that.w_win = true;
       } else if (msg.result.indexOf("黑") > -1) {
@@ -348,7 +354,7 @@ export default {
       console.log("go component game is over! result is " + msg);
     });
     //控制按钮的显示
-    EventBus.$on("myturn", value => {
+    EventBus.$on("myturn", (value) => {
       if (value == 0) {
         that.b1_turn = true;
         that.b2_turn = false;
@@ -384,10 +390,10 @@ export default {
         blackOne: this.blackOne.name,
         blackTwo: this.blackTwo.name,
         whiteOne: this.whiteOne.name,
-        whiteTwo: this.whiteTwo.name
+        whiteTwo: this.whiteTwo.name,
       });
     }
-  }
+  },
 };
 </script>
 <style scoped>

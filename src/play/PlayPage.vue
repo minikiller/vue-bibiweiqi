@@ -465,9 +465,11 @@ export default {
   },
   sockets: {
     move(game) {
-      readyMove(game);
-      this.btnRegretDisable = true;
-      this.updateGame(game);
+      if (this.bTry) {
+        readyMove(game);
+        this.btnRegretDisable = true;
+        this.updateGame(game);
+      }
     },
     //棋手对局进入准备状态
     prepare(msg) {

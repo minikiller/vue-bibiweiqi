@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button @click="getCode">开始</b-button>
+    <!-- <b-button @click="getCode">开始</b-button>
     <b-button @click="stopCode">停止</b-button>
 
     <div v-if="isMobile">
@@ -10,7 +10,7 @@
     <div v-else>
       <b-button @click="load">load</b-button>
       <b-button @click="play">play</b-button>
-    </div>
+    </div>-->
 
     <br />
     <span v-show="!show" class="count">时间: 00:00:{{ count }}</span>
@@ -42,14 +42,16 @@ import { isPc } from "../_helpers";
 // 读秒组件效果演示
 export default {
   name: "timer",
+  props: {
+    numbers: Number, //读秒次数
+    count: String //显示的读秒时间
+  },
   data() {
     return {
-      show: true,
-      count: "",
+      show: false,
       timer: null,
-      numbers: 3,
       time_count: 30,
-      isMobile: false
+      isMobile: false,
     };
   },
   mounted() {
@@ -63,7 +65,7 @@ export default {
     },
     load() {
       let that = this;
-      gameService.moveVoice().then(data => {
+      gameService.moveVoice().then((data) => {
         let url = `${config.apiUrl}` + "/" + data.url;
         console.log(url);
         let audio = document.getElementById("audioOne");
@@ -119,7 +121,7 @@ export default {
           }
         }, 1000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
