@@ -81,6 +81,7 @@ export function getTotalStep() {
 
 var butupd_last = function(e) {
   EventBus.$emit("go_move", e.path.m);
+
   // if (!e.node.children.length ) this.disable();
   // else if (e.node.children.length) this.enable();
 };
@@ -302,9 +303,9 @@ export function play(x, y) {
 
   // append new node to the current kifu
   myplayer.kifuReader.node.appendChild(node);
-
   // show next move
   myplayer.next(myplayer.kifuReader.node.children.length - 1);
+  myplayer.kifu.nodeCount++;
   disable_board();
   read_time();
   var data = {
@@ -375,35 +376,76 @@ var move_play = function(player, x, y) {
   if (player.frozen || !player.kifuReader.game.isValid(x, y)) return;
 
   var node;
-  // create new node
-  if (x == null) {
-    node = new WGo.KNode({
-      move: {
-        pass: true,
-        c: player.kifuReader.game.turn,
-      },
-      BL: black_time,
-      WL: white_time,
-      _edited: true,
-    });
-    // return;
-  } else {
-    node = new WGo.KNode({
-      move: {
-        x: x,
-        y: y,
-        c: player.kifuReader.game.turn,
-      },
-      BL: black_time,
-      WL: white_time,
-      _edited: true,
-    });
-  }
-  // append new node to the current kifu
-  player.kifuReader.node.appendChild(node);
 
   // show next move
-  player.next(player.kifuReader.node.children.length - 1);
+  console.log("this is last total " + player.kifu.nodeCount);
+  console.log("this is current total " + player.kifuReader.path.m);
+  if (player.kifu.nodeCount == player.kifuReader.path.m) {
+    // create new node
+    if (x == null) {
+      node = new WGo.KNode({
+        move: {
+          pass: true,
+          c: player.kifuReader.game.turn,
+        },
+        BL: black_time,
+        WL: white_time,
+        _edited: true,
+      });
+      // return;
+    } else {
+      node = new WGo.KNode({
+        move: {
+          x: x,
+          y: y,
+          c: player.kifuReader.game.turn,
+        },
+        BL: black_time,
+        WL: white_time,
+        _edited: true,
+      });
+    }
+    player.kifuReader.node.appendChild(node);
+    player.next(player.kifuReader.node.children.length - 1);
+  } else {
+    var m = player.kifuReader.path.m;
+    player.kifuReader.last();
+    // create new node
+    if (x == null) {
+      node = new WGo.KNode({
+        move: {
+          pass: true,
+          c: player.kifuReader.game.turn,
+        },
+        BL: black_time,
+        WL: white_time,
+        _edited: true,
+      });
+      // return;
+    } else {
+      node = new WGo.KNode({
+        move: {
+          x: x,
+          y: y,
+          c: player.kifuReader.game.turn,
+        },
+        BL: black_time,
+        WL: white_time,
+        _edited: true,
+      });
+    }
+    player.kifuReader.node.appendChild(node);
+    player.update();
+    gotoStep(m);
+  }
+  player.kifu.nodeCount++;
+  // console.log(player.kifuReader.game.position)
+  //   // append new node to the current kifu
+
+  // } else {
+  //   player.last();
+  //   player.kifuReader.node.appendChild(node);
+  // }
   read_time();
 };
 //获得现在是黑骡子，还是白骡子
@@ -707,6 +749,28 @@ export function showScore() {
     );
 
     score_selected = true;
+    return _score_mode.start();
+  }
+}
+
+export function showViewScore(value) {
+  if (value) {
+    myplayer.setFrozen(false);
+    _score_mode.end();
+    // delete _score_mode;
+    myplayer.notification();
+    myplayer.help();
+    return "";
+  } else {
+    myplayer.setFrozen(true);
+    showScoreResult("<p>" + WGo.t("help_score") + "</p>");
+    _score_mode = new WGo.ScoreMode(
+      myplayer.kifuReader.game.position,
+      myplayer.board,
+      myplayer.kifu.info.KM || 7.5,
+      // myplayer.notification
+      showScoreResult
+    );
     return _score_mode.start();
   }
 }

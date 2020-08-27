@@ -4,6 +4,8 @@ import { authHeader, handleResponse } from "../_helpers";
 export const gameService = {
   newGame,
   getAll,
+  getMyAll,
+  getHistory,
   getById,
   saveKifu,
   beginGame,
@@ -22,6 +24,17 @@ async function getAll() {
     headers: authHeader(),
   };
   const response = await fetch(`${config.apiUrl}/games/`, requestOptions);
+  const data = await response.json();
+
+  return data.games;
+}
+
+async function getHistory() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+  const response = await fetch(`${config.apiUrl}/games/history`, requestOptions);
   const data = await response.json();
 
   return data.games;

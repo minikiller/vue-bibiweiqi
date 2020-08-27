@@ -20,7 +20,9 @@
           <!-- <b-card-text>提子：</b-card-text> -->
         </b-row>
         <b-row>
-          <b-col>读秒:</b-col>
+          <b-col>
+            <timer ref="timers" :numbers="numbers"></timer>
+          </b-col>
         </b-row>
       </b-col>
     </b-row>
@@ -45,11 +47,23 @@
   </b-container>
 </template>
 <script>
+import Timer from "../component/timer.vue";
 export default {
   name: "info",
+  methods: {
+    beginTimer() {
+      this.$refs("timer").getCode();
+    },
+    resetTimer() {
+      this.$refs("timer").stopCode();
+    },
+    setNumber() {
+      this.$refs("timer").numbers = this.numbers;
+    },
+  },
   data() {
     return {
-      offline_avatar: "/static/img/offline.jpg"
+      offline_avatar: "/static/img/offline.jpg",
     };
   },
   props: {
@@ -62,16 +76,20 @@ export default {
     imgSrc: String,
     win: Boolean,
     offline: Boolean,
-    prepared: Boolean
+    prepared: Boolean,
+    numbers: Number, //读秒次数
   },
   computed: {
-    format_playTime: function() {
+    format_playTime: function () {
       let time = this.playtime;
       var min = Math.floor(time / 60);
       var sec = Math.round(time) % 60;
       var str = min + ":" + (sec < 10 ? "0" + sec : sec) + "";
       return str;
-    }
-  }
+    },
+  },
+  components: {
+    Timer,
+  },
 };
 </script>
