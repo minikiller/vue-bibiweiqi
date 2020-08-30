@@ -2,10 +2,12 @@ let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var _ev_try_move, _ev_try_click, _ev_try_out;
 var black_time, white_time;
+var w_number, b_number;
 // import { socket } from "./socket";
 import { EventBus } from "../index.js";
 var username, game;
 var timer_loop = null; //定时器
+var timer_minute = null; //读秒定时器
 var _score_mode;
 var score_selected = false;
 var _marker, _isFirst;
@@ -27,6 +29,8 @@ export function initGame(ele, gameinfo) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.total_time;
   white_time = gameinfo.total_time;
+  w_number = gameinfo.number;
+  b_number = gameinfo.number;
   EventBus.$emit("w_timeout", white_time);
   EventBus.$emit("b_timeout", black_time);
   myplayer = new WGo.BasicPlayer(ele, {
@@ -115,16 +119,22 @@ function getTime() {
 
 export function initResumeGame(ele, gameinfo, result) {
   if (myplayer != null) myplayer = null;
-  if (gameinfo.BL == "" && gameinfo.WL == "") {
+  if (gameinfo.BL === "" && gameinfo.WL === "") {
     black_time = gameinfo.total_time;
     white_time = gameinfo.total_time;
+    b_number = 3;
+    w_number = 3;
   } else {
     black_time = gameinfo.BL;
     white_time = gameinfo.WL;
+    b_number = gameinfo.b_number;
+    w_number = gameinfo.w_number;
   }
 
   EventBus.$emit("w_timeout", white_time);
   EventBus.$emit("b_timeout", black_time);
+  EventBus.$emit("b_number", b_number);
+  EventBus.$emit("w_number", w_number);
 
   if (gameinfo.kifu == "") {
     myplayer = new WGo.BasicPlayer(ele, {
@@ -314,7 +324,10 @@ export function play(x, y) {
     kifu: myplayer.kifu.toSgf(),
     BL: black_time,
     WL: white_time,
+    w_number: w_number,
+    b_number: b_number,
   };
+  console.log("current move data is:" + data);
   EventBus.$emit("move", data);
 }
 
@@ -340,32 +353,105 @@ export function clear_time() {
   clearTimeout(timer_loop);
 }
 
-var read_time = function() {
-  // console.log("your turn value is " + turn);
-  clearTimeout(timer_loop);
-  if (myplayer.kifuReader.node.move.c == -1) {
-    timer_loop = setInterval(function() {
-      black_time -= 1;
-      myplayer.kifuReader.node.BL = black_time;
-      EventBus.$emit("b_timeout", black_time);
-      // myplayer.update();
-      if (myplayer.kifuReader.node.BL == 0) {
-        // game_over("白超时胜");
-        EventBus.$emit("timeout", "白超时胜");
-      }
-    }, 1000);
-  } else {
-    timer_loop = setInterval(function() {
-      white_time -= 1;
-      myplayer.kifuReader.node.WL = white_time;
-      EventBus.$emit("w_timeout", white_time);
+export function clear_minute() {
+  clearTimeout(timer_minute);
+}
+//clear all timer
+export function clear_all() {
+  clear_time();
+  clear_minute();
+}
 
-      // myplayer.update();
-      if (myplayer.kifuReader.node.WL == 0) {
+export function set_b_number(value) {
+  b_number = value;
+}
+
+export function set_w_number(value) {
+  w_number = value;
+}
+
+var read_minute = function() {
+  clearTimeout(timer_minute);
+  if (myplayer.kifuReader.node.move.c == -1) {
+    if (myplayer.kifuReader.node.BL == 0) {
+      // game_over("白超时胜");
+      // 进入给黑读秒
+      // EventBus.$emit("timeout", "白超时胜");
+      EventBus.$emit("clear_readTime", {
+        black_time: black_time,
+        white_time: white_time,
+      });
+      timer_minute = setInterval(function() {
+        EventBus.$emit("b_readTime", "black");
+        // clear_time();
+      }, 1000);
+    }
+  } else {
+    if (myplayer.kifuReader.node.WL == 0) {
+      // game_over("白超时胜");
+      // 进入给黑读秒
+      // EventBus.$emit("timeout", "白超时胜");
+      // clear_time();
+      EventBus.$emit("clear_readTime", {
+        black_time: black_time,
+        white_time: white_time,
+      });
+      timer_minute = setInterval(function() {
+        EventBus.$emit("w_readTime", "white");
+        // clear_time();
+      }, 1000);
+    }
+  }
+};
+
+var read_time = function() {
+  console.log("clear event bus");
+  clearTimeout(timer_loop);
+  clearTimeout(timer_minute);
+
+  if (myplayer.kifuReader.node.move.c == -1) {
+    if (myplayer.kifuReader.node.BL > 0) {
+      timer_loop = setInterval(function() {
+        console.log("still in interval");
+        if (black_time == 0) {
+          clearTimeout(timer_loop);
+          read_minute();
+        } else {
+          black_time -= 1;
+          myplayer.kifuReader.node.BL = black_time;
+          EventBus.$emit("b_timeout", black_time);
+          console.log("main time is reduced");
+        }
+        // myplayer.update();
+      }, 1000); //读主时间
+    } else {
+      read_minute(); //读秒
+    }
+  } else {
+    if (myplayer.kifuReader.node.WL > 0) {
+      timer_loop = setInterval(function() {
+        console.log("still in interval");
+
+        // myplayer.update();
+
         // game_over("黑超时胜");
-        EventBus.$emit("timeout", "黑超时胜");
-      }
-    }, 1000);
+        // 进入给黑读秒
+        // EventBus.$emit("timeout", "黑超时胜");
+        // EventBus.$emit("w_readTime", "white");
+        // clear_time();
+        if (white_time == 0) {
+          clearTimeout(timer_loop);
+          read_minute();
+        } else {
+          white_time -= 1;
+          myplayer.kifuReader.node.WL = white_time;
+          EventBus.$emit("w_timeout", white_time);
+          console.log("main time is reduced");
+        }
+      }, 1000); //读主时间
+    } else {
+      read_minute(); //读秒
+    }
   }
 
   // myplayer.update();
@@ -700,6 +786,8 @@ export function enable_board() {
 export function readyMove(msg) {
   black_time = msg.BL;
   white_time = msg.WL;
+  b_number = msg.b_number;
+  w_number = msg.w_number;
   move_play(myplayer, msg.move.x, msg.move.y);
   // if (!isView)
   disable_board();

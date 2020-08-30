@@ -9,7 +9,11 @@ const state = {
   connected: false,
   roomId: "", //记录用户所在的房间号
   displayGames: [],
-  showNav: true //控制navBar的显示
+  BL: "",
+  WL: "",
+  B_number: 3,
+  W_number: 3,
+  showNav: true, //控制navBar的显示
 };
 
 const actions = {};
@@ -54,6 +58,19 @@ const mutations = {
   setResult(state, value) {
     state.result = value;
   },
+  setBL(state, value) {
+    state.BL = value;
+  },
+  setWL(state, value) {
+    state.WL = value;
+  },
+  setB_number(state, value) {
+    state.B_number = value;
+  },
+  setW_number(state, value) {
+    state.W_number = value;
+  },
+
   setTurn(state) {
     if (state.turn == "black") state.turn = "white";
     else if (state.turn == "white") {
