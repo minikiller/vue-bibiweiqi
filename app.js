@@ -361,9 +361,15 @@ io.on("connection", function(socket) {
     activeGames[msg.gameId].kifu = msg.kifu;
     activeGames[msg.gameId].BL = msg.BL;
     activeGames[msg.gameId].WL = msg.WL;
+    activeGames[msg.gameId].w_number = msg.w_number;
+    activeGames[msg.gameId].b_number = msg.b_number;
     activeGames[msg.gameId].move = msg.move;
     redis_client.set("activeGames", JSON.stringify(activeGames));
     // allGames[msg.gameId].kifu = msg.kifu;
+    logger.info(getFormattedDate() + "BL data is " + msg.BL);
+    logger.info(getFormattedDate() + "WL data is " + msg.WL);
+    logger.info(getFormattedDate() + "w_number data is " + msg.w_number);
+    logger.info(getFormattedDate() + "b_number data is " + msg.b_number);
     logger.info(getFormattedDate() + "move data is " + msg.move);
     logger.info(getFormattedDate() + "kifu data is " + msg.kifu);
     callback("ok");

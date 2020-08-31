@@ -13,10 +13,10 @@
       </b-col>
       <b-col>
         <b-row>
-          <b-col>用时：{{ format_playTime }}</b-col>
+          <b-col><h6>用时：{{ format_playTime }}</h6></b-col>
         </b-row>
         <b-row>
-          <b-col>提子：{{ caps }}</b-col>
+          <b-col><h6>提子：{{ caps }}</h6></b-col>
           <!-- <b-card-text>提子：</b-card-text> -->
         </b-row>
         <b-row>
@@ -51,14 +51,15 @@ import Timer from "../component/timer.vue";
 export default {
   name: "info",
   methods: {
-    beginTimer() {
-      this.$refs("timer").getCode();
+    beginTimer(value) {
+      console.log("begin to read time");
+      this.$refs.timers.getCode(value);
     },
     resetTimer() {
-      this.$refs("timer").stopCode();
+      this.$refs.timers.stopCode();
     },
     setNumber() {
-      this.$refs("timer").numbers = this.numbers;
+      this.$refs.timers.numbers = this.numbers;
     },
   },
   data() {

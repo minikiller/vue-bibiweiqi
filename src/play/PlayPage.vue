@@ -25,6 +25,7 @@ import {
   disable_try,
   play,
   clear_time,
+  clear_all,
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -65,6 +66,8 @@ export default {
       "setResult",
       "setTurn",
       "updateShowNav",
+      "setBL",
+      "setWL",
     ]),
     //设置按钮的状态
     setButtonStatus() {
@@ -287,7 +290,7 @@ export default {
     },
     //对局结束，保存棋谱
     _finishGame(msg) {
-      clear_time();
+      clear_all();
       this.error("对局结束： " + msg.result);
       EventBus.$emit("gameove", msg);
       console.log("game is over,result is {}".format(msg.result));
@@ -466,7 +469,14 @@ export default {
   sockets: {
     move(game) {
       if (this.bTry) {
+        if (game.BL == 0) {
+          this.setBL(30);
+        }
+        if (game.WL == 0) {
+          this.setWL(30);
+        }
         readyMove(game);
+
         this.btnRegretDisable = true;
         this.updateGame(game);
       }
@@ -491,7 +501,7 @@ export default {
     endGame(msg) {
       console.log("begin to end game");
       this.success(msg);
-      clear_time();
+      clear_all();
       disable_board();
       if (this.account.user.name == this.game.blackone_id.name) {
         this.canEnd = true; //启用数目按钮
@@ -674,6 +684,7 @@ export default {
     /* EventBus.$on("yourturn", () => {
       this.success("轮到你骡子了！");
     }); */
+
     EventBus.$on("myturn", (value) => {
       // alert("get ");
       this.setNav(value);
@@ -705,6 +716,14 @@ export default {
           }
         })
       );
+      if (game.BL == 0) {
+        //黑棋进入读秒
+        this.setBL(30); //重新初始化黑棋的读秒时间
+      }
+      if (game.WL == 0) {
+        //白棋进入读秒,重新初始化读秒时间
+        this.setWL(30);
+      }
       this.btnRegretDisable = false;
       this.canPassed = false;
       this.updateGame(game);
