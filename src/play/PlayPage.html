@@ -1,5 +1,16 @@
 <div>
   <b-container fluid>
+    <div class="container1">
+      <vue-baberrage
+        :isShow="barrageIsShow"
+        :barrageList="barrageList"
+        :maxWordCount="maxWordCount"
+        :throttleGap="throttleGap"
+        :loop="barrageLoop"
+        :boxHeight="boxHeight"
+        :messageHeight="messageHeight"
+      ></vue-baberrage>
+    </div>
     <b-navbar v-if="account.user" toggleable="sm" type="dark" variant="info">
       <b-container>
         <b-navbar-brand href="#">
@@ -13,20 +24,18 @@
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
-            <b-navbar-nav right class="ml-auto">
-              <b-nav-item href="#"
-                ><em>
-                  <b-avatar
-                    variant="info"
-                    :src="account.user.avatar"
-                  ></b-avatar>
-                  {{ account.user.name }}[{{ account.user.rank }}]
-                </em></b-nav-item
-              >
+          <b-navbar-nav right class="ml-auto">
+            <b-nav-item href="#"
+              ><em>
+                <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
+                {{ account.user.name }}[{{ account.user.rank }}]
+              </em></b-nav-item
+            >
           </b-navbar-nav>
         </b-collapse>
       </b-container>
     </b-navbar>
+
     <b-row class="mt-2 ml-2 mr-2 mb-2">
       <b-col>
         <b-button
@@ -124,6 +133,13 @@
         >
           退出
         </b-button>
+        <!-- <b-button
+          variant="primary"
+          @click="test"
+          v-b-popover.hover.top="'离开当前对局室!'"
+        >
+          test
+        </b-button> -->
       </b-col>
     </b-row>
     <b-row class="ml-2 mr-2 mb-2">

@@ -20,17 +20,6 @@
     <audio ref="audioMinuteEnd1" src="/static/voice/end1.mp3" preload="auto"></audio>
     <audio ref="audioMinuteEnd2" src="/static/voice/end2.mp3" preload="auto"></audio>
 
-    <div class="container">
-      <vue-baberrage
-        :isShow="barrageIsShow"
-        :barrageList="barrageList"
-        :maxWordCount="maxWordCount"
-        :throttleGap="throttleGap"
-        :loop="barrageLoop"
-        :boxHeight="boxHeight"
-        :messageHeight="messageHeight"
-      ></vue-baberrage>
-    </div>
     <b-row class="ml-2 mr-2">
       <b-col cols="12" sm="12" md="6" xg="8">
         <div style="width: 100%; margin: 0" ref="player"></div>
@@ -137,17 +126,15 @@ import {
   setConfirm,
 } from "../_helpers";
 import { mapState, mapMutations } from "vuex";
-import { vueBaberrage, MESSAGE_TYPE } from "vue-baberrage";
 import { EventBus } from "../index.js";
 import Info from "../component/Info";
-import { isPc, set_b_number, set_w_number, clear_all } from "../_helpers";
+import { isPc, clear_all } from "../_helpers";
 import config from "config";
 import { gameService } from "../_services";
 
 export default {
   name: "mygo",
   components: {
-    vueBaberrage,
     Info,
   },
   computed: {
@@ -175,9 +162,6 @@ export default {
       barrageLoop: false,
       maxWordCount: 3,
       throttleGap: 2000,
-      currentId: 0,
-      barrageList: [],
-      avatar: "http://sunlingfeng.0431zy.com/1.png",
       BL: "", //黑棋剩余时间
       WL: "", //白棋剩余时间
       b1_turn: false,
@@ -272,11 +256,13 @@ export default {
           }
           if (that.games.BL == 0 && that.games.B_number == 3) {
             that.setB_number(that.games.B_number - 1);
+            // set_b_number(that.games.B_number - 1);
             that.setBL(that.time_count);
             // setTimeout(that.$refs.audioMinuteEnd2.play(), 1000);
             that.$refs.audioMinuteEnd2.play();
           } else if (that.games.BL == 0 && that.games.B_number == 2) {
             that.setB_number(that.games.B_number - 1);
+            // set_b_number(that.games.B_number - 1);
             // this.count = this.time_count;
             that.setBL(that.time_count);
             // setTimeout(that.$refs.audioMinuteEnd1.play(), 1000);
@@ -284,6 +270,7 @@ export default {
           } else if (that.games.BL == 0 && that.games.B_number == 1) {
             // this.show = true;
             that.setB_number(that.games.B_number - 1);
+            // set_b_number(that.games.B_number - 1);
             clear_all();
             // alert("you failed");
             EventBus.$emit("timeout", "白超时胜");
@@ -310,11 +297,14 @@ export default {
           }
           if (that.games.WL == 0 && that.games.W_number == 3) {
             that.setW_number(that.games.W_number - 1);
+            // set_w_number(that.games.W_number - 1);
             that.setWL(that.time_count);
             // setTimeout(that.$refs.audioMinuteEnd2.play(), 1000);
             that.$refs.audioMinuteEnd2.play();
           } else if (that.games.WL == 0 && that.games.W_number == 2) {
             that.setW_number(that.games.W_number - 1);
+            // set_w_number(that.games.W_number - 1);
+
             // this.count = this.time_count;
             that.setWL(that.time_count);
             // setTimeout(that.$refs.audioMinuteEnd1.play(), 1000);
@@ -322,6 +312,8 @@ export default {
           } else if (that.games.WL == 0 && that.games.W_number == 1) {
             // this.show = true;
             that.setW_number(that.games.W_number - 1);
+            // set_w_number(that.games.W_number - 1);
+
             clear_all();
             // that.timer = null;
             // alert("you failed");
@@ -342,16 +334,7 @@ export default {
       this.w2_offline =
         userlist.indexOf(this.whiteTwo.name) > -1 ? false : true;
     },
-    get_message(data) {
-      this.barrageList.push({
-        id: ++this.currentId,
-        avatar: data.avatar,
-        msg: data.username + " => " + data.message,
-        time: 10,
-        type: MESSAGE_TYPE.NORMAL,
-        barrageStyle: "normal",
-      });
-    },
+
     joinlobby(user) {
       /* this.barrageList.push({
         id: ++this.currentId,
@@ -421,19 +404,29 @@ export default {
     } */
 
     EventBus.$on("w_timeout", (value) => {
-      that.setWL(value);
+      if (value == 0) that.setWL(this.time_count);
+      else {
+        that.setWL(value);
+      }
       // that.WL = value;
     });
     EventBus.$on("b_timeout", (value) => {
-      that.setBL(value);
+      if (value == 0) that.setBL(this.time_count);
+      else {
+        that.setBL(value);
+      }
       // that.BL = value;
     });
     EventBus.$on("b_number", (value) => {
+      console.log("set black number" + value);
       that.setB_number(value);
+      // set_b_number(value);
       // that.BL = value;
     });
     EventBus.$on("w_number", (value) => {
+      console.log("set white number" + value);
       that.setW_number(value);
+      // set_w_number(value);
       // that.BL = value;
     });
     EventBus.$on("b_readTime", (value) => {
@@ -465,14 +458,6 @@ export default {
 
     EventBus.$on("yourturn", () => {
       this.success("轮到你落子了！");
-      this.barrageList.push({
-        id: ++this.currentId,
-        avatar: this.avatar,
-        msg: "系统: 轮到你落子了！",
-        time: 5,
-        type: MESSAGE_TYPE.NORMAL,
-        barrageStyle: "red",
-      });
       this.b_yourturn = true;
       var audio = document.getElementById("audioPlay");
       if (audio != null) audio.play();
@@ -533,12 +518,12 @@ export default {
     // document.getElementById("wgo-control").style.display = "none";
     if (this.$route.query.type == "resume") {
       initGameData(this.account.user.name, this.games.game);
-      if (this.games.game.BL == 0) {
-        this.setBL(30);
-      }
-      if (this.games.game.WL == 0) {
-        this.setWL(30);
-      }
+      // if (this.games.game.BL == 0) {
+      //   this.setBL(30);
+      // }
+      // if (this.games.game.WL == 0) {
+      //   this.setWL(30);
+      // }
       initResumeGame(this.$refs.player, this.games.game, this.games.result);
     } else if (this.gameStatus == "未开始") {
       initGame(this.$refs.player, {
@@ -555,11 +540,4 @@ export default {
 </script>
 <style scoped>
 @import "/static/wgo.player.css";
-.container {
-  display: inline-block;
-  position: absolute;
-  z-index: 50;
-  width: 100%;
-  height: 20vh;
-}
 </style>

@@ -2,9 +2,10 @@ let myplayer, myboard;
 var _ev_move, _ev_click, _ev_out;
 var _ev_try_move, _ev_try_click, _ev_try_out;
 var black_time, white_time;
-var w_number, b_number;
+// var w_number, b_number;
 // import { socket } from "./socket";
 import { EventBus } from "../index.js";
+import { store } from "../_store/index.js";
 var username, game;
 var timer_loop = null; //定时器
 var timer_minute = null; //读秒定时器
@@ -24,15 +25,22 @@ const user = JSON.parse(sessionStorage.getItem("user"));
 if (user) {
   board_background = "/static/" + user.background;
 }
+export function testing() {
+  // store.state.games.BL = 90;
+  store.commit("games/setBL", 180);
+  alert(store.state.games.BL);
+}
 
 export function initGame(ele, gameinfo) {
   if (myplayer != null) myplayer = null;
   black_time = gameinfo.total_time;
   white_time = gameinfo.total_time;
-  w_number = gameinfo.number;
-  b_number = gameinfo.number;
+  // w_number = gameinfo.number;
+  // b_number = gameinfo.number;
   EventBus.$emit("w_timeout", white_time);
   EventBus.$emit("b_timeout", black_time);
+  EventBus.$emit("b_number", gameinfo.number);
+  EventBus.$emit("w_number", gameinfo.number);
   myplayer = new WGo.BasicPlayer(ele, {
     sgf:
       "(;SZ[19]TM[" +
@@ -122,19 +130,19 @@ export function initResumeGame(ele, gameinfo, result) {
   if (gameinfo.BL === "" && gameinfo.WL === "") {
     black_time = gameinfo.total_time;
     white_time = gameinfo.total_time;
-    b_number = 3;
-    w_number = 3;
+    // b_number = 3;
+    // w_number = 3;
   } else {
     black_time = gameinfo.BL;
     white_time = gameinfo.WL;
-    b_number = gameinfo.b_number;
-    w_number = gameinfo.w_number;
+    // b_number = gameinfo.b_number;
+    // w_number = gameinfo.w_number;
   }
 
   EventBus.$emit("w_timeout", white_time);
   EventBus.$emit("b_timeout", black_time);
-  EventBus.$emit("b_number", b_number);
-  EventBus.$emit("w_number", w_number);
+  EventBus.$emit("b_number", gameinfo.b_number);
+  EventBus.$emit("w_number", gameinfo.w_number);
 
   if (gameinfo.kifu == "") {
     myplayer = new WGo.BasicPlayer(ele, {
@@ -324,8 +332,8 @@ export function play(x, y) {
     kifu: myplayer.kifu.toSgf(),
     BL: black_time,
     WL: white_time,
-    w_number: w_number,
-    b_number: b_number,
+    b_number: store.state.games.B_number,
+    w_number: store.state.games.W_number,
   };
   console.log("current move data is:" + data);
   EventBus.$emit("move", data);
@@ -362,13 +370,13 @@ export function clear_all() {
   clear_minute();
 }
 
-export function set_b_number(value) {
-  b_number = value;
-}
+// export function set_b_number(value) {
+//   b_number = value;
+// }
 
-export function set_w_number(value) {
-  w_number = value;
-}
+// export function set_w_number(value) {
+//   w_number = value;
+// }
 
 var read_minute = function() {
   clearTimeout(timer_minute);
@@ -786,8 +794,6 @@ export function enable_board() {
 export function readyMove(msg) {
   black_time = msg.BL;
   white_time = msg.WL;
-  b_number = msg.b_number;
-  w_number = msg.w_number;
   move_play(myplayer, msg.move.x, msg.move.y);
   // if (!isView)
   disable_board();

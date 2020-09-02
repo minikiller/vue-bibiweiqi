@@ -4,6 +4,7 @@ import MyGo from "../component/MyGo";
 import Chat from "../component/Chat";
 import WebRTC from "../component/webrtc";
 import { gameService } from "../_services";
+import { vueBaberrage, MESSAGE_TYPE } from "vue-baberrage";
 import { mapState, mapMutations } from "vuex";
 import { EventBus } from "../index.js";
 import {
@@ -26,6 +27,7 @@ import {
   play,
   clear_time,
   clear_all,
+  testing,
 } from "../_helpers";
 
 // import { WebRTC } from "plugin";
@@ -68,6 +70,8 @@ export default {
       "updateShowNav",
       "setBL",
       "setWL",
+      "setB_number",
+      "setW_number",
     ]),
     //设置按钮的状态
     setButtonStatus() {
@@ -137,7 +141,8 @@ export default {
       // this.score_selected = !this.score_selected;
     },
     test() {
-      alert(this.game_id);
+      // alert(this.game_id);
+      testing();
       // this.$refs["modal"].show();
       // alert(testStore());
       // alert(getKifu());
@@ -467,6 +472,19 @@ export default {
     },
   },
   sockets: {
+    get_message(data) {
+      var tmp;
+      if (!data.avatar) tmp = this.avatar;
+      else tmp = data.avatar;
+      this.barrageList.push({
+        id: ++this.currentId,
+        avatar: tmp,
+        msg: data.username + " => " + data.message,
+        time: 10,
+        type: MESSAGE_TYPE.NORMAL,
+        barrageStyle: "normal",
+      });
+    },
     move(game) {
       if (this.bTry) {
         if (game.BL == 0) {
@@ -475,6 +493,8 @@ export default {
         if (game.WL == 0) {
           this.setWL(30);
         }
+        this.setW_number(game.w_number);
+        this.setB_number(game.b_number);
         readyMove(game);
 
         this.btnRegretDisable = true;
@@ -620,6 +640,9 @@ export default {
       show: false,
       isTurn: false, //落子确认按钮的开关
       game_id: "",
+      barrageList: [],
+      avatar: "http://sunlingfeng.0431zy.com/1.png",
+      currentId: 0,
     };
   },
   beforeDestroy() {
@@ -698,6 +721,17 @@ export default {
       this.isTurn = value; //打开确认取消按钮
     });
 
+    EventBus.$on("yourturn", () => {
+      this.barrageList.push({
+        id: ++this.currentId,
+        avatar: this.avatar,
+        msg: "系统: 轮到你落子了！",
+        time: 5,
+        type: MESSAGE_TYPE.NORMAL,
+        barrageStyle: "red",
+      });
+    });
+
     EventBus.$on("move", (game) => {
       //确认发送落子数据之前，当前的用户和手数可以对应上
       //如果turn==0，则用户必须是blackone，防止两个客户端同时发送数据给服务器
@@ -746,6 +780,16 @@ export default {
   components: {
     MyGo,
     Chat,
+    vueBaberrage,
   },
 };
 </script>
+<style scoped>
+.container1 {
+  display: inline-block;
+  position: absolute;
+  z-index: 50;
+  width: 100%;
+  height: 8vh;
+}
+</style>
