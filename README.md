@@ -184,3 +184,15 @@ watch: {
 ### nodejs log
 
 https://www.digitalocean.com/community/tutorials/how-to-use-winston-to-log-node-js-applications
+
+### normal js call vuex state and mutations
+refer to https://stackoverflow.com/questions/41534412/how-to-get-vuex-state-from-a-javascript-file-instead-of-a-vue-component
+```
+import { store } from "../_store/index.js";
+
+export function testing() {
+  // store.state.games.BL = 90;
+  store.commit("games/setBL", 180);
+  alert(store.state.games.BL);
+}
+```
