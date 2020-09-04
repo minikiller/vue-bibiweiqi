@@ -51,6 +51,7 @@
         </b-button>
 
         <b-button
+          size="sm"
           v-if="isOpponent && !isMobile"
           aria-pressed="true"
           variant="primary"
@@ -61,10 +62,11 @@
           {{ btnText }}
         </b-button>
 
-        <b-button variant="primary" v-if="canEnd" @click="getScore">
+        <b-button size="sm" variant="primary" v-if="canEnd" @click="getScore">
           {{ endText }}
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           :disabled="btnPassedDisable"
           v-if="canBegin&&canPassed"
@@ -74,6 +76,7 @@
           数子
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           v-model="status"
           value="true"
@@ -83,6 +86,7 @@
           坐标
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           @click="toggleMarker"
           v-b-popover.hover.top="'显示不同的手数!'"
@@ -90,6 +94,7 @@
           手数
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           v-if="isOpponent&&canBegin"
           @click="regret"
@@ -99,6 +104,7 @@
           悔棋
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           v-if="canBegin"
           @click="who"
@@ -107,16 +113,23 @@
           谁了
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           @click="refresh"
           v-b-popover.hover.top="'刷新获得最新的数据!'"
         >
           刷新
         </b-button>
-        <b-button variant="primary" v-if="account.user.isadmin" @click="print">
+        <b-button
+          size="sm"
+          variant="primary"
+          v-if="account.user.isadmin"
+          @click="print"
+        >
           debug
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           v-if="!isOpponent||status==='结束'"
           @click="beginTry"
@@ -125,6 +138,7 @@
           {{try_text}}
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           :disabled="btnQuitDisable"
           @click="exit"
@@ -134,6 +148,7 @@
           退出
         </b-button>
         <b-button
+          size="sm"
           variant="primary"
           @click="shared"
           v-b-popover.hover.top="'复制链接地址!'"
