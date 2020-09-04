@@ -12,12 +12,12 @@
     <section id="input_zone">
       <b-form-input placeholder="Enter your msg" v-model="msg"></b-form-input>
       <div v-if="isMobile">
-        <b-button variant="primary" @touchstart="send">
+        <b-button variant="primary" @touchstart="send" :disabled="!account.status.loggedIn">
           <i class="fas fa-user-friends"></i> 发送
         </b-button>
       </div>
       <div v-else>
-        <b-button variant="primary" @click="send">
+        <b-button variant="primary" @click="send" :disabled="!account.status.loggedIn">
           <i class="fas fa-user-friends"></i> 发送
         </b-button>
       </div>

@@ -2,9 +2,20 @@ import { userService } from "../_services";
 import { router } from "../_helpers";
 
 const user = JSON.parse(sessionStorage.getItem("user"));
+//生成随机用户名
+var user_name =
+  "user" +
+  Math.random()
+    .toString()
+    .substr(2, 5);
+//匿名用户
+const temp_user = {
+  name: user_name,
+  isadmin: false,
+};
 const state = user
   ? { status: { loggedIn: true }, user }
-  : { status: {}, user: null };
+  : { status: { loggedIn: false }, user: temp_user };
 
 const actions = {
   login({ dispatch, commit }, { username, password }) {
@@ -72,8 +83,8 @@ const mutations = {
     state.status = {};
   },
   changeBackground(state, value) {
-      state.user.background = value;
-      sessionStorage.setItem("user", JSON.stringify(state.user));
+    state.user.background = value;
+    sessionStorage.setItem("user", JSON.stringify(state.user));
   },
 };
 

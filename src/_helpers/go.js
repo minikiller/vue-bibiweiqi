@@ -46,6 +46,8 @@ export function initGame(ele, gameinfo) {
       "(;SZ[19]TM[" +
       gameinfo.total_time +
       "]KM[7.5]" +
+      // "HA[2]" +
+      // "AB[dd][pp]" +
       "DT[" +
       getTime() +
       "]" +

@@ -145,8 +145,14 @@ export default {
       // this.score_selected = !this.score_selected;
     },
     test() {
+<<<<<<< HEAD
       this.$copyText(this.$route.fullpath);
       // alert(this.game_id);
+=======
+      alert(window.location.pathname);
+      // console.log(this.$route);
+      alert(this.$route.fullpage);
+>>>>>>> bc3a99d3742ff8d4ef315c9a4bd52f1d18b81b3e
       // testing();
       // this.$refs["modal"].show();
       // alert(testStore());
