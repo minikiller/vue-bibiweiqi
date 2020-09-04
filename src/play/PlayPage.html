@@ -135,11 +135,18 @@
         </b-button>
         <b-button
           variant="primary"
+          @click="shared"
+          v-b-popover.hover.top="'复制链接地址!'"
+        >
+          分享
+        </b-button>
+        <!-- <b-button
+          variant="primary"
           @click="test"
           v-b-popover.hover.top="'离开当前对局室!'"
         >
           test
-        </b-button>
+        </b-button> -->
       </b-col>
     </b-row>
     <b-row class="ml-2 mr-2 mb-2">

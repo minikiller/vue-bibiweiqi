@@ -32,13 +32,14 @@ import {
 
 // import { WebRTC } from "plugin";
 import { find, head } from "lodash/core";
+
+var timeoutCallback = require("timeout-callback");
+Vue.component(WebRTC.name, WebRTC);
 import Vue from "vue";
 import VueClipboard from "vue-clipboard2";
 
 VueClipboard.config.autoSetContainer = true; // add this line
 Vue.use(VueClipboard);
-var timeoutCallback = require("timeout-callback");
-Vue.component(WebRTC.name, WebRTC);
 
 export default {
   name: "playPage",
@@ -144,15 +145,23 @@ export default {
 
       // this.score_selected = !this.score_selected;
     },
-    test() {
-<<<<<<< HEAD
-      this.$copyText(this.$route.fullpath);
+    test() {},
+    shared() {
+      const message =
+        "会会老撕鸡，点击 http://bibiweiqi.com" +
+        this.$route.fullPath +
+        " ,马上就逼逼";
+      this.$copyText(message).then(
+        function (e) {
+          alert("复制成功！");
+          console.log(e);
+        },
+        function (e) {
+          alert("复制失败！");
+          console.log(e);
+        }
+      );
       // alert(this.game_id);
-=======
-      alert(window.location.pathname);
-      // console.log(this.$route);
-      alert(this.$route.fullpage);
->>>>>>> bc3a99d3742ff8d4ef315c9a4bd52f1d18b81b3e
       // testing();
       // this.$refs["modal"].show();
       // alert(testStore());
