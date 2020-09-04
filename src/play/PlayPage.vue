@@ -33,6 +33,10 @@ import {
 // import { WebRTC } from "plugin";
 import { find, head } from "lodash/core";
 import Vue from "vue";
+import VueClipboard from "vue-clipboard2";
+
+VueClipboard.config.autoSetContainer = true; // add this line
+Vue.use(VueClipboard);
 var timeoutCallback = require("timeout-callback");
 Vue.component(WebRTC.name, WebRTC);
 
@@ -141,8 +145,9 @@ export default {
       // this.score_selected = !this.score_selected;
     },
     test() {
+      this.$copyText(this.$route.fullpath);
       // alert(this.game_id);
-      testing();
+      // testing();
       // this.$refs["modal"].show();
       // alert(testStore());
       // alert(getKifu());
