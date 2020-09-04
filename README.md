@@ -196,3 +196,6 @@ export function testing() {
   alert(store.state.games.BL);
 }
 ```
+
+### another example for go ai
+https://github.com/sanderland/katrain#install
