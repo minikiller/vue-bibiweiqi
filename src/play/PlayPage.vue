@@ -141,8 +141,10 @@ export default {
       // this.score_selected = !this.score_selected;
     },
     test() {
-      // alert(this.game_id);
-      testing();
+      alert(window.location.pathname);
+      // console.log(this.$route);
+      alert(this.$route.fullpage);
+      // testing();
       // this.$refs["modal"].show();
       // alert(testStore());
       // alert(getKifu());
