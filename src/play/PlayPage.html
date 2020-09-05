@@ -1,6 +1,6 @@
 <div>
   <b-container fluid>
-    <!-- <div class="container1">
+    <div class="container1">
       <vue-baberrage
         :isShow="barrageIsShow"
         :barrageList="barrageList"
@@ -10,7 +10,7 @@
         :boxHeight="boxHeight"
         :messageHeight="messageHeight"
       ></vue-baberrage>
-    </div> -->
+    </div>
     <b-navbar v-if="account.user" toggleable="sm" type="dark" variant="info">
       <b-navbar-brand href="#">
         <b-img
@@ -138,6 +138,14 @@
         <b-button
           size="sm"
           variant="primary"
+          @click="shared"
+          v-b-popover.hover.top="'复制链接地址!'"
+        >
+          分享
+        </b-button>
+        <b-button
+          size="sm"
+          variant="primary"
           :disabled="btnQuitDisable"
           @click="exit"
           ref="quit"
@@ -145,14 +153,7 @@
         >
           退出
         </b-button>
-        <b-button
-          size="sm"
-          variant="primary"
-          @click="shared"
-          v-b-popover.hover.top="'复制链接地址!'"
-        >
-          分享
-        </b-button>
+
         <!-- <b-button
           variant="primary"
           @click="test"
