@@ -1,6 +1,6 @@
 <div>
   <b-container fluid>
-    <div class="container1">
+    <!-- <div class="container1">
       <vue-baberrage
         :isShow="barrageIsShow"
         :barrageList="barrageList"
@@ -10,30 +10,28 @@
         :boxHeight="boxHeight"
         :messageHeight="messageHeight"
       ></vue-baberrage>
-    </div>
+    </div> -->
     <b-navbar v-if="account.user" toggleable="sm" type="dark" variant="info">
-      <b-container>
-        <b-navbar-brand href="#">
-          <b-img
-            src="/static/img/logo.png"
-            fluid
-            alt="Responsive image"
-            width="50px"
-          ></b-img>
-          {{ games.navTitle }}
-        </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav right class="ml-auto">
-            <b-nav-item href="#"
-              ><em>
-                <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
-                {{ account.user.name }}[{{ account.user.rank }}]
-              </em></b-nav-item
-            >
-          </b-navbar-nav>
-        </b-collapse>
-      </b-container>
+      <b-navbar-brand href="#">
+        <b-img
+          src="/static/img/logo.png"
+          fluid
+          alt="Responsive image"
+          width="50px"
+        ></b-img>
+        {{ games.navTitle }}
+      </b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav right class="ml-auto">
+          <b-nav-item href="#"
+            ><em>
+              <b-avatar variant="info" :src="account.user.avatar"></b-avatar>
+              {{ account.user.name }}[{{ account.user.rank }}]
+            </em></b-nav-item
+          >
+        </b-navbar-nav>
+      </b-collapse>
     </b-navbar>
 
     <b-row class="mt-2 ml-2 mr-2 mb-2">
