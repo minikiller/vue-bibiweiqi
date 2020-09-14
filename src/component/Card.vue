@@ -84,7 +84,9 @@
               </b-col>
             </div>
           </b-row>
-          <b-row align-v="center" v-if="getDisplayGames.length>3">
+          <!-- <div>this is {{getDisplayGames.length}}</div> -->
+          <b-row align-v="center">
+          <!-- <b-row align-v="center" v-if="getDisplayGames.length>=3"> -->
             <!-- <b-col cols="4"></b-col> -->
             <b-col></b-col>
             <b-col>
