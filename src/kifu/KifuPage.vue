@@ -13,6 +13,7 @@
         <template v-slot:title>
           <i class="fas fa-user-lock"></i>个人棋谱
         </template>
+
         <div class="table-responsive">
           <b-table
             striped
@@ -22,6 +23,11 @@
             table-class="text-nowrap"
             responsive
           >
+            <template v-slot:cell(index)="row">{{ row.index + 1 }}</template>
+            <template v-slot:cell(id)="row">
+              <b class="text-info" :id="'row'+row.item.id">{{ row.item.id }}</b>
+              <b-tooltip :target="'row'+row.item.id" variant="danger">{{row.item.result}}</b-tooltip>
+            </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 @click="info(row.item, row.index, $event.target)"
@@ -134,6 +140,7 @@ export default {
       share_currentPage: 1,
       share_totalRows: 0,
       fields: [
+        { key: "index", label: "序号" },
         {
           key: "id",
           label: "ID",
