@@ -75,6 +75,7 @@
               <b-dropdown id="dropdown-aria" text="Action" variant="primary" class="m-2">
                 <b-dropdown-item-button @click="info(row.item, row.index, $event.target)">下载</b-dropdown-item-button>
                 <b-dropdown-item-button @click="open(row.item, row.index, $event.target)">打开</b-dropdown-item-button>
+                <b-dropdown-item-button @click="comment(row.item, row.index, $event.target)">备注</b-dropdown-item-button>
                 <b-dropdown-item-button
                   v-if="account.user.isadmin"
                   @click="analyse(row.item, row.index, $event.target)"
@@ -182,6 +183,12 @@ export default {
     },
     open(item) {
       this.$router.push({ name: "KifuView", params: { game: item } });
+    },
+    //备注
+    comment(item) {
+      gameService.commentKifu(item.id).then((data) => {
+        this.success(data.message);
+      });
     },
     //ai analyse
     analyse(item) {
@@ -356,10 +363,11 @@ export default {
             method: "POST",
             body: formData,
             headers: authHeader(),
-          }).then(handleResponse).then((res) => {
-             this.success(res.message)
-          });
-
+          })
+            .then(handleResponse)
+            .then((res) => {
+              this.success(res.message);
+            });
         }
       }
     },
