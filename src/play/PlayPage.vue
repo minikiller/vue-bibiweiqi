@@ -218,6 +218,17 @@ export default {
       }, 1000);
       this.success("刷新成功！");
     },
+    suggest() {
+      var data = getKifu();
+      const save_data = { kifu_data: data };
+      gameService.suggestKifu(save_data).then((data) => {
+        alert("AI 推荐下一手是："+data.result);
+      });
+      this.$socket.emit("dog", {
+        userId: this.account.user.name,
+        gameId: this.game_id,
+      });
+    },
     //开始按钮，认输按钮
     begin() {
       if (this.btnText == "开始") {
@@ -492,6 +503,7 @@ export default {
     },
   },
   sockets: {
+    
     get_message(data) {
       var tmp;
       if (!data.avatar) tmp = this.avatar;

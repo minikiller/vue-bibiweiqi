@@ -26,7 +26,7 @@
             <template v-slot:cell(index)="row">{{ row.index + 1 }}</template>
             <template v-slot:cell(id)="row">
               <b class="text-info" :id="'row'+row.item.id">{{ row.item.id }}</b>
-              <b-tooltip :target="'row'+row.item.id" variant="danger">{{row.item.result}}</b-tooltip>
+              <b-tooltip :target="'row'+row.item.id" variant="danger">{{row.item.comment}}</b-tooltip>
             </template>
             <template v-slot:cell(actions)="row">
               <b-button
@@ -77,11 +77,18 @@
             table-class="text-nowrap"
             responsive
           >
+            <template v-slot:cell(index)="row">{{ row.index + 1 }}</template>
+            <template v-slot:cell(id)="row">
+              <b class="text-info" :id="'row'+row.item.id">{{ row.item.id }}</b>
+              <b-tooltip :target="'row'+row.item.id" variant="danger">{{row.item.comment}}</b-tooltip>
+            </template>
             <template v-slot:cell(actions)="row">
               <b-dropdown id="dropdown-aria" text="Action" variant="primary" class="m-2">
                 <b-dropdown-item-button @click="info(row.item, row.index, $event.target)">下载</b-dropdown-item-button>
                 <b-dropdown-item-button @click="open(row.item, row.index, $event.target)">打开</b-dropdown-item-button>
-                <b-dropdown-item-button @click="comment(row.item, row.index, $event.target)">备注</b-dropdown-item-button>
+                <b-dropdown-item-button v-if="account.user.isadmin"
+                  @click="comment_click(row.item, row.index, $event.target)"
+                >备注</b-dropdown-item-button>
                 <b-dropdown-item-button
                   v-if="account.user.isadmin"
                   @click="analyse(row.item, row.index, $event.target)"
@@ -117,6 +124,23 @@
         </b-row>
       </b-tab>
     </b-tabs>
+    <div>
+      <b-modal id="modal" title="棋谱备注" @ok="handleOk">
+        <b-form-textarea
+          id="textarea"
+          v-model="comment"
+          placeholder="Enter something..."
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+        <template v-slot:modal-footer="{ ok, cancel }">
+          <!-- Emulate built in modal footer ok and cancel button actions -->
+          <b-button size="sm" variant="success" @click="ok()">确定</b-button>
+          <b-button size="sm" variant="danger" @click="cancel()">取消</b-button>
+          <!-- Button with custom close trigger value -->
+        </template>
+      </b-modal>
+    </div>
   </div>
 </template>
 <script>
@@ -139,6 +163,8 @@ export default {
       totalRows: 0,
       share_currentPage: 1,
       share_totalRows: 0,
+      comment: "",
+      id: 0,
       fields: [
         { key: "index", label: "序号" },
         {
@@ -192,8 +218,15 @@ export default {
       this.$router.push({ name: "KifuView", params: { game: item } });
     },
     //备注
-    comment(item) {
-      gameService.commentKifu(item.id).then((data) => {
+    comment_click(item) {
+      //todos add messagebox
+      this.comment = item.comment;
+      this.id = item.id;
+      this.$bvModal.show("modal");
+    },
+    handleOk() {
+      var _data = { comment: this.comment };
+      gameService.commentKifu(this.id, _data).then((data) => {
         this.success(data.message);
       });
     },

@@ -16,6 +16,8 @@ export const gameService = {
   shareKifu,
   analyseKifu,
   winrate,
+  suggestKifu,
+  commentKifu,
 };
 
 async function getAll() {
@@ -34,7 +36,10 @@ async function getHistory() {
     method: "GET",
     headers: authHeader(),
   };
-  const response = await fetch(`${config.apiUrl}/games/history`, requestOptions);
+  const response = await fetch(
+    `${config.apiUrl}/games/history`,
+    requestOptions
+  );
   const data = await response.json();
 
   return data.games;
@@ -45,7 +50,10 @@ async function getMyAll() {
     method: "GET",
     headers: authHeader(),
   };
-  const response = await fetch(`${config.apiUrl}/games/mygames/`, requestOptions);
+  const response = await fetch(
+    `${config.apiUrl}/games/mygames/`,
+    requestOptions
+  );
   const data = await response.json();
 
   return data.games;
@@ -161,6 +169,35 @@ function saveKifu(_data) {
   };
   console.log(requestOptions["body"]);
   return fetch(`${config.apiUrl}/kifus/`, requestOptions).then(handleResponse);
+}
+
+function suggestKifu(_data) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(_data),
+  };
+  console.log(requestOptions["body"]);
+  return fetch(`${config.apiUrl}/kifus/nextstep`, requestOptions).then(
+    handleResponse
+  );
+}
+
+function commentKifu(kifu_id, _data) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(_data),
+  };
+  console.log(requestOptions["body"]);
+  return fetch(
+    `${config.apiUrl}/kifus/comment/${kifu_id}`,
+    requestOptions
+  ).then(handleResponse);
 }
 
 function moveVoice() {

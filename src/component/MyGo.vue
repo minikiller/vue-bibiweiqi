@@ -1,5 +1,6 @@
 <template>
   <div>
+    <audio id="dog" src="/static/dog.mp3" preload="auto"></audio>
     <audio id="audioMove" src="/static/move.mp3" preload="auto"></audio>
     <audio id="audioDead" src="/static/deadone.mp3" preload="auto"></audio>
     <audio id="audioPlay" src="/static/voice/turn.mp3" preload="auto"></audio>
@@ -324,6 +325,9 @@ export default {
     },
   },
   sockets: {
+    play_dog(data){
+      document.getElementById("dog").play();
+    },
     initGameUser(userlist) {
       this.b1_offline =
         userlist.indexOf(this.blackOne.name) > -1 ? false : true;

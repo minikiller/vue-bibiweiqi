@@ -50,6 +50,19 @@
 
         <b-button
           size="sm"
+          aria-pressed="true"
+          variant="primary"
+          @click="suggest"
+          ref="btnSuggest"
+          :disabled="btnPassedDisable"
+          v-if="canBegin&&canPassed"
+          v-b-popover.hover.top="'AI推荐落子!'"
+        >
+          放狗
+        </b-button>
+
+        <b-button
+          size="sm"
           v-if="isOpponent && !isMobile"
           aria-pressed="true"
           variant="primary"

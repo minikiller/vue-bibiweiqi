@@ -495,6 +495,12 @@ io.on("connection", function(socket) {
     // socket.broadcast.to(msg.gameId).emit('hello', 'nice game');
   });
 
+  //listen on dog event
+  socket.on("dog", function(msg) {
+    //给房间内的其他用户发送消息，不包括sender本身
+    io.sockets.in(msg.gameId).emit("play_dog", msg);
+  });
+
   //listen on new_message
   socket.on("new_message", function(msg) {
     logger.info(
