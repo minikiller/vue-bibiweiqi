@@ -23,7 +23,7 @@
 
     <b-row class="ml-2 mr-2">
       <b-col cols="12" sm="12" md="6" xg="8">
-        <div style="margin: 0 auto;">
+        <div style="margin: 0 -30px;">
           <div style="100%" ref="player"></div>
           <div align="center">
             <b-button-group v-if="isTurn" size="lg">
