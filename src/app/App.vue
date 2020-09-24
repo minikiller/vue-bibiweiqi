@@ -1,13 +1,17 @@
 <template>
   <div id="app">
     <b-jumbotron>
-      <b-container fluid>
+      <b-container class="container-fluid">
         <b-row>
           <b-col>
             <div class="page" v-if="getSpinner">
-              <b-spinner class="spinner" :variant="'primary'" :key="'primary'"></b-spinner>
+              <b-spinner
+                class="spinner"
+                :variant="'primary'"
+                :key="'primary'"
+              ></b-spinner>
             </div>
-            <Navbar v-if="games.showNav"/>
+            <Navbar v-if="games.showNav" />
             <notifications group="foo" position="top right" />
             <!-- <div
             v-if="alert.message"
@@ -31,24 +35,24 @@ export default {
   computed: {
     ...mapGetters("room", ["getSpinner"]),
     ...mapState({
-      alert: state => state.alert,
-      games: state => state.games
-    })
+      alert: (state) => state.alert,
+      games: (state) => state.games,
+    }),
   },
   methods: {
     ...mapActions({
-      clearAlert: "alert/clear"
-    })
+      clearAlert: "alert/clear",
+    }),
   },
   watch: {
     $route(to, from) {
       // clear alert on location change
       this.clearAlert();
-    }
+    },
   },
   components: {
-    Navbar
-  }
+    Navbar,
+  },
 };
 </script>
 
@@ -77,5 +81,9 @@ export default {
   z-index: 26;
   position: relative;
   top: 50%;
+}
+.container-fluid {
+  // margin: 2px !important;
+  padding: 2px !important;
 }
 </style>

@@ -23,14 +23,14 @@
 
     <b-row class="ml-2 mr-2">
       <b-col cols="12" sm="12" md="6" xg="8">
-        <!-- <div style="margin: 0 auto;"> -->
+        <div style="margin: 0 auto;">
           <div style="width:100%" ref="player" ></div>
           <div align="center">
             <b-button-group v-if="isTurn" size="lg">
               <b-button variant="primary" @click="confirm">确认</b-button>
               <b-button variant="danger" @click="cancel">取消</b-button>
             </b-button-group>
-          <!-- </div> -->
+          </div>
         </div>
       </b-col>
       <b-col cols="12" sm="12" md="6" xg="4">

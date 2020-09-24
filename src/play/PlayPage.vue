@@ -222,7 +222,7 @@ export default {
       var data = getKifu();
       const save_data = { kifu_data: data };
       gameService.suggestKifu(save_data).then((data) => {
-        alert("AI 推荐下一手是："+data.result);
+        alert("AI 推荐下一手是：" + data.result);
       });
       this.$socket.emit("dog", {
         userId: this.account.user.name,
@@ -503,7 +503,6 @@ export default {
     },
   },
   sockets: {
-    
     get_message(data) {
       var tmp;
       if (!data.avatar) tmp = this.avatar;
@@ -824,4 +823,6 @@ export default {
   width: 100%;
   height: 8vh;
 }
+
+ 
 </style>
