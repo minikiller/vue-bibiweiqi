@@ -84,6 +84,6 @@ export default {
 }
 .container-fluid {
   // margin: 2px !important;
-  padding: 0 !important;
+  padding: 2px !important;
 }
 </style>
